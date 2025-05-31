@@ -1,6 +1,6 @@
 # Vastro Robotics – Web
 
-This is the official website for **Vastro Robotics** — a public-facing, single-page scroll site built to establish a strong and modern web presence for our project.
+This is the official website for **Vastro Robotics**—a public-facing, single-page scroll site built to establish a strong and modern web presence for our project.
 
 ---
 
