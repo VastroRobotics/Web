@@ -1,0 +1,7 @@
+All Rights Reserved
+
+Copyright (c) 2025 Vastro Robotics
+
+This source code and its contents are the exclusive property of Vastro Robotics.
+Unauthorized copying, modification, distribution, or use in any form is strictly prohibited 
+without express written permission.
