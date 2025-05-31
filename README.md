@@ -30,7 +30,7 @@ The site is structured as a **scroll-driven journey**, with each section acting 
 
 ## Structure
 
-<pre><code>```text 
+<pre><code>
 VastroRobotics/Web
 ├── public/                # Static assets (favicon, fonts, etc.)
 ├── src/
@@ -43,7 +43,7 @@ VastroRobotics/Web
 ├── vite.config.js         # Vite config
 ├── package.json           # Project metadata and dependencies
 └── README.md              # Project info and usage
- ```</code></pre>
+ </code></pre>
 
 ---
 
