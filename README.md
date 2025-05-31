@@ -30,7 +30,20 @@ The site is structured as a **scroll-driven journey**, with each section acting 
 
 ## Structure
 
-<pre><code>```text 📁 VastroRobotics/Web ├── public/ # Static assets (favicon, fonts, etc.) ├── src/ │ ├── assets/ # Images, videos, and media (logos, team, etc.) │ ├── components/ # Reusable UI components (Glow, ScrollBar, etc.) │ ├── sections/ # Scroll stages (Home, Mission, Team, etc.) │ ├── App.jsx # Scroll journey root │ ├── main.jsx # App entry point │ ├── App.css, index.css # Global and Tailwind styles ├── vite.config.js # Vite config ├── package.json # Project metadata and dependencies └── README.md # Project info and usage ```</code></pre>
+<pre><code>```text 
+VastroRobotics/Web
+├── public/                # Static assets (favicon, fonts, etc.)
+├── src/
+│   ├── assets/            # Images, videos, and media (logos, team, etc.)
+│   ├── components/        # Reusable UI components (Glow, ScrollBar, etc.)
+│   ├── sections/          # Scroll stages (Home, Mission, Team, etc.)
+│   ├── App.jsx            # Scroll journey root
+│   ├── main.jsx           # App entry point
+│   ├── App.css, index.css # Global and Tailwind styles
+├── vite.config.js         # Vite config
+├── package.json           # Project metadata and dependencies
+└── README.md              # Project info and usage
+ ```</code></pre>
 
 ---
 
