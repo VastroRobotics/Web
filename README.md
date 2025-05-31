@@ -40,7 +40,7 @@ VastroRobotics/Web
 │   ├── App.jsx            # Scroll journey root
 │   ├── main.jsx           # App entry point
 │   ├── App.css            # Global and Tailwind styles
-│   ├── index.css
+│   └── index.css
 ├── vite.config.js         # Vite config
 ├── package.json           # Project metadata and dependencies
 └── README.md              # Project info and usage
