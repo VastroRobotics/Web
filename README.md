@@ -71,6 +71,8 @@ npm run build
 All Rights Reserved.  
 © 2025 Vastro Robotics
 
+See [LICENSE](./LICENSE) for details.
+
 ---
 
 ## Credits
