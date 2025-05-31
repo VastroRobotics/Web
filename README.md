@@ -9,7 +9,7 @@ This is the official website for **Vastro Robotics** — a public-facing, single
 This repo is part of a larger project coordinated through Google Drive.  
 For documentation, design files, meeting notes, and planning materials, visit:
 
-➡️ [Vastro Robotics Google Drive](https://drive.google.com/drive/u/1/folders/your-shared-folder-id)
+➡️ [Vastro Robotics Google Drive](https://drive.google.com/drive/u/1/folders/0ADK3K5qnp9v_Uk9PVA)
 
 ---
 
@@ -30,18 +30,7 @@ The site is structured as a **scroll-driven journey**, with each section acting 
 
 ## Structure
 
-VastroRobotics/Web
-├── public/                # Static assets (favicon, fonts, etc.)
-├── src/
-│   ├── assets/            # Images, videos, and media (logos, team, etc.)
-│   ├── components/        # Reusable UI components (Glow, ScrollBar, etc.)
-│   ├── sections/          # Scroll stages (Home, Mission, Team, etc.)
-│   ├── App.jsx            # Scroll journey root
-│   ├── main.jsx           # App entry point
-│   ├── App.css, index.css # Global and Tailwind styles
-├── vite.config.js         # Vite config
-├── package.json           # Project metadata and dependencies
-└── README.md              # Project info and usage
+<pre><code>```text 📁 VastroRobotics/Web ├── public/ # Static assets (favicon, fonts, etc.) ├── src/ │ ├── assets/ # Images, videos, and media (logos, team, etc.) │ ├── components/ # Reusable UI components (Glow, ScrollBar, etc.) │ ├── sections/ # Scroll stages (Home, Mission, Team, etc.) │ ├── App.jsx # Scroll journey root │ ├── main.jsx # App entry point │ ├── App.css, index.css # Global and Tailwind styles ├── vite.config.js # Vite config ├── package.json # Project metadata and dependencies └── README.md # Project info and usage ```</code></pre>
 
 ---
 
