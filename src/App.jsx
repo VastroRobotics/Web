@@ -1,15 +1,19 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, lazy, Suspense } from "react";
 import ScrollBar from "./components/ScrollBar";
 import Home from "./sections/Home";
-import Mission from "./sections/Mission";
-import About from "./sections/About";
-import Team from "./sections/Team";
-import Timeline from "./sections/Timeline";
 import SectionWrapper from "./components/SectionWrapper";
+import Loading from "./components/Loading";
+import ErrorBoundary from "./components/ErrorBoundary";
 
-const sections = [Home, Mission,  About, Team, Timeline];
+// Lazy load all sections except Home
+const Mission = lazy(() => import("./sections/Mission"));
+const About = lazy(() => import("./sections/About"));
+const Team = lazy(() => import("./sections/Team"));
+const Timeline = lazy(() => import("./sections/Timeline"));
+
+const sections = [Home, Mission, About, Team, Timeline];
 
 export default function App() {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -36,7 +40,6 @@ export default function App() {
       isThrottled.current = false;
     }, 800); // debounce duration
   };
-  
 
   const jumpToSection = (index) => {
     setActiveIndex(index);
@@ -52,7 +55,7 @@ export default function App() {
       <ScrollBar
         activeIndex={activeIndex}
         setActiveIndex={jumpToSection}
-        sectionRefs={{}} // optional if needed
+        sectionRefs={{}}
       />
       {sections.map((Section, i) => (
         <div
@@ -61,23 +64,28 @@ export default function App() {
           style={{
             pointerEvents: i === activeIndex ? "auto" : "none",
             zIndex: i === activeIndex ? 10 : 0,
+            display: Math.abs(i - activeIndex) > 1 ? 'none' : 'block'
           }}
         >
-          <SectionWrapper
-            isActive={i === activeIndex}
-            scrollDirection={scrollDirection}
-          >
-            <Section
+          <ErrorBoundary>
+            <SectionWrapper
               isActive={i === activeIndex}
               scrollDirection={scrollDirection}
-              onCanLeaveChange={setCanLeave}
-              goToNext={() =>
-                setActiveIndex((prev) =>
-                  Math.min(prev + 1, sections.length - 1)
-                )
-              }
-            />
-          </SectionWrapper>
+            >
+              <Suspense fallback={i === 0 ? null : <Loading />}>
+                <Section
+                  isActive={i === activeIndex}
+                  scrollDirection={scrollDirection}
+                  onCanLeaveChange={setCanLeave}
+                  goToNext={() =>
+                    setActiveIndex((prev) =>
+                      Math.min(prev + 1, sections.length - 1)
+                    )
+                  }
+                />
+              </Suspense>
+            </SectionWrapper>
+          </ErrorBoundary>
         </div>
       ))}
     </div>

@@ -1,5 +1,18 @@
 @import "tailwindcss";
 
+/* Base styles to ensure consistent background */
+:root {
+  background-color: #121212;
+}
+
+html, body {
+  background-color: #121212;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
 @font-face {
   font-family: 'GrifterBold';
   src: url('/fonts/grifterbold.otf') format('opentype');
@@ -49,8 +62,7 @@
 }
 
 :root {
-  /* Set Orbitron for all text except titles */
-  font-family: 'Orbitron', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -66,11 +78,6 @@ body {
   min-width: 320px;
   min-height: 100vh;
   background-color: #121212;
-}
-
-h1, h2, h3, h4, h5, h6 {
-  /* Apply Grifter Bold for all headings */
-  font-family: 'GrifterBold', system-ui, Avenir, Helvetica, Arial, sans-serif;
 }
 
 .scrollbar-hide {

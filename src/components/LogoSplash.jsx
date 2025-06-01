@@ -2,7 +2,7 @@ import { motion, useAnimation } from "framer-motion";
 import { useEffect } from "react";
 import Logo from "../assets/images/logo/text_only_white.svg"; // Adjust path as needed
 
-const LogoStartup = () => {
+const LogoSplash = () => {
   const controls = useAnimation();
 
   useEffect(() => {
@@ -57,4 +57,4 @@ const LogoStartup = () => {
   );
 };
 
-export default LogoStartup;
+export default LogoSplash;
