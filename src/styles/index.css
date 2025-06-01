@@ -1,18 +1,5 @@
 @import "tailwindcss";
 
-/* Base styles to ensure consistent background */
-:root {
-  background-color: #121212;
-}
-
-html, body {
-  background-color: #121212;
-  margin: 0;
-  padding: 0;
-  min-height: 100vh;
-  min-height: 100dvh;
-}
-
 @font-face {
   font-family: 'GrifterBold';
   src: url('/fonts/grifterbold.otf') format('opentype');
@@ -20,52 +7,9 @@ html, body {
   font-style: normal;
 }
 
-@layer utilities {
-  @keyframes slowGlow {
-    0%, 100% {
-      transform: scale(1);
-    }
-    50% {
-      transform: scale(1.03);
-    }
-  }
-
-  @keyframes slowGlowReverse {
-    0%, 100% {
-      transform: scale(1.03);
-    }
-    50% {
-      transform: scale(1);
-    }
-  }
-
-  .animate-slowGlow {
-    animation: slowGlow 12s ease-in-out infinite;
-  }
-
-  .animate-slowGlowReverse {
-    animation: slowGlowReverse 16s ease-in-out infinite;
-  }
-
-  @keyframes colorFade {
-    0% {
-      color: white;
-    }
-    100% {
-      color: #9ca3af;
-    }
-  }
-
-  .animate-colorFade {
-    animation: colorFade 2s ease-out forwards;
-  }
-}
-
 :root {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
+  /* Set Orbitron for all text except titles */
+  font-family: Avenir, Helvetica, Arial, sans-serif;  line-height: 1.5;
   color-scheme: light dark;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -77,7 +21,11 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  background-color: #121212;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  /* Apply Grifter Bold for all headings */
+  font-family: 'GrifterBold', system-ui, Avenir, Helvetica, Arial, sans-serif;
 }
 
 .scrollbar-hide {
