@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import ScrollVideo from "../assets/scroll.webm";
+import ScrollVideo from "../../assets/animations/scroll.webm";
 
 const ScrollIndicator = () => {
   const videoRef = useRef(null);

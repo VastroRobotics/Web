@@ -8,18 +8,18 @@ import {
   Suspense,
   useCallback
 } from "react";
-import InfoPoint from "../components/InfoPoint";
-import ScrollPrompt from "../components/ScrollPrompt";
-import LogoSplash from "../components/LogoSplash";
-import AssetLoader from '../utils/assetLoader';
+import InfoPoint from "../ui/InfoPoint";
+import ScrollPrompt from "../layout/ScrollPrompt";
+import LogoSplash from "../common/LogoSplash";
+import AssetLoader from '../../utils/assetLoader';
 
-import BackEntrance from "../assets/videos/hero/back_entrance.webm";
-import BackLoop from "../assets/videos/hero/back_loop.webm";
-import FrontEntrance from "../assets/videos/hero/front_entrance.webm";
-import FrontLoop from "../assets/videos/hero/front_loop.webm";
+import BackEntrance from "../../assets/animations/back_entrance.webm";
+import BackLoop from "../../assets/animations/back_loop.webm";
+import FrontEntrance from "../../assets/animations/front_entrance.webm";
+import FrontLoop from "../../assets/animations/front_loop.webm";
 
-const LazyBackgroundEmblem = lazy(() => import('../components/BackgroundEmblem'));
-const LazyGlow = lazy(() => import('../components/Glow'));
+const LazyBackgroundEmblem = lazy(() => import('../BackgroundEmblem'));
+const LazyGlow = lazy(() => import('../ui/Glow'));
 
 const Home = forwardRef(
   ({ isActive, scrollDirection, onCanLeaveChange, goToNext }, ref) => {

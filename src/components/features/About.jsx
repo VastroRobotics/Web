@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import VastroLogo from "../assets/images/logo/vastro_full_logo.svg";
+import VastroLogo from "../../assets/branding/vastro_full_logo.svg";
 
 export default function VastroMultipage() {
   const [activePage, setActivePage] = useState("mission");

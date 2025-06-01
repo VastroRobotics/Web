@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion, useAnimation } from "framer-motion";
-import ScrollIndicator from "../components/ScrollIndicator";
+import ScrollIndicator from "../layout/ScrollIndicator";
 
 const timelineEvents = [
   {

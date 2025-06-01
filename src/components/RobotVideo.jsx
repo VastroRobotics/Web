@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState } from "react";
-import Entrance from "../assets/robot_entrance.webm";
-import Ambient from "../assets/robot_loop_only.webm";
+import Entrance from "../assets/animations/robot_entrance.webm";
+import Ambient from "../assets/animations/robot_loop_only.webm";
 
 const RobotVideo = () => {
   const entranceRef = useRef(null);

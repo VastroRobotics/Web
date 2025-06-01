@@ -2,9 +2,9 @@
 
 import { forwardRef, useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import Glow from "../components/Glow";
-import Chart from "../components/Chart";
-import ComparisonTable from "../components/ComparisonTable";
+import Glow from "../ui/Glow";
+import Chart from "../ui/Chart";
+import ComparisonTable from "../ui/ComparisonTable";
 
 const specs = [
   { label: "WEIGHT", left: "32 kg", right: "4 kg" },

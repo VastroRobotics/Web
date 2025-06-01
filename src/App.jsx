@@ -1,17 +1,17 @@
 "use client";
 
 import { useEffect, useRef, useState, lazy, Suspense } from "react";
-import ScrollBar from "./components/ScrollBar";
-import Home from "./sections/Home";
-import SectionWrapper from "./components/SectionWrapper";
-import Loading from "./components/Loading";
-import ErrorBoundary from "./components/ErrorBoundary";
+import ScrollBar from "./components/layout/ScrollBar";
+import Home from "./components/features/Home";
+import SectionWrapper from "./components/layout/SectionWrapper";
+import Loading from "./components/common/Loading";
+import ErrorBoundary from "./components/common/ErrorBoundary";
 
 // Lazy load all sections except Home
-const Mission = lazy(() => import("./sections/Mission"));
-const About = lazy(() => import("./sections/About"));
-const Team = lazy(() => import("./sections/Team"));
-const Timeline = lazy(() => import("./sections/Timeline"));
+const Mission = lazy(() => import("./components/features/Mission"));
+const About = lazy(() => import("./components/features/About"));
+const Team = lazy(() => import("./components/features/Team"));
+const Timeline = lazy(() => import("./components/features/Timeline"));
 
 const sections = [Home, Mission, About, Team, Timeline];
 

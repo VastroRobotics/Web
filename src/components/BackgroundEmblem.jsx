@@ -1,5 +1,5 @@
 import React from "react";
-  import Logo from "../assets/images/logo/icon_only_gray.svg";
+  import Logo from "../assets/branding/icon_only_gray.svg";
 
   const BackgroundEmblem = () => {
     return (

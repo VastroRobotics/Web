@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import logo from '../assets/images/logo/vastro_full_logo.svg';
+import logo from '../../assets/branding/vastro_full_logo.svg';
 
 export default function Loading({ message = 'Loading...' }) {
   const [shouldShow, setShouldShow] = useState(false);

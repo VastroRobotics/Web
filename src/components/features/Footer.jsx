@@ -1,8 +1,8 @@
 import React from 'react';
 import { Instagram, Linkedin } from 'lucide-react';
-import logoUrl from "../assets/images/logo/vastro_full_logo.svg";
-import glowLeft from "../assets/images/effects/glow_left.png";
-import glowRight from "../assets/images/effects/glow_right.png";
+import logoUrl from "../../assets/branding/vastro_full_logo.svg";
+import glowLeft from "../../assets/effects/glow_left.png";
+import glowRight from "../../assets/effects/glow_right.png";
 
 export default function Footer() {
   return (

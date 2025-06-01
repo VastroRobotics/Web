@@ -1,6 +1,6 @@
 import { motion, useAnimation } from "framer-motion";
 import { useEffect } from "react";
-import Logo from "../assets/images/logo/text_only_white.svg"; // Adjust path as needed
+import Logo from "../../assets/branding/text_only_white.svg"; // Adjust path as needed
 
 const LogoSplash = () => {
   const controls = useAnimation();

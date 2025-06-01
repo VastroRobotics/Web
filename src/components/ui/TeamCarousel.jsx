@@ -5,14 +5,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronRight } from "lucide-react";
 
 // Import images
-import AlexImage from "../assets/images/team/Alex.png";
-import AndrewImage from "../assets/images/team/Andrew.jpeg";
-import InesImage from "../assets/images/team/Ines.jpeg";
-import JesalinaImage from "../assets/images/team/Jesalina.jpeg";
-import JoshImage from "../assets/images/team/Josh.jpeg";
-import LucasImage from "../assets/images/team/Lucas.jpeg";
-import RickImage from "../assets/images/team/Rick.jpg";
-import RyanImage from "../assets/images/team/Ryan.jpeg";
+import AlexImage from "../../assets/media/team/Alex.png";
+import AndrewImage from "../../assets/media/team/Andrew.jpeg";
+import InesImage from "../../assets/media/team/Ines.jpeg";
+import JesalinaImage from "../../assets/media/team/Jesalina.jpeg";
+import JoshImage from "../../assets/media/team/Josh.jpeg";
+import LucasImage from "../../assets/media/team/Lucas.jpeg";
+import RickImage from "../../assets/media/team/Rick.jpg";
+import RyanImage from "../../assets/media/team/Ryan.jpeg";
 
 const teamMembers = [
 	{

@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import TeamCarousel from "../components/TeamCarousel";
+import TeamCarousel from "../ui/TeamCarousel";
 
 export default function Team({ isActive, scrollDirection, onCanLeaveChange }) {
   useEffect(() => {
