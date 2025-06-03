@@ -89,7 +89,7 @@ export default function Chart({
             transition={{ duration: 1, ease: "easeOut" }}
             className="text-3xl font-bold text-white"
           >
-            ${amount.toLocaleString()}
+            {`$${amount.toLocaleString()}`}
           </motion.span>
         </div>
       </div>

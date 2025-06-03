@@ -89,10 +89,10 @@ const HeroScroll = forwardRef(({ isActive, onCanLeaveChange }, ref) => {
 
       setTimeout(() => {
         isThrottled.current = false;
-        if (next === finalStage) onCanLeaveChange(true);
+        if (next === finalStage || next === 0) onCanLeaveChange(true);
       }, delay);
 
-      if (dir < 0) onCanLeaveChange(false);
+      if (dir < 0 && next !== 0) onCanLeaveChange(false);
       setStage(next);
     };
 
@@ -186,7 +186,7 @@ const HeroScroll = forwardRef(({ isActive, onCanLeaveChange }, ref) => {
             <Chart title="Competitors" targetAmount={75000} targetPercent={70} barColor="#ffffff" />
           </div>
         </motion.div>
-      </div>
+      </motion.div>
 
       <div className="w-full flex flex-col-reverse lg:flex-row items-center px-0 relative">
         <motion.div

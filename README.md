@@ -58,6 +58,13 @@ npm install
 npm run dev
 ```
 
+To run lint checks, first install dev dependencies:
+
+```bash
+npm install
+npm run lint
+```
+
 To build:
 
 ```bash
