@@ -48,10 +48,7 @@ const LogoSplash = () => {
         alt="Startup Logo"
         animate={controls}
         initial={{ opacity: 0, filter: "brightness(0) blur(6px) saturate(0)" }}
-        className="w-full"
-        style={{
-          width: "clamp(300px, 60vw, 1000px)",
-        }}
+        className="w-[100vw] lg:w-[80vw] xl:w-[60vw] mx-auto"
       />
     </div>
   );

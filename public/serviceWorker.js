@@ -58,36 +58,20 @@ self.addEventListener('activate', event => {
 
 // Custom fetch handling based on content type
 self.addEventListener('fetch', event => {
-  const strategy = getCacheStrategy(event.request);
-  
   event.respondWith(
-    caches.open(CACHE_NAMES[strategy])
-      .then(cache => {
-        return cache.match(event.request)
-          .then(response => {
-            // For videos, always return cached version if available
-            if (strategy === 'videos' && response) {
-              return response;
-            }
-            
-            // Network first for dynamic content
-            const fetchPromise = fetch(event.request).then(networkResponse => {
-              if (networkResponse && networkResponse.status === 200) {
-                cache.put(event.request, networkResponse.clone());
-              }
-              return networkResponse;
-            }).catch(() => response);
-            
-            // Return cached response immediately for static assets
-            if (strategy === 'static' && response) {
-              // Update cache in background
-              fetchPromise.catch(() => {});
-              return response;
-            }
-            
-            // Wait for network response, falling back to cache
-            return fetchPromise.catch(() => response);
-          });
-      })
+    caches.match(event.request).then(response => {
+      if (response) {
+        return response;
+      }
+      return fetch(event.request).then(networkResponse => {
+        const cacheName = getCacheStrategy(event.request);
+        return caches.open(CACHE_NAMES[cacheName]).then(cache => {
+          cache.put(event.request, networkResponse.clone());
+          return networkResponse;
+        });
+      });
+    }).catch(() => {
+      // Fallback logic for offline scenarios
+    })
   );
 });

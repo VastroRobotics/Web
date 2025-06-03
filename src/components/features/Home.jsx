@@ -12,6 +12,7 @@ import InfoPoint from "../ui/InfoPoint";
 import ScrollPrompt from "../layout/ScrollPrompt";
 import LogoSplash from "../common/LogoSplash";
 import AssetLoader from '../../utils/assetLoader';
+import { useBreakpoint } from '../../hooks/useBreakpoint';
 
 import BackEntrance from "../../assets/animations/back_entrance.webm";
 import BackLoop from "../../assets/animations/back_loop.webm";
@@ -37,6 +38,8 @@ const Home = forwardRef(
     const [videoReady, setVideoReady] = useState(false);
     const [entranceLoaded, setEntranceLoaded] = useState({ back: false, front: false });
     const [loadingProgress, setLoadingProgress] = useState(0);
+
+    const { breakpoint, isMobile } = useBreakpoint();
 
     const infoPoints = [
       {
@@ -213,7 +216,6 @@ const Home = forwardRef(
               <Suspense fallback={null}>
                 <LazyBackgroundEmblem />
               </Suspense>
-
               <div className="absolute inset-0" style={{ perspective: 800 }}>
                 <div className="absolute inset-0">
                   <div className="absolute inset-0 flex items-center justify-center">
@@ -246,7 +248,13 @@ const Home = forwardRef(
                         />
                       </div>                      <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">                        <div className="flex items-center justify-center">
                           <Suspense fallback={null}>
-                            <LogoSplash />
+                            <LogoSplash 
+                              // Responsive splash text size
+                              className="text-4xl sm:text-5xl md:text-7xl xl:text-8xl font-bold text-white text-center drop-shadow-lg"
+                              style={{
+                                fontSize: isMobile ? 'clamp(2rem, 7vw, 3.5rem)' : 'clamp(3rem, 8vw, 6rem)'
+                              }}
+                            />
                           </Suspense>
                         </div>
                       </div>
@@ -302,8 +310,17 @@ const Home = forwardRef(
                 </div>
               </div>
 
+              {/* Responsive scroll down button */}
               <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-50">
-                {logoDone && <ScrollPrompt onClick={goToNext} />}
+                {logoDone && (
+                  <div className={
+                    isMobile
+                      ? 'w-10 h-10'
+                      : 'w-16 h-16'
+                  }>
+                    <ScrollPrompt onClick={goToNext} />
+                  </div>
+                )}
               </div>
             </div>
           </div>

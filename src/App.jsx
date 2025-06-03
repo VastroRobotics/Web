@@ -52,11 +52,6 @@ export default function App() {
 
   return (
     <div className="w-full h-screen overflow-hidden relative">
-      <ScrollBar
-        activeIndex={activeIndex}
-        setActiveIndex={jumpToSection}
-        sectionRefs={{}}
-      />
       {sections.map((Section, i) => (
         <div
           key={i}

@@ -15,7 +15,7 @@ export default function ScrollPrompt({ onClick }) {
       onClick={onClick}
     >
       <motion.div
-        className="w-18 h-18 rounded-full bg-white flex items-center justify-center shadow-[0_0_12px_5px_rgba(255,255,255,0.3)]"
+        className="w-14 h-14 sm:w-15 sm:h-15 md:w-16 md:h-16 lg:w-18 lg:h-18 xl:w-20 xl:h-20 rounded-full bg-white flex items-center justify-center shadow-[0_0_12px_5px_rgba(255,255,255,0.3)]"
         whileHover={{ scale: 1.1 }}
         transition={{ type: "spring", stiffness: 300, damping: 20 }}
       >
@@ -33,7 +33,7 @@ export default function ScrollPrompt({ onClick }) {
           className="flex items-center justify-center"
         >
           <FaArrowDown
-            className="w-7 h-7"  
+            className="w-6 h-6 lg:w-7 lg:h-7 xl:w-8 xl:h-8"  
             style={{ color: "#141414" }}
           />
         </motion.div>
