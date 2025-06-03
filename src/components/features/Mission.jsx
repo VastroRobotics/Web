@@ -33,6 +33,21 @@ const HeroScroll = forwardRef(({ isActive, onCanLeaveChange }, ref) => {
   const chartControls = useAnimation();
   const rightControls = useAnimation();
   const tableControls = useAnimation();
+  const rowControls = useAnimation();
+
+  useEffect(() => {
+    const leftInit = { x: "100%", opacity: 0, width: "90%", scale: 1.3 };
+    const chartInit = { opacity: 0, scale: 1.3 };
+    const rightInit = { x: "100%", opacity: 0, width: isDesktop ? "60%" : "100%" };
+    const tableInit = { opacity: 0, x: -20 };
+    const rowInit = { y: 0 };
+
+    leftControls.set(leftInit);
+    chartControls.set(chartInit);
+    rightControls.set(rightInit);
+    tableControls.set(tableInit);
+    rowControls.set(rowInit);
+  }, [isDesktop, leftControls, chartControls, rightControls, tableControls, rowControls]);
 
   useEffect(() => {
     if (!isDesktop) {
@@ -87,21 +102,30 @@ const HeroScroll = forwardRef(({ isActive, onCanLeaveChange }, ref) => {
 
   useEffect(() => {
     const leftStates = [
-      { x: "100%", opacity: 0, scale: 1 },
-      { x: "15%", opacity: 1, scale: 1.2 },
-      { x: "0%", opacity: 1, scale: 1.2 },
-      { x: "0%", opacity: 1, scale: 1 },
-      { x: "0%", opacity: 1, scale: 1 },
-      { x: "0%", opacity: 1, scale: 1 },
+      { x: "100%", opacity: 0, width: "90%", scale: 1.3 },
+      { x: "0%", opacity: 1, width: "90%", scale: 1.3 },
+      { x: "0%", opacity: 1, width: isDesktop ? "70%" : "100%", scale: 1.2 },
+      { x: "0%", opacity: 1, width: isDesktop ? "70%" : "100%", scale: 1 },
+      { x: "0%", opacity: 1, width: isDesktop ? "70%" : "100%", scale: 1 },
+      { x: "0%", opacity: 1, width: isDesktop ? "70%" : "100%", scale: 1 },
     ];
 
     const chartStates = [
       { opacity: 0, scale: 1.3 },
       { opacity: 0, scale: 1.3 },
-      { opacity: 1, scale: 1.3 },
+      { opacity: 1, scale: 1.4 },
       { opacity: 1, scale: 1 },
       { opacity: 1, scale: 1 },
       { opacity: 1, scale: 1 },
+    ];
+
+    const rowStates = [
+      { y: 0 },
+      { y: 0 },
+      { y: 0 },
+      { y: isDesktop ? -80 : 0 },
+      { y: isDesktop ? -80 : 0 },
+      { y: isDesktop ? -80 : 0 },
     ];
 
     const rightStates = [
@@ -126,14 +150,20 @@ const HeroScroll = forwardRef(({ isActive, onCanLeaveChange }, ref) => {
     chartControls.start({ ...chartStates[stage], transition: { duration: 0.6, ease: "easeOut" } });
     rightControls.start({ ...rightStates[stage], transition: { duration: 0.6, ease: "easeOut" } });
     tableControls.start({ ...tableStates[stage], transition: { duration: 0.6, ease: "easeOut" } });
-  }, [stage, isDesktop, leftControls, chartControls, rightControls, tableControls]);
+    rowControls.start({ ...rowStates[stage], transition: { duration: 0.6, ease: "easeOut" } });
+  }, [stage, isDesktop, leftControls, chartControls, rightControls, tableControls, rowControls]);
 
   return (
     <div className="w-full h-screen flex flex-col justify-center space-y-10 overflow-hidden py-6">
-      <div ref={ref} className="w-full flex flex-col lg:flex-row items-center px-0 relative">
+      <motion.div
+        ref={ref}
+        className="w-full flex flex-col lg:flex-row items-center px-0 relative"
+        animate={rowControls}
+        initial={false}
+      >
         <motion.div
           className="bg-black flex flex-col items-center justify-center relative rounded-r-3xl px-20 py-24 my-6"
-          style={{ boxShadow: "0 0 20px rgba(255,255,255,0.15)", width: isDesktop ? "70%" : "100%" }}
+          style={{ boxShadow: "0 0 20px rgba(255,255,255,0.15)" }}
           animate={leftControls}
           initial={false}
         >
