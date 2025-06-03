@@ -1,9 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { FaArrowDown } from "react-icons/fa";
-
-export default function ScrollPrompt({ onClick }) {
+import { FaArrowDown, FaArrowUp } from "react-icons/fa";
+export default function ScrollPrompt({ onClick, direction = "down", className }) {
   return (
     <motion.button
       initial={{ opacity: 0 }}
@@ -11,7 +10,7 @@ export default function ScrollPrompt({ onClick }) {
       transition={{ delay: 2, duration: 2 }} 
       whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 1.05 }}
-      className="absolute bottom-15 left-1/2 transform -translate-x-1/2 z-50"
+      className={className ? className : "absolute bottom-15 left-1/2 transform -translate-x-1/2 z-50"}
       onClick={onClick}
     >
       <motion.div
@@ -21,10 +20,10 @@ export default function ScrollPrompt({ onClick }) {
       >
         <motion.div
           initial={{ y: 0 }}
-          animate={{ y: [0, 0, 0, 5, 0, 5, 0] }}
+          animate={{ y: direction === "up" ? [0, 0, 0, -5, 0, -5, 0] : [0, 0, 0, 5, 0, 5, 0] }}
           transition={{
-            delay: 4.5, 
-            duration: 1.5,  
+            delay: 4.5,
+            duration: 1.5,
             times: [0, 0.2, 0.4, 0.6, 0.7, 0.9, 1],
             ease: "easeInOut",
             repeat: Infinity,
@@ -32,10 +31,17 @@ export default function ScrollPrompt({ onClick }) {
           }}
           className="flex items-center justify-center"
         >
-          <FaArrowDown
-            className="w-6 h-6 lg:w-7 lg:h-7 xl:w-8 xl:h-8"  
-            style={{ color: "#141414" }}
-          />
+          {direction === "up" ? (
+            <FaArrowUp
+              className="w-6 h-6 lg:w-7 lg:h-7 xl:w-8 xl:h-8"
+              style={{ color: "#141414" }}
+            />
+          ) : (
+            <FaArrowDown
+              className="w-6 h-6 lg:w-7 lg:h-7 xl:w-8 xl:h-8"
+              style={{ color: "#141414" }}
+            />
+          )}
         </motion.div>
       </motion.div>
     </motion.button>
