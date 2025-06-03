@@ -6,13 +6,13 @@ import ScrollPrompt from "../layout/ScrollPrompt";
 
 export default function MiniFooter({ onScrollTop }) {
   return (
-    <div className='w-80 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 '>
-      <div className="space-y-4 text-grey-400">
+    <div className="absolute top-1/2 left-1/2 w-full max-w-md px-4 transform -translate-x-1/2 -translate-y-1/2">
+      <div className="space-y-6 text-grey-400">
         {/* Logo and email */}
         <div className="flex flex-col items-start space-y-1">
           <img src={Logo} alt="Vastro logo" className="h-12 w-auto" />
-          <div className="flex items-center">
-            <Mail className="w-3 h-3 mr-2" />
+          <div className="flex items-center text-gray-400 text-sm">
+            <Mail className="w-4 h-4 mr-2" />
             <span>info@vastro.org</span>
           </div>
         </div>
@@ -27,7 +27,7 @@ export default function MiniFooter({ onScrollTop }) {
               <Instagram className="w-5 h-5" />
             </a>
           </div>
-          <ScrollPrompt direction="up" onClick={onScrollTop} className="relative" />
+          <ScrollPrompt direction="up" onClick={onScrollTop} className="w-8 h-8 relative" />
         </div>
 
         {/* Credits */}

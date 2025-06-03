@@ -79,6 +79,7 @@ export default function App() {
                       Math.min(prev + 1, sections.length - 1)
                     )
                   }
+                  {...(Section === Footer ? { onScrollTop: () => setActiveIndex(0) } : {})}
                 />
               </Suspense>
             </SectionWrapper>
