@@ -1,46 +1,41 @@
-import React from 'react';
-import { Instagram, Linkedin } from 'lucide-react';
-import logoUrl from "../../assets/branding/vastro_full_logo.svg";
-import glowLeft from "../../assets/effects/glow_left.png";
-import glowRight from "../../assets/effects/glow_right.png";
+"use client";
 
-export default function Footer() {
+import { Instagram, Linkedin, Mail } from "lucide-react";
+import Logo from "../../assets/branding/vastro_full_logo.svg";
+import ScrollPrompt from "../layout/ScrollPrompt";
+
+export default function MiniFooter({ onScrollTop }) {
   return (
-    <footer className="relative bg-black text-white py-32 overflow-hidden">
-      {/* Textured bottom corner glows */}
-      <img
-        src={glowLeft}
-        alt="Bottom left glow"
-        className="absolute bottom-0 left-0 w-80 h-80 object-contain opacity-20 pointer-events-none select-none"
-      />
-      <img
-        src={glowRight}
-        alt="Bottom right glow"
-        className="absolute bottom-0 right-0 w-80 h-80 object-contain opacity-20 pointer-events-none select-none"
-      />
+    <div className='w-80 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 '>
+      <div className="space-y-4 text-grey-400">
+        {/* Logo and email */}
+        <div className="flex flex-col items-start space-y-1">
+          <img src={Logo} alt="Vastro logo" className="h-12 w-auto" />
+          <div className="flex items-center">
+            <Mail className="w-3 h-3 mr-2" />
+            <span>info@vastro.org</span>
+          </div>
+        </div>
 
-      {/* Logo and email */}
-      <div className="container mx-auto flex flex-col items-center justify-center relative z-10 mt-12">
-        <img src={logoUrl} alt="Vastro logo" className="mb-2 h-16 w-auto" />
-        <p className="text-sm">info@vastro.org</p>
-      </div>
+        {/* Social icons and scroll to top */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <a href="https://linkedin.com/company/vastro" aria-label="LinkedIn">
+              <Linkedin className="w-5 h-5" />
+            </a>
+            <a href="https://instagram.com/vastro" aria-label="Instagram">
+              <Instagram className="w-5 h-5" />
+            </a>
+          </div>
+          <ScrollPrompt direction="up" onClick={onScrollTop} className="relative" />
+        </div>
 
-      {/* Website credit */}
-      <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-xs opacity-70 z-10">
-        Website by Lucas Kover Wolf
-      </div>
-
-      {/* Social bar */}
-      <div className="absolute bottom-6 right-6 z-10">
-        <div className="flex space-x-4 bg-gray-800 bg-opacity-75 rounded-full px-4 py-2 items-center">
-          <a href="https://instagram.com/vastro" aria-label="Instagram">
-            <Instagram size={20} />
-          </a>
-          <a href="https://linkedin.com/company/vastro" aria-label="LinkedIn">
-            <Linkedin size={20} />
-          </a>
+        {/* Credits */}
+        <div className="text-xs text-gray-400 flex flex-col items-start leading-tight">
+          <span>© Vastro Robotics 2025</span>
+          <span>All rights reserved. Terms &amp; Conditions.</span>
         </div>
       </div>
-    </footer>
+    </div>
   );
 }

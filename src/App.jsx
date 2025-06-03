@@ -6,6 +6,8 @@ import Home from "./components/features/Home";
 import SectionWrapper from "./components/layout/SectionWrapper";
 import Loading from "./components/common/Loading";
 import ErrorBoundary from "./components/common/ErrorBoundary";
+import Footer from "./components/features/Footer";
+
 
 // Lazy load all sections except Home
 const Mission = lazy(() => import("./components/features/Mission"));
@@ -13,7 +15,7 @@ const About = lazy(() => import("./components/features/About"));
 const Team = lazy(() => import("./components/features/Team"));
 const Timeline = lazy(() => import("./components/features/Timeline"));
 
-const sections = [Home, Mission, About, Team, Timeline];
+const sections = [Home, Mission, About, Team, Footer];
 
 export default function App() {
   const [activeIndex, setActiveIndex] = useState(0);
