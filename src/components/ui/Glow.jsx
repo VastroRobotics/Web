@@ -1,34 +1,28 @@
 import React from "react";
 
-export default function Glow({ color = "white" }) {
-  return (
-    <div className="absolute inset-0 z-0 pointer-events-none flex items-center justify-center">
-      <svg
-        width="700"
-        height="500"
-        viewBox="0 0 500 500"
-        className="absolute blur-[90px] opacity-20 animate-slowGlow scale-x-125 scale-y-75"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-      >
-        <path
-          d="M250 100C350 80 400 -50 460 60C520 170 320 440 200 480C80 520 100 300 40 200C-20 100 150 120 250 100Z"
-          fill={color}
-        />
-      </svg>
-      <svg
-        width="500"
-        height="350"
-        viewBox="0 0 500 500"
-        className="absolute blur-[70px] opacity-10 translate-x-12 translate-y-6 animate-slowGlowReverse scale-x-125 scale-y-75"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-      >
-        <path
-          d="M250 100C350 80 400 -50 460 60C520 170 320 440 200 480C80 520 100 300 40 200C-20 100 150 120 250 100Z"
-          fill={color}
-        />
-      </svg>
-    </div>
-  );
+/**
+ * A lightweight, blurred glow based on a radial gradient.
+ * Width/height can be a number (pixels) or any valid CSS size string.
+ * Shape options:
+ *  - "circle" (default)
+ *  - "oval" (uses the provided width/height as an ellipse)
+ *  - "rect" (no border radius)
+ */
+export default function Glow({
+  color = "rgba(255,255,255,0.5)",
+  width = 700,
+  height = 500,
+  shape = "circle",
+  className = "",
+}) {
+  const style = {
+    width: typeof width === "number" ? `${width}px` : width,
+    height: typeof height === "number" ? `${height}px` : height,
+    background: `radial-gradient(circle, ${color} 0%, transparent 70%)`,
+    filter: "blur(80px)",
+    borderRadius:
+      shape === "circle" ? "50%" : shape === "oval" ? "50% / 60%" : "0",
+  };
+
+  return <div className={`pointer-events-none subtle-glow ${className}`} style={style} />;
 }

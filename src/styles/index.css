@@ -36,3 +36,16 @@ h1, h2, h3, h4, h5, h6 {
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
+
+@keyframes subtleGlow {
+  0%, 100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.subtle-glow {
+  animation: subtleGlow 10s ease-in-out infinite;
+}

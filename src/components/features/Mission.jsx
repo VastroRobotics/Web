@@ -57,7 +57,7 @@ const HeroScroll = forwardRef((_, ref) => {
             animate={inView ? "visible" : "hidden"}
             className="absolute inset-0 flex items-center justify-center pointer-events-none"
           >
-            <Glow color="white" />
+            <Glow color="white" width={600} height={400} shape="oval" />
           </motion.div>
 
           <motion.div
@@ -113,7 +113,7 @@ const HeroScroll = forwardRef((_, ref) => {
             animate={inView ? "visible" : "hidden"}
             className="absolute inset-0 flex items-center justify-center pointer-events-none"
           >
-            <Glow color="white" />
+            <Glow color="white" width={600} height={400} shape="oval" />
           </motion.div>
 
           <motion.div
