@@ -313,13 +313,11 @@ const Home = forwardRef(
               {/* Responsive scroll down button */}
               <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-50">
                 {logoDone && (
-                  <div className={
-                    isMobile
-                      ? 'w-10 h-10'
-                      : 'w-16 h-16'
-                  }>
-                    <ScrollPrompt onClick={goToNext} />
-                  </div>
+                  <ScrollPrompt
+                    onClick={goToNext}
+                    className={isMobile ? 'w-10 h-10' : 'w-16 h-16'}
+                    animateIn={true}
+                  />
                 )}
               </div>
             </div>

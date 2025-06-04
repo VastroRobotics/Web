@@ -7,13 +7,15 @@ import SectionWrapper from "./components/layout/SectionWrapper";
 import Loading from "./components/common/Loading";
 import ErrorBoundary from "./components/common/ErrorBoundary";
 
+
 // Lazy load all sections except Home
 const Mission = lazy(() => import("./components/features/Mission"));
 const About = lazy(() => import("./components/features/About"));
 const Team = lazy(() => import("./components/features/Team"));
 const Timeline = lazy(() => import("./components/features/Timeline"));
+const Footer = lazy(() => import("./components/features/Footer"));
 
-const sections = [Home, Mission, About, Team, Timeline];
+const sections = [Home, Mission, About, Team, Footer, Timeline];
 
 export default function App() {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -77,6 +79,7 @@ export default function App() {
                       Math.min(prev + 1, sections.length - 1)
                     )
                   }
+                  {...(Section === Footer ? { onScrollTop: () => setActiveIndex(0) } : {})}
                 />
               </Suspense>
             </SectionWrapper>
