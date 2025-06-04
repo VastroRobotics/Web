@@ -25,7 +25,9 @@ export default function StageBanner({
   const crossKey = isMobile ? "width" : "height";
   const variants = {
     hidden: {
-      x: direction === 0 ? -200 : 200,
+      ...(isMobile
+        ? { y: direction === 0 ? -200 : 200 }
+        : { x: direction === 0 ? -200 : 200 }),
       opacity: 0,
       [lenKey]: `${start}%`,
       [crossKey]: `${thickness}%`,
@@ -33,6 +35,7 @@ export default function StageBanner({
     },
     visible: {
       x: 0,
+      y: 0,
       opacity: 1,
       [lenKey]: `${end}%`,
       [crossKey]: `${thickness}%`,
@@ -43,9 +46,10 @@ export default function StageBanner({
   const style = isMobile
     ? {
         [crossKey]: `${thickness}%`,
-        left: direction === 0 ? 0 : "auto",
-        right: direction === 1 ? 0 : "auto",
-        top: 0,
+        left: "50%",
+        transform: "translateX(-50%)",
+        top: direction === 0 ? 0 : "auto",
+        bottom: direction === 1 ? 0 : "auto",
       }
     : {
         [crossKey]: `${thickness}%`,
@@ -57,8 +61,16 @@ export default function StageBanner({
 
   return (
     <motion.div
-      className={`absolute flex items-center justify-center bg-black text-white font-bold px-6 overflow-hidden my-6 ${
-        direction === 0 ? "rounded-r-3xl" : "rounded-l-3xl"
+      className={`absolute flex items-center justify-center bg-black text-white font-bold overflow-hidden ${
+        isMobile ? "py-6 mx-6" : "px-6 my-6"
+      } ${
+        isMobile
+          ? direction === 0
+            ? "rounded-b-3xl"
+            : "rounded-t-3xl"
+          : direction === 0
+          ? "rounded-r-3xl"
+          : "rounded-l-3xl"
       }`}
       style={{ ...style, boxShadow: "0 0 20px rgba(255,255,255,0.15)" }}
       variants={variants}
@@ -68,7 +80,11 @@ export default function StageBanner({
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
         <Glow color="white" />
       </div>
-      <span className="relative z-10 text-center whitespace-nowrap leading-tight text-[8vw] md:text-[3vw]">
+      <span
+        className={`relative z-10 text-center whitespace-nowrap leading-tight ${
+          isMobile ? "text-[8vh]" : "text-[8vw] md:text-[3vw]"
+        }`}
+      >
         {text}
       </span>
     </motion.div>
