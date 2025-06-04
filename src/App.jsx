@@ -44,6 +44,7 @@ export default function App() {
   };
 
   const jumpToSection = (index) => {
+    setScrollDirection(index > activeIndex ? "down" : "up");
     setActiveIndex(index);
   };
 
@@ -75,12 +76,20 @@ export default function App() {
                   isActive={i === activeIndex}
                   scrollDirection={scrollDirection}
                   onCanLeaveChange={setCanLeave}
-                  goToNext={() =>
+                  goToNext={() => {
+                    setScrollDirection("down");
                     setActiveIndex((prev) =>
                       Math.min(prev + 1, sections.length - 1)
-                    )
-                  }
-                  {...(Section === Footer ? { onScrollTop: () => setActiveIndex(0) } : {})}
+                    );
+                  }}
+                  {...(Section === Footer
+                    ? {
+                        onScrollTop: () => {
+                          setScrollDirection("up");
+                          setActiveIndex(0);
+                        },
+                      }
+                    : {})}
                 />
               </Suspense>
             </SectionWrapper>
