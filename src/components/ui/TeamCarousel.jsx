@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronRight, Linkedin } from "lucide-react";
+import { ChevronRight, Linkedin, Mail } from "lucide-react";
 
 // Import images
 import AlexImage from "../../assets/media/team/Alex.png";
@@ -21,6 +21,7 @@ const teamMembers = [
                 role: "Software",
                 image: AlexImage,
                 linkedin: "#",
+                email: "#",
                 bio: "Alexander is a junior studying Applied Mathematics and Computer Science. Alexander’s work behind the scenes to develop our virtual-reality immersion software and implementation of haptic feedback controls has been key for our continued success in developing an immersive control system for our users.",
         },
         {
@@ -29,6 +30,7 @@ const teamMembers = [
                 role: "Founder & CEO",
                 image: AndrewImage,
                 linkedin: "#",
+                email: "#",
                 bio: "Andrew is a junior studying Mechanical Engineering and Business Economics. With an interest in start-ups, he assisted significantly in building the project from the ground up and scaling the venture to where it is today.",
         },
         {
@@ -37,6 +39,7 @@ const teamMembers = [
                 role: "Head of R&D",
                 image: InesImage,
                 linkedin: "#",
+                email: "#",
                 bio: "Ines is a current freshman studying Design Engineering. With her skills as a researcher and communications, Ines delivers high-impact research to help the team continue to refine our hardware & software systems to bring our product to the market.",
         },
         {
@@ -45,6 +48,7 @@ const teamMembers = [
                 role: "Co-Founder",
                 image: JesalinaImage,
                 linkedin: "#",
+                email: "#",
                 bio: "Jesalina is a junior studying Computer Engineering and Entrepreneurship. With a knack for interfacing both software development and developing hardware & electrical systems, Jesalina works to ensure our solution has all of its power and electrical needs met.",
         },
         {
@@ -53,6 +57,7 @@ const teamMembers = [
                 role: "Design Lead",
                 image: JoshImage,
                 linkedin: "#",
+                email: "#",
                 bio: "Josh is a current junior studying Mechanical Engineering. Josh’s aptitude for designing mechanical systems and utilizing his skills in CAD, Josh contributes significantly to our overall design to meet all users needs.",
         },
         {
@@ -61,6 +66,7 @@ const teamMembers = [
                 role: "Software",
                 image: LucasImage,
                 linkedin: "#",
+                email: "#",
                 bio: "Placeholder.",
         },
         {
@@ -69,6 +75,7 @@ const teamMembers = [
                 role: "Adviser",
                 image: RickImage,
                 linkedin: "#",
+                email: "#",
                 bio: "Placeholder.",
         },
         {
@@ -77,6 +84,7 @@ const teamMembers = [
                 role: "Software",
                 image: RyanImage,
                 linkedin: "#",
+                email: "#",
                 bio: "Placeholder.",
         },
 ];
@@ -217,30 +225,40 @@ export default function TeamCarousel() {
 											</div>
 										)}
 
-                                       {/* Text Box */}
+                                       {/* Info Box */}
                                         <motion.div
-                                                className="absolute bottom-0 left-0 p-6 w-full pointer-events-none bg-gradient-to-t from-black/90 via-black/70 to-transparent"
-                                                initial={false}
-                                                animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 10 }}
-                                                transition={{ duration: 0.3, ease: "easeOut" }}
+                                                className="absolute bottom-0 left-0 w-full pointer-events-none min-h-[160px]"
+                                                initial="hidden"
+                                                animate={isActive ? "visible" : "hidden"}
+                                                variants={{ hidden: { opacity: 0, y: 40 }, visible: { opacity: 1, y: 0 } }}
+                                                transition={{ duration: 0.5, ease: [0.23, 1, 0.32, 1] }}
                                         >
-                                                <div className="flex flex-col space-y-2">
-                                                        <h3 className="text-3xl font-bold text-white">
+                                                <div className="p-6 bg-gradient-to-t from-black/90 via-black/70 to-transparent space-y-2 pointer-events-auto">
+                                                        <h3 className="text-3xl font-bold text-white whitespace-nowrap">
                                                                 {member.name}
                                                         </h3>
                                                         <div className="flex items-center text-xl font-semibold text-gray-200 space-x-2">
                                                                 <span>{member.role}</span>
-                                                                <a
-                                                                        href={member.linkedin}
-                                                                        target="_blank"
-                                                                        rel="noopener noreferrer"
-                                                                        aria-label="LinkedIn"
-                                                                        className="hover:text-white p-1"
-                                                                >
-                                                                        <Linkedin className="w-5 h-5 ml-1" />
-                                                                </a>
+                                                                <div className="flex items-center space-x-2 pl-2 text-gray-400">
+                                                                        <a
+                                                                                href={member.email}
+                                                                                aria-label="Email"
+                                                                                className="p-1 text-gray-400 hover:text-white"
+                                                                        >
+                                                                                <Mail className="w-5 h-5" />
+                                                                        </a>
+                                                                        <a
+                                                                                href={member.linkedin}
+                                                                                target="_blank"
+                                                                                rel="noopener noreferrer"
+                                                                                aria-label="LinkedIn"
+                                                                                className="p-1 text-gray-400 hover:text-white"
+                                                                        >
+                                                                                <Linkedin className="w-5 h-5" />
+                                                                        </a>
+                                                                </div>
                                                         </div>
-                                                        <p className="text-base text-gray-400">
+                                                        <p className="text-base text-gray-400 whitespace-pre-line">
                                                                 {member.bio}
                                                         </p>
                                                 </div>
