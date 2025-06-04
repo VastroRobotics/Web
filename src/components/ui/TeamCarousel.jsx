@@ -90,20 +90,27 @@ const teamMembers = [
 ];
 
 export default function TeamCarousel() {
-	const [activeIndex, setActiveIndex] = useState(1); // Default to 2nd on load
-	const [rotationOffset, setRotationOffset] = useState(0);
-	const [isRotating, setIsRotating] = useState(false);
-	const [lastInteraction, setLastInteraction] = useState(Date.now());
-	const carouselRef = useRef(null);
+        const [activeIndex, setActiveIndex] = useState(1); // Default to 2nd on load
+        const [rotationOffset, setRotationOffset] = useState(0);
+        const [isRotating, setIsRotating] = useState(false);
+        const [lastInteraction, setLastInteraction] = useState(Date.now());
+        const [infoVisible, setInfoVisible] = useState(false);
+        const carouselRef = useRef(null);
 
-	useEffect(() => {
-		const interval = setInterval(() => {
-			if (Date.now() - lastInteraction > 18000 && !isRotating) {
-				rotateCarousel();
-			}
-		}, 8000);
-		return () => clearInterval(interval);
-	}, [lastInteraction, isRotating]);
+       useEffect(() => {
+               const interval = setInterval(() => {
+                       if (Date.now() - lastInteraction > 18000 && !isRotating) {
+                               rotateCarousel();
+                       }
+               }, 8000);
+               return () => clearInterval(interval);
+       }, [lastInteraction, isRotating]);
+
+       useEffect(() => {
+               setInfoVisible(false);
+               const timeout = setTimeout(() => setInfoVisible(true), 350);
+               return () => clearTimeout(timeout);
+       }, [activeIndex]);
 
        const rotateCarousel = () => {
                if (isRotating) return;
@@ -227,13 +234,13 @@ export default function TeamCarousel() {
 
                                        {/* Info Box */}
                                         <motion.div
-                                                className="absolute bottom-0 left-0 w-full pointer-events-none min-h-[160px]"
+                                                className="absolute bottom-0 left-0 w-full aspect-[4/3] pointer-events-none overflow-hidden"
                                                 initial="hidden"
-                                                animate={isActive ? "visible" : "hidden"}
-                                                variants={{ hidden: { opacity: 0, y: 40 }, visible: { opacity: 1, y: 0 } }}
-                                                transition={{ duration: 0.5, ease: [0.23, 1, 0.32, 1] }}
+                                                animate={isActive && infoVisible ? "visible" : "hidden"}
+                                                variants={{ hidden: { opacity: 0, y: 60 }, visible: { opacity: 1, y: 0 } }}
+                                                transition={{ duration: 0.35, ease: [0.23, 1, 0.32, 1] }}
                                         >
-                                                <div className="p-6 bg-gradient-to-t from-black/90 via-black/70 to-transparent space-y-2 pointer-events-auto">
+                                                <div className="absolute inset-0 p-6 bg-gradient-to-t from-black/90 via-black/70 to-transparent space-y-2 pointer-events-auto">
                                                         <h3 className="text-3xl font-bold text-white whitespace-nowrap">
                                                                 {member.name}
                                                         </h3>
