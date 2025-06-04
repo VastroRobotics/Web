@@ -25,6 +25,8 @@ const Mission = forwardRef(({ isActive, onCanLeaveChange }, ref) => {
   const bannerControlsBottom = useAnimation();
   const [showCharts, setShowCharts] = useState(false);
   const [showTable, setShowTable] = useState(false);
+  const [topTextVisible, setTopTextVisible] = useState(false);
+  const [bottomTextVisible, setBottomTextVisible] = useState(false);
 
   const maxStage = 2;
   const throttleDelay = 1500;
@@ -34,38 +36,60 @@ const Mission = forwardRef(({ isActive, onCanLeaveChange }, ref) => {
 
     if (stage >= 1) {
       if (stage === 1) {
+        isThrottled.current = true;
         setShowCharts(false);
-        bannerControlsTop.set({ x: "-100%", width: "100%" });
+        setTopTextVisible(false);
+        bannerControlsTop.set({ x: "100%", width: "90%" });
         bannerControlsTop
-          .start({ x: 0, width: "100%", transition: { duration: 1.2, ease: "easeOut" } })
+          .start({ x: 0, width: "90%", transition: { duration: 1.2, ease: "easeOut" } })
           .then(() => {
+            setTopTextVisible(true);
             setTimeout(() => {
-              bannerControlsTop.start({ width: "70%", transition: { duration: 1.0, ease: "easeOut" } });
-              setShowCharts(true);
+              bannerControlsTop
+                .start({ width: "70%", transition: { duration: 1.2, ease: "easeOut" } })
+                .then(() => {
+                  setShowCharts(true);
+                  setTimeout(() => {
+                    isThrottled.current = false;
+                  }, throttleDelay);
+                });
             }, 300);
           });
       }
     } else {
-      bannerControlsTop.set({ x: "-100%", width: "100%" });
+      bannerControlsTop.set({ x: "100%", width: "90%" });
       setShowCharts(false);
+      setTopTextVisible(false);
+      isThrottled.current = false;
     }
 
     if (stage >= 2) {
       if (stage === 2) {
+        isThrottled.current = true;
         setShowTable(false);
+        setBottomTextVisible(false);
         bannerControlsBottom.set({ x: "100%", width: "100%" });
         bannerControlsBottom
           .start({ x: 0, width: "100%", transition: { duration: 1.2, ease: "easeOut" } })
           .then(() => {
+            setBottomTextVisible(true);
             setTimeout(() => {
-              bannerControlsBottom.start({ width: "60%", transition: { duration: 1.0, ease: "easeOut" } });
-              setShowTable(true);
+              bannerControlsBottom
+                .start({ width: "60%", transition: { duration: 1.2, ease: "easeOut" } })
+                .then(() => {
+                  setShowTable(true);
+                  setTimeout(() => {
+                    isThrottled.current = false;
+                  }, throttleDelay);
+                });
             }, 300);
           });
       }
     } else {
       bannerControlsBottom.set({ x: "100%", width: "100%" });
       setShowTable(false);
+      setBottomTextVisible(false);
+      isThrottled.current = false;
     }
   }, [stage, isDesktop]);
 
@@ -99,11 +123,6 @@ const Mission = forwardRef(({ isActive, onCanLeaveChange }, ref) => {
       if (next === stage) return;
 
       isThrottled.current = true;
-      setTimeout(() => {
-        isThrottled.current = false;
-        if (next === maxStage) onCanLeaveChange(true);
-      }, throttleDelay);
-
       onCanLeaveChange(false);
       setStage(next);
     };
@@ -128,7 +147,7 @@ const Mission = forwardRef(({ isActive, onCanLeaveChange }, ref) => {
         <div className="w-full flex flex-col lg:flex-row items-center px-0">
           <AnimatedBanner
             text={"VR‑controlled quadruped robots\n$75k capability for $2.5k"}
-            direction="left"
+            direction="right"
           />
           <div className="w-full lg:w-[30%] flex flex-col justify-center items-center">
             <div className="flex flex-col lg:flex-col md:flex-row gap-10 justify-center items-center w-full">
@@ -160,20 +179,21 @@ const Mission = forwardRef(({ isActive, onCanLeaveChange }, ref) => {
         animate={{ height: stage >= 2 ? "50%" : "100%", top: 0 }}
         transition={{ duration: 1.0, ease: "easeInOut" }}
       >
-        <div className="flex items-center justify-center w-full h-full">
+        <div className="flex items-center justify-end w-full h-full">
           <AnimatePresence>
             {stage >= 1 && (
               <motion.div
                 key="top-banner-wrapper"
-                className="flex justify-start"
+                className="flex justify-end"
                 style={{ width: "100%" }}
                 initial={false}
                 animate={bannerControlsTop}
               >
                 <AnimatedBanner
                   text={"VR‑controlled quadruped robots\n$75k capability for $2.5k"}
-                  direction="left"
+                  direction="right"
                   className="w-full"
+                  showText={topTextVisible}
                 />
               </motion.div>
             )}
@@ -233,6 +253,7 @@ const Mission = forwardRef(({ isActive, onCanLeaveChange }, ref) => {
                 text={"Making remote access\nmore accessible"}
                 direction="right"
                 className="w-full"
+                showText={bottomTextVisible}
               />
             </motion.div>
           )}
