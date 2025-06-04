@@ -1,6 +1,6 @@
 "use client";
 
-import { forwardRef, useRef } from "react";
+import { forwardRef, useEffect, useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import Glow from "../ui/Glow";
 import Chart from "../ui/Chart";
@@ -35,16 +35,94 @@ const variants = {
   },
 };
 
-const HeroScroll = forwardRef((_, ref) => {
-  const containerRef = useRef(null);
-  const inView = useInView(containerRef, { once: true, margin: "-100px" });
+const HeroScroll = forwardRef(
+  ({ isActive, scrollDirection, onCanLeaveChange }, ref) => {
+    const containerRef = useRef(null);
+    const viewRef = useRef(null);
+    const inView = useInView(viewRef, { once: true, margin: "-100px" });
+
+    const timerRef = useRef(null);
+    const allowLeaveRef = useRef(false);
+
+    useEffect(() => {
+      if (isActive) {
+        onCanLeaveChange(false);
+        allowLeaveRef.current = false;
+      } else {
+        clearTimeout(timerRef.current);
+        timerRef.current = null;
+        allowLeaveRef.current = false;
+      }
+    }, [isActive]);
+
+    useEffect(() => {
+      if (!isActive) return;
+      const el = containerRef.current;
+      if (!el) return;
+
+      const handleScrollReset = () => {
+        const { scrollTop, scrollHeight, clientHeight } = el;
+        const atTop = scrollTop <= 0;
+        const atBottom = scrollTop + clientHeight >= scrollHeight - 1;
+        if (!atTop && !atBottom) {
+          if (timerRef.current) {
+            clearTimeout(timerRef.current);
+            timerRef.current = null;
+          }
+          if (allowLeaveRef.current) {
+            allowLeaveRef.current = false;
+            onCanLeaveChange(false);
+          }
+        }
+      };
+
+      const handleWheel = (e) => {
+        const { scrollTop, scrollHeight, clientHeight } = el;
+        const atTop = scrollTop <= 0;
+        const atBottom = scrollTop + clientHeight >= scrollHeight - 1;
+        const tryingDown = e.deltaY > 0;
+        const tryingUp = e.deltaY < 0;
+
+        if ((atBottom && tryingDown) || (atTop && tryingUp)) {
+          if (!allowLeaveRef.current && !timerRef.current) {
+            timerRef.current = setTimeout(() => {
+              allowLeaveRef.current = true;
+              onCanLeaveChange(true);
+            }, 500);
+          }
+          if (!allowLeaveRef.current) {
+            e.stopPropagation();
+          }
+        } else {
+          if (timerRef.current) {
+            clearTimeout(timerRef.current);
+            timerRef.current = null;
+          }
+          if (allowLeaveRef.current) {
+            allowLeaveRef.current = false;
+            onCanLeaveChange(false);
+          }
+          e.stopPropagation();
+        }
+      };
+
+      el.addEventListener("wheel", handleWheel, { passive: false });
+      el.addEventListener("scroll", handleScrollReset);
+      return () => {
+        el.removeEventListener("wheel", handleWheel);
+        el.removeEventListener("scroll", handleScrollReset);
+        clearTimeout(timerRef.current);
+        timerRef.current = null;
+      };
+    }, [isActive]);
 
   return (
-    <div className="py-6 space-y-10">
+    <div ref={containerRef} className="py-6 space-y-10 h-[200vh] overflow-y-auto">
       {/* First Section: Left Banner + Charts */}
       <div ref={ref} className="w-full flex flex-col lg:flex-row items-center px-0">
         <motion.div
-          ref={containerRef}
+          ref={viewRef}
+          
           initial="hidden"
           animate={inView ? "visible" : "hidden"}
           variants={variants.banner}
@@ -126,7 +204,7 @@ const HeroScroll = forwardRef((_, ref) => {
           </motion.div>
         </motion.div>
       </div>
-    </div   >
+    </div>
   );
 });
 
