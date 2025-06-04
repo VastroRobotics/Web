@@ -47,17 +47,19 @@ export default function StageBanner({
     ? {
         [crossKey]: `${thickness}%`,
         left: "50%",
-        transform: "translateX(-50%)",
         top: direction === 0 ? 0 : "auto",
         bottom: direction === 1 ? 0 : "auto",
+        transform: "translateX(-50%)",
       }
     : {
         [crossKey]: `${thickness}%`,
         top: "50%",
-        transform: "translateY(-50%)",
         left: direction === 0 ? 0 : "auto",
         right: direction === 1 ? 0 : "auto",
+        transform: "translateY(-50%)",
       };
+
+  const fontSize = `${(thickness * 0.2).toFixed(2)}${isMobile ? "vw" : "vh"}`;
 
   return (
     <motion.div
@@ -81,9 +83,8 @@ export default function StageBanner({
         <Glow color="white" />
       </div>
       <span
-        className={`relative z-10 text-center whitespace-nowrap leading-tight ${
-          isMobile ? "text-[8vh]" : "text-[8vw] md:text-[3vw]"
-        }`}
+        className="relative z-10 text-center whitespace-nowrap overflow-hidden text-ellipsis leading-tight"
+        style={{ fontSize }}
       >
         {text}
       </span>
