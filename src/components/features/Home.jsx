@@ -316,6 +316,7 @@ const Home = forwardRef(
                   <ScrollPrompt
                     onClick={goToNext}
                     className={isMobile ? 'w-10 h-10' : 'w-16 h-16'}
+                    animateIn={true}
                   />
                 )}
               </div>

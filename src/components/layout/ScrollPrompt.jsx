@@ -6,12 +6,12 @@ import { FaArrowDown, FaArrowUp } from "react-icons/fa";
 const defaultSize =
   "absolute bottom-15 left-1/2 transform -translate-x-1/2 z-50 w-14 h-14 sm:w-15 sm:h-15 md:w-16 md:h-16 lg:w-18 lg:h-18 xl:w-20 xl:h-20";
 
-export default function ScrollPrompt({ onClick, direction = "down", className = "" }) {
+export default function ScrollPrompt({ onClick, direction = "down", animateIn = false, className = "" }) {
   return (
     <motion.button
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ delay: 2, duration: 2 }} 
+      initial={animateIn ? { opacity: 0, scale: 0.9 } : false}
+      animate={animateIn ? { opacity: 1, scale: 1 } : false}
+      transition={animateIn ? { delay: 2, duration: 1.5, ease: "easeOut" } : {}}
       whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 1.05 }}
       className={`${className || defaultSize} relative`}
@@ -24,7 +24,12 @@ export default function ScrollPrompt({ onClick, direction = "down", className = 
       >
         <motion.div
           initial={{ y: 0 }}
-          animate={{ y: direction === "up" ? [0, 0, 0, -5, 0, -5, 0] : [0, 0, 0, 5, 0, 5, 0] }}
+          animate={{
+            y:
+              direction === "up"
+                ? [0, 0, 0, -5, 0, -5, 0]
+                : [0, 0, 0, 5, 0, 5, 0],
+          }}
           transition={{
             delay: 4.5,
             duration: 1.5,
