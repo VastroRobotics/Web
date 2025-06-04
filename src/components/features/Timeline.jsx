@@ -227,7 +227,7 @@ export default function Timeline({
                       }}
                       animate={
                         (isPast || isCurrent)
-                          ? { scale: 1, backgroundColor: "black", border: "4px solid " + color }
+                          ? { scale: 1, backgroundColor: "#121212", border: "4px solid " + color }
                           : { scale: 0.55, backgroundColor: "#333333", border: "none" }
                       }
                       transition={{
@@ -278,51 +278,65 @@ export default function Timeline({
                         }}
                       />
 
-                      <Motion.div
-                        className={`absolute flex flex-col${isDown ? " flex-col-reverse" : ""}`}
-                        initial={{ opacity: 0, x: -30 }}
-                        animate={isFuture ? { opacity: 0, x: -30 } : { opacity: 1, x: 0 }}
-                        transition={{
-                          duration: isFuture ? 0.15 : 0.2,
-                          delay: isFuture ? reverseTitleDelay : titleDelay,
-                          ease: "easeOut",
-                        }}
-                        style={{
-                          left: "60px",
-                          top: isDown ? `${distance}px` : `-${distance + nodeSize}px`,
-                          transform: isDown ? "translateY(-100%)" : "none",
-                          width: "350px",
-                        }}
-                      >
-                        <span className="text-sm text-gray-400 mb-0.5">{ev.date}</span>
-                        <h3 className="text-2xl font-bold text-white mb-2" style={{ color }}>{ev.title}</h3>
-                        <Motion.p
-                          className="text-sm text-gray-400 mb-4"
-                          initial={{ opacity: 0, y: -30 }}
-                          animate={isFuture ? { opacity: 0, y: -30 } : { opacity: 1, y: 0 }}
-                          transition={{
-                            duration: isFuture ? 0.15 : 0.2,
-                            delay: isFuture ? reverseTextDelay : textDelay,
-                            ease: "easeOut",
-                          }}
-                        >
-                          {ev.description}
-                        </Motion.p>
-                        {ev.image && (
-                          <Motion.div
-                            className="rounded-md overflow-hidden"
-                            initial={{ opacity: 0 }}
-                            animate={isFuture ? { opacity: 0 } : { opacity: 1 }}
-                            transition={{
-                              duration: isFuture ? 0.15 : 0.2,
-                              delay: isFuture ? reverseImageDelay : imageDelay,
-                              ease: "easeOut",
-                            }}
-                          >
-                            <img src={ev.image} alt={ev.title} width={240} height={150} className="rounded-md object-cover" />
-                          </Motion.div>
-                        )}
-                      </Motion.div>
+<Motion.div
+  className={`absolute flex flex-col${isDown ? "-reverse" : ""}`}
+  initial={{ opacity: 0, x: -30 }}
+  animate={isFuture ? { opacity: 0, x: -30 } : { opacity: 1, x: 0 }}
+  transition={{
+    duration: isFuture ? 0.15 : 0.2,
+    delay: isFuture ? reverseTitleDelay : titleDelay,
+    ease: "easeOut",
+  }}
+  style={{
+    left: "60px",
+    ...(isDown
+      ? {
+          bottom: `-${distance + nodeSize + 12}px`,
+        }
+      : {
+          top: `-${distance + nodeSize}px`,
+        }),
+    width: "350px",
+  }}
+>
+  <div className={`m${isDown ? "t-4" : "b-2"}`}>
+    <span className="text-sm text-gray-400 mb-0.5">{ev.date}</span>
+    <h3 className="text-2xl font-bold text-white" style={{ color }}>{ev.title}</h3>
+  </div>
+  <Motion.p
+    className={`text-sm text-gray-400 m${isDown ? "t-4" : "b-4"}`}
+    initial={{ opacity: 0, y: -30 }}
+    animate={isFuture ? { opacity: 0, y: isDown ? 30 : -30 } : { opacity: 1, y: 0 }}
+    transition={{
+      duration: isFuture ? 0.15 : 0.2,
+      delay: isFuture ? reverseTextDelay : textDelay,
+      ease: "easeOut",
+    }}
+  >
+    {ev.description}
+  </Motion.p>
+  {ev.image && (
+    <Motion.div
+      className="rounded-md overflow-hidden"
+      initial={{ opacity: 0 }}
+      animate={isFuture ? { opacity: 0 } : { opacity: 1 }}
+      transition={{
+        duration: isFuture ? 0.15 : 0.2,
+        delay: isFuture ? reverseImageDelay : imageDelay,
+        ease: "easeOut",
+      }}
+    >
+      <img
+        src={ev.image}
+        alt={ev.title}
+        width={240}
+        height={150}
+        className="rounded-md object-cover"
+      />
+    </Motion.div>
+  )}
+</Motion.div>
+
                     </div>
                   </div>
                 );
@@ -335,7 +349,7 @@ export default function Timeline({
           <div className="absolute top-0 right-0 h-full w-40 pointer-events-none z-20 bg-gradient-to-l from-black to-transparent" />
 
           {/* Scroll Indicator */}
-          <div className="bottom-0 justify-center z-50">
+          <div className="top-0 justify-center z-50">
             <ScrollIndicator />
           </div>
         </div>
