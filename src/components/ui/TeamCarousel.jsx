@@ -15,79 +15,80 @@ import RickImage from "../../assets/media/team/Rick.jpg";
 import RyanImage from "../../assets/media/team/Ryan.jpeg";
 
 const teamMembers = [
-        {
-                id: 1,
-                name: "Alex",
-                role: "Software",
-                image: AlexImage,
-                linkedin: "#",
-                email: "#",
-                bio: "Alexander is a junior studying Applied Mathematics and Computer Science. Alexander’s work behind the scenes to develop our virtual-reality immersion software and implementation of haptic feedback controls has been key for our continued success in developing an immersive control system for our users.",
-        },
-        {
-                id: 2,
-                name: "Andrew",
-                role: "Founder & CEO",
-                image: AndrewImage,
-                linkedin: "#",
-                email: "#",
-                bio: "Andrew is a junior studying Mechanical Engineering and Business Economics. With an interest in start-ups, he assisted significantly in building the project from the ground up and scaling the venture to where it is today.",
-        },
-        {
-                id: 3,
-                name: "Ines",
-                role: "Head of R&D",
-                image: InesImage,
-                linkedin: "#",
-                email: "#",
-                bio: "Ines is a current freshman studying Design Engineering. With her skills as a researcher and communications, Ines delivers high-impact research to help the team continue to refine our hardware & software systems to bring our product to the market.",
-        },
-        {
-                id: 4,
-                name: "Jesalina",
-                role: "Co-Founder",
-                image: JesalinaImage,
-                linkedin: "#",
-                email: "#",
-                bio: "Jesalina is a junior studying Computer Engineering and Entrepreneurship. With a knack for interfacing both software development and developing hardware & electrical systems, Jesalina works to ensure our solution has all of its power and electrical needs met.",
-        },
-        {
-                id: 5,
-                name: "Josh",
-                role: "Design Lead",
-                image: JoshImage,
-                linkedin: "#",
-                email: "#",
-                bio: "Josh is a current junior studying Mechanical Engineering. Josh’s aptitude for designing mechanical systems and utilizing his skills in CAD, Josh contributes significantly to our overall design to meet all users needs.",
-        },
-        {
-                id: 6,
-                name: "Lucas",
-                role: "Software",
-                image: LucasImage,
-                linkedin: "#",
-                email: "#",
-                bio: "Placeholder.",
-        },
-        {
-                id: 7,
-                name: "Rick",
-                role: "Adviser",
-                image: RickImage,
-                linkedin: "#",
-                email: "#",
-                bio: "Placeholder.",
-        },
-        {
-                id: 8,
-                name: "Ryan",
-                role: "Software",
-                image: RyanImage,
-                linkedin: "#",
-                email: "#",
-                bio: "Placeholder.",
-        },
+  {
+    id: 1,
+    name: "Jesalina Phan",
+    role: "Co-Founder",
+    image: JesalinaImage,
+    linkedin: "#",
+    email: "jesalina.p@vastro.org",
+    bio: "Jesalina is a junior studying Computer Engineering and Entrepreneurship. With a knack for interfacing both software development and developing hardware & electrical systems, Jesalina works to ensure our solution has all of its power and electrical needs met.",
+  },
+  {
+    id: 2,
+    name: "Andrew Mombay",
+    role: "Founder & CEO",
+    image: AndrewImage,
+    linkedin: "https://www.linkedin.com/in/andrew-mombay",
+    email: "andrew.m@vastro.org",
+    bio: "Andrew is a junior studying Mechanical Engineering and Business Economics. With an interest in start-ups, he assisted significantly in building the project from the ground up and scaling the venture to where it is today.",
+  },
+  {
+    id: 3,
+    name: "Josh Krakauer",
+    role: "Design Lead",
+    image: JoshImage,
+    linkedin: "https://www.linkedin.com/in/josh-krakauer-b51a5523b",
+    email: "josh.k@vastro.org",
+    bio: "Josh is a current junior studying Mechanical Engineering. Josh’s aptitude for designing mechanical systems and utilizing his skills in CAD, Josh contributes significantly to our overall design to meet all users needs.",
+  },
+  {
+    id: 4,
+    name: "Lucas Kover Wolf",
+    role: "Software",
+    image: LucasImage,
+    linkedin: "#",
+    email: "lucas.k@vastro.org",
+    bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  },
+  {
+    id: 5,
+    name: "Ines Saltiel",
+    role: "Head of R&D",
+    image: InesImage,
+    linkedin: "https://www.linkedin.com/in/ines-saltiel",
+    email: "ines.s@vastro.org",
+    bio: "Ines is a current freshman studying Design Engineering. With her skills as a researcher and communications, Ines delivers high-impact research to help the team continue to refine our hardware & software systems to bring our product to the market.",
+  },
+  {
+    id: 6,
+    name: "Alexander Thaep",
+    role: "Software",
+    image: AlexImage,
+    linkedin: "#",
+    email: "alexander.t@vastro.org",
+    bio: "Alexander is a junior studying Applied Mathematics and Computer Science. Alexander’s work behind the scenes to develop our virtual-reality immersion software and implementation of haptic feedback controls has been key for our continued success in developing an immersive control system for our users.",
+  },
+  {
+    id: 7,
+    name: "Ryan Duong",
+    role: "Software",
+    image: RyanImage,
+    linkedin: "https://www.linkedin.com/in/ryanduongct",
+    email: "ryan.d@vastro.org",
+    bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  },
+  {
+    id: 8,
+    name: "Rick Fleeter",
+    role: "Adviser",
+    image: RickImage,
+    linkedin: "https://it.linkedin.com/in/rick-fleeter-5272432a3",
+    email: "rick.f@vastro.org",
+    bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  },
 ];
+
 
 export default function TeamCarousel() {
         const [activeIndex, setActiveIndex] = useState(1); // Default to 2nd on load
@@ -227,14 +228,14 @@ export default function TeamCarousel() {
 										{!isActive && (
 											<div className="absolute inset-0 flex items-end justify-center pb-20">
 												<div className="rotate-[-90deg] origin-center whitespace-nowrap text-3xl font-bold text-white tracking-wide">
-													{member.name}
+													{member.name.split(" ")[0]}
 												</div>
 											</div>
 										)}
 
                                        {/* Info Box */}
                                         <motion.div
-                                                className="absolute bottom-0 left-0 w-full aspect-[2/4] pointer-events-none overflow-hidden"
+                                                className="absolute bottom-0 left-0 w-full aspect-[4/2] pointer-events-none overflow-hidden"
                                                 initial="hidden"
                                                 animate={isActive && infoVisible ? "visible" : "hidden"}
                                                 variants={{ hidden: { opacity: 0, y: 50 }, visible: { opacity: 1, y: 0 } }}
@@ -246,7 +247,7 @@ export default function TeamCarousel() {
                                                         </h3>
                                                         <div className="flex items-center text-xl font-semibold text-gray-200 space-x-2">
                                                                 <span>{member.role}</span>
-                                                                <div className="flex items-center space-x-2 pl-2 text-gray-400">
+                                                                <div className="flex items-center space-x-1 pl-3 text-gray-400">
                                                                         <a
                                                                                 href={member.email}
                                                                                 aria-label="Email"
