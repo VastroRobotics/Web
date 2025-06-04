@@ -3,51 +3,29 @@
 import { forwardRef, useEffect, useRef, useState } from "react";
 import StageBanner from "./StageBanner";
 
-const components = [
-  (props) => (
-    <StageBanner
-      {...props}
-      text="Banner 1"
-      direction={0}
-      start={20}
-      end={100}
-    />
-  ),
-  (props) => (
-    <StageBanner
-      {...props}
-      text="Banner 2"
-      direction={1}
-      start={20}
-      end={100}
-    />
-  ),
-  (props) => (
-    <StageBanner
-      {...props}
-      text="Banner 3"
-      direction={0}
-      start={20}
-      end={100}
-    />
-  ),
+const components = [StageBanner, StageBanner, StageBanner];
+
+const baseParams = [
+  { text: "Banner 1", direction: 0, start: 20, end: 100 },
+  { text: "Banner 2", direction: 1, start: 20, end: 100 },
+  { text: "Banner 3", direction: 0, start: 20, end: 100 },
 ];
 
 const stages = [
   [
-    [1, true],
-    [2, false],
-    [3, false],
+    { show: true },
+    { show: false },
+    { show: false },
   ],
   [
-    [1, false],
-    [2, true],
-    [3, false],
+    { show: false },
+    { show: true },
+    { show: false },
   ],
   [
-    [1, false],
-    [2, false],
-    [3, true],
+    { show: false },
+    { show: false },
+    { show: true },
   ],
 ];
 
@@ -101,9 +79,9 @@ const Mission = forwardRef(function Mission(
 
   return (
     <div ref={ref} className="relative w-full h-full overflow-hidden">
-      {stage.map(([num, show]) => {
-        const Component = components[num - 1];
-        return <Component key={num} show={show} />;
+      {stage.map((params, i) => {
+        const Component = components[i];
+        return <Component key={i} {...baseParams[i]} {...params} />;
       })}
     </div>
   );

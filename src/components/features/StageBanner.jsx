@@ -20,16 +20,19 @@ export default function StageBanner({
   }, []);
 
   const lenKey = isMobile ? "height" : "width";
-  const init = {
-    x: direction === 0 ? -200 : 200,
-    opacity: 0,
-    [lenKey]: `${start}%`,
-  };
-  const anim = {
-    x: 0,
-    opacity: show ? 1 : 0,
-    [lenKey]: `${end}%`,
-    transition: { duration: 0.8, ease: "easeOut" },
+  const variants = {
+    hidden: {
+      x: direction === 0 ? -200 : 200,
+      opacity: 0,
+      [lenKey]: `${start}%`,
+      transition: { duration: 0.8, ease: "easeOut" },
+    },
+    visible: {
+      x: 0,
+      opacity: 1,
+      [lenKey]: `${end}%`,
+      transition: { duration: 0.8, ease: "easeOut" },
+    },
   };
 
   const style = isMobile
@@ -46,8 +49,9 @@ export default function StageBanner({
     <motion.div
       className="absolute flex items-center justify-center bg-black text-white font-bold p-4 overflow-hidden"
       style={style}
-      initial={init}
-      animate={anim}
+      variants={variants}
+      initial="hidden"
+      animate={show ? "visible" : "hidden"}
     >
       <span className="text-center text-3xl">{text}</span>
     </motion.div>
