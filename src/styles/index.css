@@ -36,3 +36,21 @@ h1, h2, h3, h4, h5, h6 {
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
+
+/* Responsive scaling for the team carousel */
+.team-carousel-wrapper {
+  width: 600px;
+  transform-origin: top left;
+}
+
+@media (min-width: 1024px) {
+  .team-carousel-wrapper {
+    transform: scale(calc(min(50vw, 600px) / 600));
+  }
+}
+
+@media (max-width: 1023px) {
+  .team-carousel-wrapper {
+    transform: scale(calc(min(80vw, 600px) / 600));
+  }
+}
