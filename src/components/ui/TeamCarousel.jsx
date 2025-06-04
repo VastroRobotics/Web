@@ -97,15 +97,15 @@ export default function TeamCarousel() {
 		return () => clearInterval(interval);
 	}, [lastInteraction, isRotating]);
 
-	const rotateCarousel = () => {
-		if (isRotating) return;
-		setIsRotating(true);
-		setTimeout(() => {
-			setRotationOffset((prev) => (prev + 4) % teamMembers.length);
-			setActiveIndex(0); // Now default to first item on rotation
-			setIsRotating(false);
-		}, 400);
-	};
+       const rotateCarousel = () => {
+               if (isRotating) return;
+               setIsRotating(true);
+               setRotationOffset((prev) => (prev + 4) % teamMembers.length);
+               setActiveIndex(0); // Now default to first item on rotation
+               setTimeout(() => {
+                       setIsRotating(false);
+               }, 1000);
+       };
 
 	const getVisibleMembers = () => {
 		const result = [];
@@ -153,11 +153,11 @@ export default function TeamCarousel() {
 									marginRight: isActive ? "8px" : "0px",
 								}}
 								exit={{ x: -50, opacity: 0 }}
-								transition={{
-									duration: 0.5,
-									ease: [0.23, 1, 0.32, 1],
-									layout: { duration: 0.5, ease: [0.23, 1, 0.32, 1] },
-								}}
+                                                               transition={{
+                                                                       duration: 0.6,
+                                                                       ease: [0.23, 1, 0.32, 1],
+                                                                       layout: { duration: 0.6, ease: [0.23, 1, 0.32, 1] },
+                                                               }}
 								onMouseEnter={() =>
 									!isRightmost && !isRotating && setActiveIndex(index)
 								}
@@ -206,7 +206,7 @@ export default function TeamCarousel() {
                                         )}
 
 										{!isRightmost && (
-											<div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
+                                       <div className="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent" />
 										)}
 
 										{!isActive && (
@@ -217,14 +217,14 @@ export default function TeamCarousel() {
 											</div>
 										)}
 
-                                                                               {/* Text Box (fixed size) */}
+                                       {/* Text Box */}
                                         <motion.div
-                                                className="absolute bottom-0 left-0 p-6 w-full h-[160px] overflow-hidden pointer-events-none bg-gradient-to-t from-black/70 via-black/40 to-transparent"
+                                                className="absolute bottom-0 left-0 p-6 w-full pointer-events-none bg-gradient-to-t from-black/90 via-black/70 to-transparent"
                                                 initial={false}
                                                 animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 10 }}
                                                 transition={{ duration: 0.3, ease: "easeOut" }}
                                         >
-                                                <div className="flex flex-col justify-between h-full">
+                                                <div className="flex flex-col space-y-2">
                                                         <h3 className="text-3xl font-bold text-white">
                                                                 {member.name}
                                                         </h3>
@@ -235,9 +235,9 @@ export default function TeamCarousel() {
                                                                         target="_blank"
                                                                         rel="noopener noreferrer"
                                                                         aria-label="LinkedIn"
-                                                                        className="hover:text-white"
+                                                                        className="hover:text-white p-1"
                                                                 >
-                                                                        <Linkedin className="w-5 h-5" />
+                                                                        <Linkedin className="w-5 h-5 ml-1" />
                                                                 </a>
                                                         </div>
                                                         <p className="text-base text-gray-400">
