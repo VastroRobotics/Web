@@ -7,6 +7,10 @@ import ScrollPrompt from "../layout/ScrollPrompt";
 
 export default function MiniFooter({ onScrollTop }) {
   return (
+        <div className="relative w-full h-screen">
+      <div className="absolute inset-0 p-6">
+        <div className="relative w-full h-full overflow-hidden rounded-3xl bg-black shadow-[0_0_10px_2px_rgba(255,255,255,0.15)]">
+
     <div className="absolute top-1/2 left-1/2 px-18 transform -translate-x-1/2 -translate-y-1/2">
       <div className="text-grey-400">
         {/* Main Row */}
@@ -50,15 +54,19 @@ export default function MiniFooter({ onScrollTop }) {
 
         {/* Scroll to top */}
         <div className="flex justify-center items-center my-25">
-          <ScrollPrompt direction="up" onClick={onScrollTop} className="w-12 h-12" />
+          <ScrollPrompt direction="up" onClick={onScrollTop} className="w-14 h-14" />
         </div>
 
         {/* Footer Credits */}
         <div className="text-sm text-gray-400 flex flex-col items-start leading-tight ml-4 whitespace-nowrap">
-          <span>© Vastro Robotics 2025</span>
-          <span>All rights reserved. Terms &amp; Conditions.</span>
+          <span>© Vastro Robotics 2025. All rights reserved.</span>
+          <span>Terms &amp; Conditions.</span>
         </div>
       </div>
     </div>
+            </div>
+        </div>
+        </div>
+
   );
 }
