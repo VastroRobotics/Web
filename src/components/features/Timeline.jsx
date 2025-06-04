@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion, useAnimation } from "framer-motion";
+import { motion as Motion, useAnimation } from "framer-motion";
 import ScrollIndicator from "../layout/ScrollIndicator";
 
 const timelineEvents = [
@@ -49,13 +49,18 @@ const timelineEvents = [
   },
 ];
 
-export default function Timeline({ isActive, scrollDirection, onCanLeaveChange }) {
+export default function Timeline({
+  isActive,
+  onCanLeaveChange,
+  centerFraction = 0.5,
+}) {
   const controls = useAnimation();
   const [activeIndex, setActiveIndex] = useState(0);
   const [canScroll, setCanScroll] = useState(false);
-  const [rendered, setRendered] = useState(Array(timelineEvents.length).fill(false));
   const isThrottled = useRef(false);
   const unlockTimeout = useRef(null);
+
+  const [viewport, setViewport] = useState({ width: 0, height: 0 });
 
   const forwardThrottle = 600;
   const backwardThrottle = 400;
@@ -66,7 +71,15 @@ export default function Timeline({ isActive, scrollDirection, onCanLeaveChange }
   const nodeOffset = nodeSize / 2;
 
   const shiftPerEvent = timelineWidth / (timelineEvents.length - 1);
-  const screenCenter = typeof window !== "undefined" ? window.innerWidth / 2 : 0;
+
+  useEffect(() => {
+    const handleResize = () => {
+      setViewport({ width: window.innerWidth, height: window.innerHeight });
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     if (isActive) {
@@ -91,12 +104,19 @@ export default function Timeline({ isActive, scrollDirection, onCanLeaveChange }
     if (!isActive || !canScroll) return;
 
     const handleWheel = (e) => {
+      const dir = e.deltaY > 0 ? 1 : -1;
+      const maxIndex = timelineEvents.length - 1;
+
+      if ((dir < 0 && activeIndex === 0) || (dir > 0 && activeIndex === maxIndex)) {
+        onCanLeaveChange(true);
+        return;
+      }
+
       e.preventDefault();
       e.stopPropagation();
       if (isThrottled.current) return;
 
-      const dir = e.deltaY > 0 ? 1 : -1;
-      const nextIndex = Math.max(0, Math.min(activeIndex + dir, timelineEvents.length - 1));
+      const nextIndex = Math.min(Math.max(activeIndex + dir, 0), maxIndex);
       if (nextIndex === activeIndex) return;
 
       isThrottled.current = true;
@@ -104,10 +124,9 @@ export default function Timeline({ isActive, scrollDirection, onCanLeaveChange }
 
       setTimeout(() => {
         isThrottled.current = false;
-        if (nextIndex === 0) onCanLeaveChange(true);
       }, delay);
 
-      if (dir < 0) onCanLeaveChange(false);
+      onCanLeaveChange(false);
       setActiveIndex(nextIndex);
     };
 
@@ -116,10 +135,10 @@ export default function Timeline({ isActive, scrollDirection, onCanLeaveChange }
   }, [isActive, canScroll, activeIndex]);
 
   useEffect(() => {
-    controls.start({ x: screenCenter - nodeOffset - activeIndex * shiftPerEvent });
+    const center = viewport.width * centerFraction;
+    controls.start({ x: center - nodeOffset - activeIndex * shiftPerEvent });
 
-    setRendered((prev) => prev.map((r, i) => i < activeIndex ? true : i === activeIndex));
-  }, [activeIndex]);
+  }, [activeIndex, viewport.width, centerFraction]);
 
   const progress = activeIndex / (timelineEvents.length - 1);
 
@@ -131,7 +150,7 @@ export default function Timeline({ isActive, scrollDirection, onCanLeaveChange }
       <div className="absolute inset-0 p-6">
         <div className="relative w-full h-full overflow-hidden rounded-3xl bg-black shadow-[0_0_10px_2px_rgba(255,255,255,0.15)]">
           {/* Timeline Line */}
-          <motion.div
+          <Motion.div
             className="absolute left-0 top-1/2 flex items-center"
             style={{
               width: `${timelineWidth}px`,
@@ -149,7 +168,7 @@ export default function Timeline({ isActive, scrollDirection, onCanLeaveChange }
                 marginTop: `-${timelineHeight / 2}px`,
               }}
             >
-              <motion.div
+              <Motion.div
                 className="absolute top-0 left-0 h-full bg-white"
                 animate={{ width: `${progress * 100}%` }}
                 transition={{ ease: "easeOut", duration: 0.35 }}
@@ -160,7 +179,8 @@ export default function Timeline({ isActive, scrollDirection, onCanLeaveChange }
                 const isFuture = idx > activeIndex;
                 const isCurrent = idx === activeIndex;
                 const isPast = idx < activeIndex;
-                const distance = ev.distance || 300;
+                const baseDistance = ev.distance || 300;
+                const distance = Math.min(baseDistance, viewport.height * 0.35);
 
                 const pos = `${(idx / (timelineEvents.length - 1)) * timelineWidth}px`;
                 const color = ev.color;
@@ -181,7 +201,7 @@ export default function Timeline({ isActive, scrollDirection, onCanLeaveChange }
 
                 return (
                   <div key={ev.id} className="absolute" style={{ left: pos, top: "50%", transform: "translateY(-50%)" }}>
-                    <motion.div
+                    <Motion.div
                       initial={{ scale: 0.55, backgroundColor: "#333333" }}
                       className="relative rounded-full"
                       style={{
@@ -204,7 +224,7 @@ export default function Timeline({ isActive, scrollDirection, onCanLeaveChange }
                     />
 
                     <div className="absolute" style={{ left: 0, top: 0, width: "400px" }}>
-                      <motion.div
+                      <Motion.div
                         className="absolute bg-white"
                         initial={{ scaleY: 0, opacity: 0.4 }}
                         animate={isFuture ? { scaleY: 0, opacity: 0.4 } : { scaleY: 1, opacity: 1 }}
@@ -223,7 +243,7 @@ export default function Timeline({ isActive, scrollDirection, onCanLeaveChange }
                         }}
                       />
 
-                      <motion.div
+                      <Motion.div
                         className="absolute rounded-full"
                         initial={{ scale: 0.3, opacity: 0 }}
                         animate={isFuture ? { scale: 0.3, opacity: 0 } : { scale: 1.2, opacity: 1 }}
@@ -245,7 +265,7 @@ export default function Timeline({ isActive, scrollDirection, onCanLeaveChange }
                         }}
                       />
 
-                      <motion.div
+                      <Motion.div
                         className="absolute flex flex-col"
                         initial={{ opacity: 0, x: -30 }}
                         animate={isFuture ? { opacity: 0, x: -30 } : { opacity: 1, x: 0 }}
@@ -262,7 +282,7 @@ export default function Timeline({ isActive, scrollDirection, onCanLeaveChange }
                       >
                         <span className="text-sm text-gray-400 mb-0.5">{ev.date}</span>
                         <h3 className="text-2xl font-bold text-white mb-2" style={{ color }}>{ev.title}</h3>
-                        <motion.p
+                        <Motion.p
                           className="text-sm text-gray-400 mb-4"
                           initial={{ opacity: 0, y: -30 }}
                           animate={isFuture ? { opacity: 0, y: -30 } : { opacity: 1, y: 0 }}
@@ -273,9 +293,9 @@ export default function Timeline({ isActive, scrollDirection, onCanLeaveChange }
                           }}
                         >
                           {ev.description}
-                        </motion.p>
+                        </Motion.p>
                         {ev.image && (
-                          <motion.div
+                          <Motion.div
                             className="rounded-md overflow-hidden"
                             initial={{ opacity: 0 }}
                             animate={isFuture ? { opacity: 0 } : { opacity: 1 }}
@@ -286,15 +306,15 @@ export default function Timeline({ isActive, scrollDirection, onCanLeaveChange }
                             }}
                           >
                             <img src={ev.image} alt={ev.title} width={240} height={150} className="rounded-md object-cover" />
-                          </motion.div>
+                          </Motion.div>
                         )}
-                      </motion.div>
+                      </Motion.div>
                     </div>
                   </div>
                 );
               })}
             </div>
-          </motion.div>
+          </Motion.div>
 
           {/* Side gradient overlays */}
           <div className="absolute top-0 left-0 h-full w-40 pointer-events-none z-20 bg-gradient-to-r from-black to-transparent" />
