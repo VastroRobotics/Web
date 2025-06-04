@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { FaArrowDown, FaArrowUp } from "react-icons/fa";
 
 const defaultSize =
-  "w-14 h-14 sm:w-15 sm:h-15 md:w-16 md:h-16 lg:w-18 lg:h-18 xl:w-20 xl:h-20";
+  "absolute bottom-15 left-1/2 transform -translate-x-1/2 z-50 w-14 h-14 sm:w-15 sm:h-15 md:w-16 md:h-16 lg:w-18 lg:h-18 xl:w-20 xl:h-20";
 
 export default function ScrollPrompt({ onClick, direction = "down", className = "" }) {
   return (
@@ -33,18 +33,12 @@ export default function ScrollPrompt({ onClick, direction = "down", className = 
             repeat: Infinity,
             repeatDelay: 2.5,
           }}
-          className="flex items-center justify-center"
+          className="flex items-center justify-center w-2/5 h-2/5"
         >
           {direction === "up" ? (
-            <FaArrowUp
-              className="w-6 h-6 lg:w-7 lg:h-7 xl:w-8 xl:h-8"
-              style={{ color: "#141414" }}
-            />
+            <FaArrowUp className="w-full h-full" style={{ color: "#141414" }} />
           ) : (
-            <FaArrowDown
-              className="w-6 h-6 lg:w-7 lg:h-7 xl:w-8 xl:h-8"
-              style={{ color: "#141414" }}
-            />
+            <FaArrowDown className="w-full h-full" style={{ color: "#141414" }} />
           )}
         </motion.div>
       </motion.div>
