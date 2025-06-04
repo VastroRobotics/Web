@@ -108,7 +108,7 @@ export default function TeamCarousel() {
 
        useEffect(() => {
                setInfoVisible(false);
-               const timeout = setTimeout(() => setInfoVisible(true), 480);
+               const timeout = setTimeout(() => setInfoVisible(true), 240);
                return () => clearTimeout(timeout);
        }, [activeIndex]);
 
@@ -189,8 +189,8 @@ export default function TeamCarousel() {
                                                                                !isActive ? "filter grayscale" : ""
                                                                                }`}
                                                                                loading="lazy"
-                                                                               animate={{ scale: isActive ? 1.05 : 1 }}
-                                                                               transition={{ duration: 0.4, ease: "easeOut" }}
+                                                                               animate={{ scale: isActive ? 1.12 : 1 }}
+                                                                               transition={{ duration: 0.5, ease: "easeOut" }}
                                                                                />
 
 										{/* Static black overlay with bouncing arrow */}
