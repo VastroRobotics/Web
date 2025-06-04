@@ -6,14 +6,40 @@ export default function SectionWrapper({ isActive, scrollDirection, children }) 
       {isActive && (
         <motion.div
           key="section"
-          initial={{ opacity: 0, y: 60 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: scrollDirection === "down" ? -60 : 60 }}
-          transition={{
-            duration: 1.2,
-            ease: [0.16, 1, 0.3, 1], // slow ease out
+          custom={scrollDirection}
+          variants={{
+            initial: (dir) => ({
+              opacity: 0,
+              y: dir === "down" ? 150 : -150,
+              scale: 0.9,
+              rotateX: dir === "down" ? -15 : 15,
+            }),
+            animate: {
+              opacity: 1,
+              y: 0,
+              scale: 1,
+              rotateX: 0,
+              transition: {
+                duration: 1.5,
+                ease: [0.22, 1, 0.36, 1],
+              },
+            },
+            exit: (dir) => ({
+              opacity: 0,
+              y: dir === "down" ? -150 : 150,
+              scale: 0.9,
+              rotateX: dir === "down" ? 15 : -15,
+              transition: {
+                duration: 1.5,
+                ease: [0.22, 1, 0.36, 1],
+              },
+            }),
           }}
+          initial="initial"
+          animate="animate"
+          exit="exit"
           className="absolute inset-0"
+          style={{ perspective: 1000 }}
         >
           {children}
         </motion.div>
