@@ -44,7 +44,11 @@ export default function Chart({
   }, [inView, controls, targetStrokeOffset, targetAmount]);
 
   return (
-    <div ref={containerRef} className="flex flex-col items-center justify-center space-y-3">
+    <div
+      ref={containerRef}
+      className="flex flex-col items-center justify-center space-y-3"
+      style={{ opacity: 0 }}
+    >
       <div className="relative w-48 h-48">
         <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
           <defs>

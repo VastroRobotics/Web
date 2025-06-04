@@ -1,7 +1,7 @@
 "use client";
 
-import { forwardRef, useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { forwardRef, useRef, useEffect } from "react";
+import { motion, useInView, useAnimation } from "framer-motion";
 import Glow from "../ui/Glow";
 import Chart from "../ui/Chart";
 import ComparisonTable from "../ui/ComparisonTable";
@@ -21,40 +21,69 @@ const variants = {
     hidden: { opacity: 0 },
     visible: { opacity: 1, transition: { duration: 1.2, delay: 1 } },
   },
-  banner: {
-    hidden: { x: -200, opacity: 0 },
-    visible: { x: 0, opacity: 1, transition: { duration: 0.8, ease: "easeOut" } },
-  },
   chart: {
     hidden: { opacity: 0, scale: 0.9 },
     visible: { opacity: 1, scale: 1, transition: { duration: 0.8, ease: "easeOut" } },
   },
-  bannerRight: {
-    hidden: { x: 200, opacity: 0 },
-    visible: { x: 0, opacity: 1, transition: { duration: 0.8, ease: "easeOut" } },
-  },
 };
 
 const HeroScroll = forwardRef((_, ref) => {
-  const containerRef = useRef(null);
-  const inView = useInView(containerRef, { once: true, margin: "-100px" });
+  const bannerControls = useAnimation();
+  const chartControls = useAnimation();
+  const firstWrapControls = useAnimation();
+  const secondBannerControls = useAnimation();
+  const secondSectionRef = useRef(null);
+  const secondInView = useInView(secondSectionRef, { margin: "-50% 0px", once: true });
+
+  useEffect(() => {
+    async function run() {
+      firstWrapControls.start({ opacity: 1 });
+      await bannerControls.start({
+        x: 0,
+        opacity: 1,
+        scaleX: [1.05, 1],
+        transition: { type: "spring", stiffness: 70, damping: 12 },
+      });
+      chartControls.start("visible");
+    }
+    run();
+  }, [bannerControls, chartControls, firstWrapControls]);
+
+  useEffect(() => {
+    if (secondInView) {
+      firstWrapControls.start({
+        y: "-25vh",
+        scale: 0.5,
+        transition: { duration: 1, ease: "easeInOut" },
+      });
+      secondBannerControls.start({
+        x: 0,
+        opacity: 1,
+        scaleX: [1.05, 1],
+        transition: { type: "spring", stiffness: 70, damping: 12, delay: 0.2 },
+      });
+    }
+  }, [secondInView, firstWrapControls, secondBannerControls]);
 
   return (
     <div className="py-6 space-y-10">
       {/* First Section: Left Banner + Charts */}
-      <div ref={ref} className="w-full flex flex-col lg:flex-row items-center px-0">
+      <motion.div
+        ref={ref}
+        className="w-full flex flex-col lg:flex-row items-center px-0"
+        style={{ opacity: 0 }}
+        animate={firstWrapControls}
+      >
         <motion.div
-          ref={containerRef}
-          initial="hidden"
-          animate={inView ? "visible" : "hidden"}
-          variants={variants.banner}
+          initial={{ x: "100%", opacity: 0 }}
+          animate={bannerControls}
           className="bg-black w-full lg:w-[70%] flex flex-col items-center justify-center relative rounded-r-3xl px-20 py-24 my-6"
           style={{ boxShadow: "0 0 20px rgba(255,255,255,0.15)" }}
         >
           <motion.div
             variants={variants.glow}
             initial="hidden"
-            animate={inView ? "visible" : "hidden"}
+            animate="visible"
             className="absolute inset-0 flex items-center justify-center pointer-events-none"
           >
             <Glow color="white" />
@@ -63,8 +92,8 @@ const HeroScroll = forwardRef((_, ref) => {
           <motion.div
             className="relative z-10 text-center font-bold text-white whitespace-nowrap text-[3vw] leading-[1.1]"
             initial="hidden"
-            animate={inView ? "visible" : "hidden"} 
-          >   
+            animate="visible"
+          >
             VR‑controlled quadruped robots<br />
             $75k capability for $2.5k
           </motion.div>
@@ -73,44 +102,39 @@ const HeroScroll = forwardRef((_, ref) => {
         <motion.div
           className="w-full lg:w-[30%] flex flex-col justify-center items-center"
           initial="hidden"
-          animate={inView ? "visible" : "hidden"}
+          animate={chartControls}
           variants={variants.chart}
         >
           <div className="flex flex-col lg:flex-col md:flex-row gap-10 justify-center items-center w-full">
             <Chart title="VASTRO" targetAmount={2500} targetPercent={2.5} barColor="#ffffff" />
             <Chart title="Competitors" targetAmount={75000} targetPercent={70} barColor="#ffffff" />
           </div>
-        </motion.div> 
-      </div>
-
-      {/* Second Section: Table Left + Right Banner */}
-      <div className="w-full flex flex-col-reverse lg:flex-row items-center px-0">
-      <motion.div 
-        className="w-full lg:w-[40%] flex justify-center items-center px-6 py-0"
-        initial="hidden"
-        animate={inView ? "visible" : "hidden"}
-        variants={variants.chart}
-      >
-        <div className="w-full mx-15">
-          <ComparisonTable
-            data={specs}
-            labelLeft="SpotMini"
-            labelRight="VASTRO"
-          />
-        </div>
+        </motion.div>
       </motion.div>
 
-        <motion.div 
+      {/* Second Section: Table Left + Right Banner */}
+      <motion.div ref={secondSectionRef} className="w-full flex flex-col-reverse lg:flex-row items-center px-0">
+        <motion.div
+          className="w-full lg:w-[40%] flex justify-center items-center px-6 py-0"
           initial="hidden"
-          animate={inView ? "visible" : "hidden"}
-          variants={variants.bannerRight}
+          animate={secondInView ? "visible" : "hidden"}
+          variants={variants.chart}
+        >
+          <div className="w-full mx-15">
+            <ComparisonTable data={specs} labelLeft="SpotMini" labelRight="VASTRO" />
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ x: "100%", opacity: 0 }}
+          animate={secondBannerControls}
           className="bg-black w-full lg:w-[60%] flex flex-col items-center justify-center relative rounded-l-3xl px-20 py-32"
           style={{ boxShadow: "0 0 20px rgba(255,255,255,0.15)" }}
         >
           <motion.div
             variants={variants.glow}
             initial="hidden"
-            animate={inView ? "visible" : "hidden"}
+            animate="visible"
             className="absolute inset-0 flex items-center justify-center pointer-events-none"
           >
             <Glow color="white" />
@@ -119,14 +143,14 @@ const HeroScroll = forwardRef((_, ref) => {
           <motion.div
             className="relative z-10 text-center font-bold text-white whitespace-nowrap text-[3vw] leading-[1.1]"
             initial="hidden"
-            animate={inView ? "visible" : "hidden"}
+            animate="visible"
           >
             Making remote access<br />
             more accessible
           </motion.div>
         </motion.div>
-      </div>
-    </div   >
+      </motion.div>
+    </div>
   );
 });
 

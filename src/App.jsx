@@ -38,7 +38,7 @@ export default function App() {
   
     setTimeout(() => {
       isThrottled.current = false;
-    }, 800); // debounce duration
+    }, 300); // debounce duration shortened
   };
 
   const jumpToSection = (index) => {
