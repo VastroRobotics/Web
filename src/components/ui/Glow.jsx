@@ -13,6 +13,7 @@ export default function Glow({
   width = 700,
   height = 500,
   shape = "circle",
+  radius = 0,
   className = "",
 }) {
   const style = {
@@ -21,8 +22,16 @@ export default function Glow({
     background: `radial-gradient(circle, ${color} 0%, transparent 70%)`,
     filter: "blur(80px)",
     borderRadius:
-      shape === "circle" ? "50%" : shape === "oval" ? "50% / 60%" : "0",
+      shape === "circle"
+        ? "50%"
+        : shape === "oval"
+        ? "50% / 60%"
+        : typeof radius === "number"
+        ? `${radius}px`
+        : radius,
   };
 
-  return <div className={`pointer-events-none subtle-glow ${className}`} style={style} />;
+  return (
+    <div className={`pointer-events-none subtle-glow ${className}`} style={style} />
+  );
 }

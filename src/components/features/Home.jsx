@@ -302,7 +302,13 @@ const Home = forwardRef(
 
                   <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 opacity-40 z-50 pointer-events-none">
                     <Suspense fallback={null}>
-                      <LazyGlow color="black" width={700} height={500} shape="oval" />
+                      <LazyGlow
+                        color="white"
+                        width={1000}
+                        height={250}
+                        shape="rect"
+                        radius={120}
+                      />
                     </Suspense>
                   </div>
                 </div>
