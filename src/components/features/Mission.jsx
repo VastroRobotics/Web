@@ -27,7 +27,7 @@ const Mission = forwardRef(({ isActive, onCanLeaveChange }, ref) => {
   const [showTable, setShowTable] = useState(false);
 
   const maxStage = 2;
-  const throttleDelay = 600;
+  const throttleDelay = 1500;
 
   useEffect(() => {
     if (!isDesktop) return;
@@ -35,32 +35,36 @@ const Mission = forwardRef(({ isActive, onCanLeaveChange }, ref) => {
     if (stage >= 1) {
       if (stage === 1) {
         setShowCharts(false);
-        bannerControlsTop.set({ x: "-100%", width: "90%" });
+        bannerControlsTop.set({ x: "-100%", width: "100%" });
         bannerControlsTop
-          .start({ x: 0, width: "90%", transition: { duration: 0.8, ease: "easeOut" } })
+          .start({ x: 0, width: "100%", transition: { duration: 1.2, ease: "easeOut" } })
           .then(() => {
-            bannerControlsTop.start({ width: "65%", transition: { duration: 0.6, ease: "easeOut" } });
-            setShowCharts(true);
+            setTimeout(() => {
+              bannerControlsTop.start({ width: "70%", transition: { duration: 1.0, ease: "easeOut" } });
+              setShowCharts(true);
+            }, 300);
           });
       }
     } else {
-      bannerControlsTop.set({ x: "-100%", width: "90%" });
+      bannerControlsTop.set({ x: "-100%", width: "100%" });
       setShowCharts(false);
     }
 
     if (stage >= 2) {
       if (stage === 2) {
         setShowTable(false);
-        bannerControlsBottom.set({ x: "100%", width: "90%" });
+        bannerControlsBottom.set({ x: "100%", width: "100%" });
         bannerControlsBottom
-          .start({ x: 0, width: "90%", transition: { duration: 0.8, ease: "easeOut" } })
+          .start({ x: 0, width: "100%", transition: { duration: 1.2, ease: "easeOut" } })
           .then(() => {
-            bannerControlsBottom.start({ width: "70%", transition: { duration: 0.6, ease: "easeOut" } });
-            setShowTable(true);
+            setTimeout(() => {
+              bannerControlsBottom.start({ width: "60%", transition: { duration: 1.0, ease: "easeOut" } });
+              setShowTable(true);
+            }, 300);
           });
       }
     } else {
-      bannerControlsBottom.set({ x: "100%", width: "90%" });
+      bannerControlsBottom.set({ x: "100%", width: "100%" });
       setShowTable(false);
     }
   }, [stage, isDesktop]);
@@ -154,15 +158,15 @@ const Mission = forwardRef(({ isActive, onCanLeaveChange }, ref) => {
       <motion.div
         className="absolute left-0 right-0 flex items-center justify-center px-6"
         animate={{ height: stage >= 2 ? "50%" : "100%", top: 0 }}
-        transition={{ duration: 0.8, ease: "easeInOut" }}
+        transition={{ duration: 1.0, ease: "easeInOut" }}
       >
-        <div className="flex items-center justify-center gap-8 w-full h-full">
+        <div className="flex items-center justify-center w-full h-full">
           <AnimatePresence>
             {stage >= 1 && (
               <motion.div
                 key="top-banner-wrapper"
                 className="flex justify-start"
-                style={{ width: "90%" }}
+                style={{ width: "100%" }}
                 initial={false}
                 animate={bannerControlsTop}
               >
@@ -182,7 +186,7 @@ const Mission = forwardRef(({ isActive, onCanLeaveChange }, ref) => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0.6, ease: "easeOut" }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
               >
                 <div className="flex flex-col lg:flex-col md:flex-row gap-10 justify-center items-center w-full">
                   <Chart title="VASTRO" targetAmount={2500} targetPercent={2.5} barColor="#ffffff" />
@@ -198,7 +202,7 @@ const Mission = forwardRef(({ isActive, onCanLeaveChange }, ref) => {
       <motion.div
         className="absolute left-0 right-0 flex flex-col-reverse lg:flex-row items-center px-6"
         animate={{ height: stage >= 2 ? "50%" : "0%", bottom: 0, opacity: stage >= 2 ? 1 : 0 }}
-        transition={{ duration: 0.8, ease: "easeInOut" }}
+        transition={{ duration: 1.0, ease: "easeInOut" }}
       >
         <AnimatePresence>
           {showTable && (
@@ -208,7 +212,7 @@ const Mission = forwardRef(({ isActive, onCanLeaveChange }, ref) => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
             >
               <div className="w-full mx-15">
                 <ComparisonTable data={specs} labelLeft="SpotMini" labelRight="VASTRO" />
@@ -221,7 +225,7 @@ const Mission = forwardRef(({ isActive, onCanLeaveChange }, ref) => {
             <motion.div
               key="bottom-banner-wrapper"
               className="flex justify-end"
-              style={{ width: "90%" }}
+              style={{ width: "100%" }}
               initial={false}
               animate={bannerControlsBottom}
             >
