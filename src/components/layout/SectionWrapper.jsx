@@ -1,6 +1,14 @@
+import { useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+export default function SectionWrapper({ isActive, scrollDirection, isFirst = false, children }) {
+  const hasMounted = useRef(false);
 
-export default function SectionWrapper({ isActive, scrollDirection, children }) {
+  const initialVariant = isFirst && !hasMounted.current ? false : "initial";
+
+  if (isActive && !hasMounted.current) {
+    hasMounted.current = true;
+  }
+
   return (
     <AnimatePresence mode="sync">
       {isActive && (
@@ -9,11 +17,11 @@ export default function SectionWrapper({ isActive, scrollDirection, children }) 
           custom={scrollDirection}
           variants={{
             initial: (dir) => ({
-              opacity: 0.95,
+              opacity: 1,
               y: dir === "down" ? "100%" : "-100%",
-              z: -100,
+              z: -150,
               scale: 0.9,
-              rotateX: dir === "down" ? -20 : 20,
+              rotateX: dir === "down" ? -15 : 15,
             }),
             animate: {
               opacity: 1,
@@ -27,18 +35,18 @@ export default function SectionWrapper({ isActive, scrollDirection, children }) 
               },
             },
             exit: (dir) => ({
-              opacity: 0.95,
+              opacity: 1,
               y: dir === "down" ? "-100%" : "100%",
-              z: -100,
+              z: -150,
               scale: 0.9,
-              rotateX: dir === "down" ? 20 : -20,
+              rotateX: dir === "down" ? 15 : -15,
               transition: {
                 duration: 1.8,
                 ease: [0.22, 1, 0.36, 1],
               },
             }),
           }}
-          initial="initial"
+          initial={initialVariant}
           animate="animate"
           exit="exit"
           className="absolute inset-0"

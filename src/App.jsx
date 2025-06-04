@@ -68,6 +68,7 @@ export default function App() {
             <SectionWrapper
               isActive={i === activeIndex}
               scrollDirection={scrollDirection}
+              isFirst={i === 0}
             >
               <Suspense fallback={i === 0 ? null : <Loading />}>
                 <Section
