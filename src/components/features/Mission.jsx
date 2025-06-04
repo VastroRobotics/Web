@@ -1,7 +1,7 @@
 "use client";
 
 import { forwardRef, useEffect, useRef, useState } from "react";
-import StageBanner from "./StageBanner.jsx";
+import StageBanner from "../layout/StageBanner.jsx";
 
 const components = [StageBanner, StageBanner, StageBanner];
 
