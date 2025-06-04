@@ -147,7 +147,7 @@ export default function Timeline({
   }, [isActive, canScroll, activeIndex]);
 
   useEffect(() => {
-    const fraction = viewport.width < 768 ? 0.25 : centerFraction;
+    const fraction = viewport.width < 768 ? 0.20 : centerFraction;
     const center = viewport.width * fraction;
     controls.start({ x: center - nodeOffset - activeIndex * shiftPerEvent });
 
@@ -297,11 +297,14 @@ export default function Timeline({
           top: `-${distance + nodeSize}px`,
         }),
     width: "350px",
+    maxWidth: "40vw"
   }}
 >
   <div className={`m${isDown ? "t-4" : "b-2"}`}>
-    <span className="text-sm text-gray-400 mb-0.5">{ev.date}</span>
-    <h3 className="text-2xl font-bold text-white" style={{ color }}>{ev.title}</h3>
+    <span className="text-xs sm:text-sm lg:text-md xl:text-md text-gray-400 mb-0.5">{ev.date}</span>
+    <h3 className="text-xl sm:text-2xl font-bold text-white whitespace-nowrap" style={{ color }}>
+  {ev.title}
+</h3>
   </div>
   <Motion.p
     className={`text-sm text-gray-400 m${isDown ? "t-4" : "b-4"}`}
@@ -330,7 +333,7 @@ export default function Timeline({
         src={ev.image}
         alt={ev.title}
         width={240}
-        height={150}
+        style={{ maxWidth: "30vw", height: "auto" }}
         className="rounded-md object-cover"
       />
     </Motion.div>

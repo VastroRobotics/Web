@@ -9,46 +9,51 @@ export default function MiniFooter({ onScrollTop }) {
   return (
     <div className="absolute top-1/2 left-1/2 px-18 transform -translate-x-1/2 -translate-y-1/2">
       <div className="text-grey-400">
-        {/* Logo and email */}
-        <div className="flex flex-row items-center">
-          <img src={LogoIcon} alt="Logo" className="h-19 w-auto" />
-          <div className="flex flex-col items-start ml-5 mt-6 space-y-1">
-            <img src={LogoText} alt="VASTRO" className="h-9 w-auto" />
-            <a
-              href="mailto:info@vastro.org"
-              className="flex items-center text-gray-400 text-base hover:text-white transition-colors"
-            >
-              <Mail className="w-4 h-4 mr-2" />
-              <span>info@vastro.org</span>
-            </a>
+        {/* Main Row */}
+        <div className="flex flex-row items-end">
+          {/* Logo Icon */}
+          <img src={LogoIcon} alt="Logo" className="h-17 w-auto mb-1" />
+
+          {/* Right Section: Row of (Text+Email) and Icons */}
+          <div className="flex flex-row items-stretch">
+            {/* Column: Logo Text + Email */}
+            <div className="flex flex-col justify-between ml-6 mr-5">
+              <img src={LogoText} alt="VASTRO" className="h-9 w-auto mb-1" />
+              <a
+                href="mailto:info@vastro.org"
+                className="flex items-center text-gray-400 text-base hover:text-white transition-colors"
+              >
+                <Mail className="w-4 h-4 mr-2" />
+                <span>info@vastro.org</span>
+              </a>
+            </div>
+
+            {/* Column: Social Icons */}
+            <div className="flex flex-col justify-between text-gray-400">
+              <a
+                href="https://instagram.com/vastro"
+                aria-label="Instagram"
+                className="hover:text-white transition-colors"
+              >
+                <Instagram className="w-6 h-6" />
+              </a>
+              <a
+                href="https://linkedin.com/company/virtual-astronaut"
+                aria-label="LinkedIn"
+                className="hover:text-white transition-colors"
+              >
+                <Linkedin className="w-6 h-6" />
+              </a>
+            </div>
           </div>
         </div>
 
-        {/* Social icons and scroll to top */}
-        <div className="flex items-start justify-between">
-          <div className="flex items-center gap-4 text-gray-400 mt-3 ml-4">
-            <a
-              href="https://linkedin.com/company/virtual-astronaut"
-              aria-label="LinkedIn"
-              className="hover:text-white transition-colors"
-            >
-              <Linkedin className="w-6 h-6" />
-            </a>
-            <a
-              href="https://instagram.com/vastro"
-              aria-label="Instagram"
-              className="hover:text-white transition-colors"
-            >
-              <Instagram className="w-6 h-6" />
-            </a>
-          </div>
-        </div>
-
-        <div className="flex justify-center items-center mt-16 mb-22">
+        {/* Scroll to top */}
+        <div className="flex justify-center items-center my-25">
           <ScrollPrompt direction="up" onClick={onScrollTop} className="w-12 h-12" />
         </div>
 
-        {/* Credits */}
+        {/* Footer Credits */}
         <div className="text-sm text-gray-400 flex flex-col items-start leading-tight ml-4 whitespace-nowrap">
           <span>© Vastro Robotics 2025</span>
           <span>All rights reserved. Terms &amp; Conditions.</span>
