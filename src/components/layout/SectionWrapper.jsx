@@ -1,6 +1,12 @@
 import { useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-export default function SectionWrapper({ isActive, scrollDirection, isFirst = false, children }) {
+
+export default function SectionWrapper({
+  isActive,
+  scrollDirection,
+  isFirst = false,
+  children,
+}) {
   const hasMounted = useRef(false);
 
   const initialVariant = isFirst && !hasMounted.current ? false : "initial";
@@ -17,31 +23,19 @@ export default function SectionWrapper({ isActive, scrollDirection, isFirst = fa
           custom={scrollDirection}
           variants={{
             initial: (dir) => ({
-              opacity: 1,
               y: dir === "down" ? "100%" : "-100%",
-              z: -150,
-              scale: 0.9,
-              rotateX: dir === "down" ? -15 : 15,
             }),
             animate: {
-              opacity: 1,
               y: 0,
-              z: 0,
-              scale: 1,
-              rotateX: 0,
               transition: {
-                duration: 1.8,
+                duration: 0.8,
                 ease: [0.22, 1, 0.36, 1],
               },
             },
             exit: (dir) => ({
-              opacity: 1,
               y: dir === "down" ? "-100%" : "100%",
-              z: -150,
-              scale: 0.9,
-              rotateX: dir === "down" ? 15 : -15,
               transition: {
-                duration: 1.8,
+                duration: 0.8,
                 ease: [0.22, 1, 0.36, 1],
               },
             }),
@@ -51,9 +45,7 @@ export default function SectionWrapper({ isActive, scrollDirection, isFirst = fa
           exit="exit"
           className="absolute inset-0"
           style={{
-            perspective: 1200,
-            transformStyle: "preserve-3d",
-            transformOrigin: scrollDirection === "down" ? "top center" : "bottom center",
+            overflow: "hidden",
           }}
         >
           {children}
