@@ -1,13 +1,30 @@
 "use client";
 
 import { forwardRef, useEffect, useRef, useState } from "react";
-import { AnimatePresence } from "framer-motion";
 import StagePlaceholder from "./StagePlaceholder";
 
+const components = [
+  (props) => <StagePlaceholder {...props} text="Stage 1" />,
+  (props) => <StagePlaceholder {...props} text="Stage 2" />,
+  (props) => <StagePlaceholder {...props} text="Stage 3" />,
+];
+
 const stages = [
-  (props) => <StagePlaceholder {...props} number={1} />,
-  (props) => <StagePlaceholder {...props} number={2} />,
-  (props) => <StagePlaceholder {...props} number={3} />,
+  [
+    [1, true],
+    [2, false],
+    [3, false],
+  ],
+  [
+    [1, false],
+    [2, true],
+    [3, false],
+  ],
+  [
+    [1, false],
+    [2, false],
+    [3, true],
+  ],
 ];
 
 const throttleDuration = 700;
@@ -25,7 +42,7 @@ const Mission = forwardRef(function Mission(
     const start = scrollDirection === "up" ? last : 0;
     setIndex(start);
     onCanLeaveChange(false);
-  }, [isActive, scrollDirection, last]);
+  }, [isActive, scrollDirection, last, onCanLeaveChange]);
 
   useEffect(() => {
     if (!isActive) return;
@@ -54,15 +71,16 @@ const Mission = forwardRef(function Mission(
 
     window.addEventListener("wheel", onWheel, { passive: false });
     return () => window.removeEventListener("wheel", onWheel);
-  }, [isActive, index, last]);
+  }, [isActive, index, last, onCanLeaveChange]);
 
-  const Stage = stages[index];
+  const stage = stages[index];
 
   return (
     <div ref={ref} className="relative w-full h-full overflow-hidden">
-      <AnimatePresence mode="wait">
-        <Stage key={index} />
-      </AnimatePresence>
+      {stage.map(([num, show]) => {
+        const Component = components[num - 1];
+        return <Component key={num} show={show} />;
+      })}
     </div>
   );
 });
