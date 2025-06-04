@@ -279,7 +279,7 @@ export default function Timeline({
                       />
 
                       <Motion.div
-                        className={`absolute flex flex-col${isDown ? " flex-col-reverse" : ""}`}
+                        className="absolute flex flex-col space-y-2"
                         initial={{ opacity: 0, x: -30 }}
                         animate={isFuture ? { opacity: 0, x: -30 } : { opacity: 1, x: 0 }}
                         transition={{
@@ -294,10 +294,15 @@ export default function Timeline({
                           width: "350px",
                         }}
                       >
-                        <span className="text-sm text-gray-400 mb-0.5">{ev.date}</span>
-                        <h3 className="text-2xl font-bold text-white mb-2" style={{ color }}>{ev.title}</h3>
+                        <h3
+                          className={`text-2xl font-bold text-white ${isDown ? "order-4 mt-2" : "order-1 mb-2"}`}
+                          style={{ color }}
+                        >
+                          {ev.title}
+                        </h3>
+                        <span className={`text-sm text-gray-400 ${isDown ? "order-3 mt-0.5" : "order-2 mb-0.5"}`}>{ev.date}</span>
                         <Motion.p
-                          className="text-sm text-gray-400 mb-4"
+                          className={`text-sm text-gray-400 ${isDown ? "order-2 mt-4" : "order-3 mb-4"}`}
                           initial={{ opacity: 0, y: -30 }}
                           animate={isFuture ? { opacity: 0, y: -30 } : { opacity: 1, y: 0 }}
                           transition={{
@@ -310,7 +315,7 @@ export default function Timeline({
                         </Motion.p>
                         {ev.image && (
                           <Motion.div
-                            className="rounded-md overflow-hidden"
+                            className={`rounded-md overflow-hidden ${isDown ? "order-1 mb-4" : "order-4 mt-4"}`}
                             initial={{ opacity: 0 }}
                             animate={isFuture ? { opacity: 0 } : { opacity: 1 }}
                             transition={{
@@ -319,7 +324,13 @@ export default function Timeline({
                               ease: "easeOut",
                             }}
                           >
-                            <img src={ev.image} alt={ev.title} width={240} height={150} className="rounded-md object-cover" />
+                            <img
+                              src={ev.image}
+                              alt={ev.title}
+                              width={240}
+                              height={150}
+                              className="rounded-md object-cover"
+                            />
                           </Motion.div>
                         )}
                       </Motion.div>
