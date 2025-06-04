@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from "framer-motion";
 
 export default function SectionWrapper({ isActive, scrollDirection, children }) {
   return (
-    <AnimatePresence mode="wait">
+    <AnimatePresence mode="sync">
       {isActive && (
         <motion.div
           key="section"
@@ -10,9 +10,9 @@ export default function SectionWrapper({ isActive, scrollDirection, children }) 
           variants={{
             initial: (dir) => ({
               opacity: 0,
-              y: dir === "down" ? 150 : -150,
-              scale: 0.9,
-              rotateX: dir === "down" ? -15 : 15,
+              y: dir === "down" ? 250 : -250,
+              scale: 0.85,
+              rotateX: dir === "down" ? -25 : 25,
             }),
             animate: {
               opacity: 1,
@@ -26,9 +26,9 @@ export default function SectionWrapper({ isActive, scrollDirection, children }) 
             },
             exit: (dir) => ({
               opacity: 0,
-              y: dir === "down" ? -150 : 150,
-              scale: 0.9,
-              rotateX: dir === "down" ? 15 : -15,
+              y: dir === "down" ? -250 : 250,
+              scale: 0.85,
+              rotateX: dir === "down" ? 25 : -25,
               transition: {
                 duration: 1.5,
                 ease: [0.22, 1, 0.36, 1],
@@ -39,7 +39,10 @@ export default function SectionWrapper({ isActive, scrollDirection, children }) 
           animate="animate"
           exit="exit"
           className="absolute inset-0"
-          style={{ perspective: 1000 }}
+          style={{
+            perspective: 1000,
+            transformOrigin: scrollDirection === "down" ? "top center" : "bottom center",
+          }}
         >
           {children}
         </motion.div>
