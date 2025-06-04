@@ -20,7 +20,6 @@ const specs = [
 const HeroScroll = forwardRef(({ isActive, onCanLeaveChange }, ref) => {
   const { isDesktop } = useBreakpoint();
   const [stage, setStage] = useState(0);
-  const [canScroll, setCanScroll] = useState(false);
   const isThrottled = useRef(false);
 
   const maxStage = 5;
@@ -31,30 +30,34 @@ const HeroScroll = forwardRef(({ isActive, onCanLeaveChange }, ref) => {
     if (!isDesktop) return;
     if (isActive) {
       setStage(0);
-      onCanLeaveChange(false);
-      setCanScroll(false);
-      isThrottled.current = true;
-      const t = setTimeout(() => {
-        setCanScroll(true);
-        isThrottled.current = false;
-      }, forwardDelay);
-      return () => clearTimeout(t);
+      onCanLeaveChange(true);
+      const start = setTimeout(() => setStage(1), 50);
+      const toStage2 = setTimeout(() => setStage(2), forwardDelay);
+      return () => {
+        clearTimeout(start);
+        clearTimeout(toStage2);
+      };
     } else {
-      setCanScroll(false);
       isThrottled.current = false;
     }
   }, [isActive, isDesktop]);
 
   useEffect(() => {
-    if (!isActive || !canScroll || !isDesktop) return;
+    if (!isActive || stage < 2 || !isDesktop) return;
 
     const handleWheel = (e) => {
+      const dir = e.deltaY > 0 ? 1 : -1;
+
+      if (dir < 0 && stage === 2) {
+        onCanLeaveChange(true);
+        return;
+      }
+
       e.preventDefault();
       e.stopPropagation();
       if (isThrottled.current) return;
 
-      const dir = e.deltaY > 0 ? 1 : -1;
-      const next = Math.max(0, Math.min(stage + dir, maxStage));
+      const next = Math.max(2, Math.min(stage + dir, maxStage));
       if (next === stage) return;
 
       isThrottled.current = true;
@@ -65,13 +68,13 @@ const HeroScroll = forwardRef(({ isActive, onCanLeaveChange }, ref) => {
         if (next === maxStage) onCanLeaveChange(true);
       }, delay);
 
-      if (dir < 0) onCanLeaveChange(false);
+      onCanLeaveChange(false);
       setStage(next);
     };
 
     window.addEventListener("wheel", handleWheel, { passive: false });
     return () => window.removeEventListener("wheel", handleWheel);
-  }, [isActive, canScroll, stage, isDesktop]);
+  }, [isActive, stage, isDesktop]);
 
   // Fallback simple layout on mobile or tablet
   if (!isDesktop) {
@@ -115,13 +118,22 @@ const HeroScroll = forwardRef(({ isActive, onCanLeaveChange }, ref) => {
   }
 
   // Desktop animated version
-  const topBannerWidth = stage === 1 ? "90%" : "70%";
+  const topBannerWidth = stage < 2 ? "90%" : "70%";
   const topChartsVisible = stage >= 2;
   const topOffset = stage >= 3 ? "10%" : "50%";
   const topTranslate = stage >= 3 ? "0%" : "-50%";
 
-  const bottomBannerWidth = stage < 5 ? "100%" : "60%";
+  const bottomBannerWidth = stage < 5 ? "90%" : "60%";
   const bottomChartsVisible = stage >= 5;
+
+  useEffect(() => {
+    if (!isDesktop) return;
+    if (stage <= 1 || stage === maxStage) {
+      onCanLeaveChange(true);
+    } else {
+      onCanLeaveChange(false);
+    }
+  }, [stage, isDesktop, onCanLeaveChange]);
 
   return (
     <div className="w-full h-full relative" ref={ref}>
@@ -133,7 +145,9 @@ const HeroScroll = forwardRef(({ isActive, onCanLeaveChange }, ref) => {
       >
         <motion.div
           className="bg-black flex flex-col items-center justify-center relative rounded-r-3xl px-20 py-24"
-          style={{ width: topBannerWidth, boxShadow: "0 0 20px rgba(255,255,255,0.15)" }}
+          style={{ boxShadow: "0 0 20px rgba(255,255,255,0.15)" }}
+          animate={{ width: topBannerWidth }}
+          transition={{ type: "spring", stiffness: 160, damping: 20 }}
         >
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
             <Glow color="white" />
@@ -185,7 +199,9 @@ const HeroScroll = forwardRef(({ isActive, onCanLeaveChange }, ref) => {
 
         <motion.div
           className="bg-black flex flex-col items-center justify-center relative rounded-l-3xl px-20 py-32"
-          style={{ width: bottomBannerWidth, boxShadow: "0 0 20px rgba(255,255,255,0.15)" }}
+          style={{ boxShadow: "0 0 20px rgba(255,255,255,0.15)" }}
+          animate={{ width: bottomBannerWidth }}
+          transition={{ type: "spring", stiffness: 160, damping: 20 }}
         >
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
             <Glow color="white" />
