@@ -58,13 +58,13 @@ const HeroScroll = forwardRef((_, ref) => {
             className="absolute inset-0 flex items-center justify-center pointer-events-none"
           >
             <Glow
-              color="white"
-              width={500}
-              height={350}
+              color="rgba(255,255,255,0.4)"
+              width={600}
+              height={400}
               shape="rect"
-              radius={180}
-              blur={50}
-              stop="55%"
+              radius={120}
+              blur={40}
+              stop="45%"
             />
           </motion.div>
 
@@ -122,13 +122,13 @@ const HeroScroll = forwardRef((_, ref) => {
             className="absolute inset-0 flex items-center justify-center pointer-events-none"
           >
             <Glow
-              color="white"
-              width={500}
-              height={350}
+              color="rgba(255,255,255,0.4)"
+              width={600}
+              height={400}
               shape="rect"
-              radius={180}
-              blur={50}
-              stop="55%"
+              radius={120}
+              blur={40}
+              stop="45%"
             />
           </motion.div>
 

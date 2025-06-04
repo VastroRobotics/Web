@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import VastroLogo from "../../assets/branding/vastro_full_logo.svg";
-import Glow from "../ui/Glow";
 
 export default function VastroMultipage() {
   const [activePage, setActivePage] = useState("mission");
@@ -117,31 +116,35 @@ export default function VastroMultipage() {
           "Our quadruped robot is designed for remote, high-risk applications ranging from substation inspection to planetary exploration. We focus on affordability, modularity, and safety at scale.",
         ], (
           <>
-            <Glow
-              color="rgba(96, 165, 250, 0.15)"
-              width={256}
-              height={256}
-              blur={40}
-              stop="55%"
-              className="absolute right-[30%] top-[-10%] -z-10"
+            <div
+              className="absolute right-[25%] top-[-15%] -z-10"
+              style={{
+                width: '30%',
+                height: '60%',
+                background:
+                  'radial-gradient(ellipse at center, rgba(96,165,250,0.25) 0%, transparent 70%)',
+                filter: 'blur(50px)',
+              }}
             />
-            <Glow
-              color="rgba(192, 132, 252, 0.15)"
-              width={320}
-              height={288}
-              shape="oval"
-              blur={40}
-              stop="55%"
+            <div
               className="absolute right-[5%] top-[20%] -z-10"
+              style={{
+                width: '35%',
+                height: '70%',
+                background:
+                  'radial-gradient(ellipse at center, rgba(192,132,252,0.25) 0%, transparent 70%)',
+                filter: 'blur(55px)',
+              }}
             />
-            <Glow
-              color="rgba(34, 211, 238, 0.15)"
-              width={288}
-              height={320}
-              shape="oval"
-              blur={40}
-              stop="55%"
-              className="absolute right-[20%] top-[50%] -z-10"
+            <div
+              className="absolute right-[15%] top-[55%] -z-10"
+              style={{
+                width: '30%',
+                height: '60%',
+                background:
+                  'radial-gradient(ellipse at center, rgba(34,211,238,0.25) 0%, transparent 70%)',
+                filter: 'blur(50px)',
+              }}
             />
           </>
         ))}
@@ -151,23 +154,25 @@ export default function VastroMultipage() {
           "By focusing on modular architecture, our robots offer enterprise performance at a fraction of the cost—making advanced mobility more accessible.",
         ], (
           <>
-            <Glow
-              color="rgba(59, 130, 246, 0.2)"
-              width={288}
-              height={320}
-              shape="oval"
-              blur={40}
-              stop="55%"
-              className="absolute right-[5%] top-[-5%] rotate-45 -z-10"
+            <div
+              className="absolute right-[5%] top-[-10%] rotate-45 -z-10"
+              style={{
+                width: '40%',
+                height: '70%',
+                background:
+                  'radial-gradient(ellipse at center, rgba(59,130,246,0.3) 0%, transparent 70%)',
+                filter: 'blur(55px)',
+              }}
             />
-            <Glow
-              color="rgba(6, 182, 212, 0.2)"
-              width={256}
-              height={256}
-              shape="oval"
-              blur={40}
-              stop="55%"
+            <div
               className="absolute right-[15%] top-[50%] -z-10"
+              style={{
+                width: '30%',
+                height: '60%',
+                background:
+                  'radial-gradient(ellipse at center, rgba(6,182,212,0.25) 0%, transparent 70%)',
+                filter: 'blur(50px)',
+              }}
             />
           </>
         ))}
@@ -177,23 +182,25 @@ export default function VastroMultipage() {
           "With real-time feedback, smart defaults, and smooth UX, VASTRO empowers users to focus on their mission—not the controls.",
         ], (
           <>
-            <Glow
-              color="rgba(168, 85, 247, 0.2)"
-              width={320}
-              height={384}
-              shape="oval"
-              blur={40}
-              stop="55%"
+            <div
               className="absolute right-[0%] top-[40%] -rotate-15 -z-10"
+              style={{
+                width: '35%',
+                height: '75%',
+                background:
+                  'radial-gradient(ellipse at center, rgba(168,85,247,0.3) 0%, transparent 70%)',
+                filter: 'blur(55px)',
+              }}
             />
-            <Glow
-              color="rgba(34, 211, 238, 0.2)"
-              width={256}
-              height={288}
-              shape="oval"
-              blur={40}
-              stop="55%"
+            <div
               className="absolute right-[10%] top-[-15%] -z-10"
+              style={{
+                width: '30%',
+                height: '60%',
+                background:
+                  'radial-gradient(ellipse at center, rgba(34,211,238,0.25) 0%, transparent 70%)',
+                filter: 'blur(50px)',
+              }}
             />
           </>
         ))}
@@ -203,23 +210,25 @@ export default function VastroMultipage() {
           "Our platform adapts to any task, from urban inspection to hazardous material handling to education. It’s your robot—make it yours.",
         ], (
           <>
-            <Glow
-              color="rgba(6, 182, 212, 0.2)"
-              width={288}
-              height={320}
-              shape="oval"
-              blur={40}
-              stop="55%"
+            <div
               className="absolute right-[0%] top-[0%] rotate-20 -z-10"
+              style={{
+                width: '35%',
+                height: '70%',
+                background:
+                  'radial-gradient(ellipse at center, rgba(6,182,212,0.25) 0%, transparent 70%)',
+                filter: 'blur(55px)',
+              }}
             />
-            <Glow
-              color="rgba(192, 132, 252, 0.2)"
-              width={320}
-              height={256}
-              shape="oval"
-              blur={40}
-              stop="55%"
+            <div
               className="absolute right-[10%] top-[50%] -z-10"
+              style={{
+                width: '35%',
+                height: '60%',
+                background:
+                  'radial-gradient(ellipse at center, rgba(192,132,252,0.25) 0%, transparent 70%)',
+                filter: 'blur(50px)',
+              }}
             />
           </>
         ))}

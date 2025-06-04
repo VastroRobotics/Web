@@ -300,16 +300,17 @@ const Home = forwardRef(
                     </div>
                   </div>
 
-                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 opacity-40 z-50 pointer-events-none">
+                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 opacity-50 z-50 pointer-events-none">
                     <Suspense fallback={null}>
                       <LazyGlow
                         color="white"
-                        width={800}
-                        height={200}
+                        width="50vw"
+                        height="10vw"
                         shape="rect"
-                        radius={120}
-                        blur={50}
-                        stop="55%"
+                        radius={80}
+                        blur={35}
+                        stop="40%"
+                        className="fade-in"
                       />
                     </Suspense>
                   </div>
