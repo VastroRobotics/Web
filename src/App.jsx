@@ -15,7 +15,7 @@ const Team = lazy(() => import("./components/features/Team"));
 const Timeline = lazy(() => import("./components/features/Timeline"));
 const Footer = lazy(() => import("./components/features/Footer"));
 
-const sections = [Home, Mission, About, Team, Footer, Timeline];
+const sections = [Home, Mission, About, Team, Timeline, Footer];
 
 export default function App() {
   const [activeIndex, setActiveIndex] = useState(0);
