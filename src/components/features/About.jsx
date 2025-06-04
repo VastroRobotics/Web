@@ -6,20 +6,15 @@ import VastroLogo from "../../assets/branding/vastro_full_logo.svg";
 export default function VastroMultipage() {
   const [activePage, setActivePage] = useState("mission");
   const [transitioning, setTransitioning] = useState(false);
-  const [glowVisible, setGlowVisible] = useState(true);
 
   const pages = ["mission", "affordable", "intuitive", "customizable"];
 
   const handleTransition = (nextPage) => {
     if (nextPage !== activePage) {
-      setGlowVisible(false);
       setTransitioning(true);
       setTimeout(() => {
         setActivePage(nextPage);
-        setTimeout(() => {
-          setGlowVisible(true);
-          setTransitioning(false);
-        }, 400);
+        setTransitioning(false);
       }, 300);
     }
   };
@@ -42,8 +37,12 @@ export default function VastroMultipage() {
   const slashStyle = "text-[clamp(1.75rem,2.25vw+1rem,3.25rem)] leading-none";
   const navBtnStyle = "px-2 py-1 focus:outline-none transition-colors text-[clamp(0.75rem,0.8vw+0.3rem,1rem)]";
 
-  const renderSection = (key, title, paragraphs, glowDecor) => (
-    <div key={key} className={sectionStyle(key)}>
+  const renderSection = (key, title, paragraphs, colors) => (
+    <div
+      key={key}
+      className={`${sectionStyle(key)} luminous`}
+      style={{ "--glow-color1": colors[0], "--glow-color2": colors[1] }}
+    >
       <div className="w-full max-w-[80%] lg:max-w-[50%] h-full flex flex-col">
         {/* Title and slash aligned */}
         <h2 className={headingStyle}>
@@ -99,9 +98,6 @@ export default function VastroMultipage() {
         </div>
       </div>
 
-      <div className={`transition-opacity duration-700 ${glowVisible ? "opacity-100" : "opacity-0"}`}>
-        {glowDecor}
-      </div>
     </div>
   );
 
@@ -111,127 +107,45 @@ export default function VastroMultipage() {
       style={{ height: "50vh" }}
     >
       <div className="flex-1 relative h-full">
-        {renderSection("mission", "Mission", [
-          "At VASTRO, we believe the world needs more accessible, telepresence-enabled robotic systems—especially in industries where human risk is high.",
-          "Our quadruped robot is designed for remote, high-risk applications ranging from substation inspection to planetary exploration. We focus on affordability, modularity, and safety at scale.",
-        ], (
-          <>
-            <div
-              className="absolute right-[25%] top-[-15%] -z-10"
-              style={{
-                width: '30%',
-                height: '60%',
-                background:
-                  'radial-gradient(ellipse at center, rgba(96,165,250,0.25) 0%, transparent 70%)',
-                filter: 'blur(50px)',
-              }}
-            />
-            <div
-              className="absolute right-[5%] top-[20%] -z-10"
-              style={{
-                width: '35%',
-                height: '70%',
-                background:
-                  'radial-gradient(ellipse at center, rgba(192,132,252,0.25) 0%, transparent 70%)',
-                filter: 'blur(55px)',
-              }}
-            />
-            <div
-              className="absolute right-[15%] top-[55%] -z-10"
-              style={{
-                width: '30%',
-                height: '60%',
-                background:
-                  'radial-gradient(ellipse at center, rgba(34,211,238,0.25) 0%, transparent 70%)',
-                filter: 'blur(50px)',
-              }}
-            />
-          </>
-        ))}
+        {renderSection(
+          "mission",
+          "Mission",
+          [
+            "At VASTRO, we believe the world needs more accessible, telepresence-enabled robotic systems—especially in industries where human risk is high.",
+            "Our quadruped robot is designed for remote, high-risk applications ranging from substation inspection to planetary exploration. We focus on affordability, modularity, and safety at scale.",
+          ],
+          ["rgba(96,165,250,0.25)", "rgba(192,132,252,0.25)"]
+        )}
 
-        {renderSection("affordable", "Affordable", [
-          "Advanced robotics shouldn’t break the bank. We’ve built VASTRO with cost in mind using streamlined manufacturing and open standards.",
-          "By focusing on modular architecture, our robots offer enterprise performance at a fraction of the cost—making advanced mobility more accessible.",
-        ], (
-          <>
-            <div
-              className="absolute right-[5%] top-[-10%] rotate-45 -z-10"
-              style={{
-                width: '40%',
-                height: '70%',
-                background:
-                  'radial-gradient(ellipse at center, rgba(59,130,246,0.3) 0%, transparent 70%)',
-                filter: 'blur(55px)',
-              }}
-            />
-            <div
-              className="absolute right-[15%] top-[50%] -z-10"
-              style={{
-                width: '30%',
-                height: '60%',
-                background:
-                  'radial-gradient(ellipse at center, rgba(6,182,212,0.25) 0%, transparent 70%)',
-                filter: 'blur(50px)',
-              }}
-            />
-          </>
-        ))}
+        {renderSection(
+          "affordable",
+          "Affordable",
+          [
+            "Advanced robotics shouldn’t break the bank. We’ve built VASTRO with cost in mind using streamlined manufacturing and open standards.",
+            "By focusing on modular architecture, our robots offer enterprise performance at a fraction of the cost—making advanced mobility more accessible.",
+          ],
+          ["rgba(59,130,246,0.3)", "rgba(6,182,212,0.25)"]
+        )}
 
-        {renderSection("intuitive", "Intuitive", [
-          "Technology is only powerful when it's usable. Our control interfaces are clear, responsive, and learnable in minutes—even for non-experts.",
-          "With real-time feedback, smart defaults, and smooth UX, VASTRO empowers users to focus on their mission—not the controls.",
-        ], (
-          <>
-            <div
-              className="absolute right-[0%] top-[40%] -rotate-15 -z-10"
-              style={{
-                width: '35%',
-                height: '75%',
-                background:
-                  'radial-gradient(ellipse at center, rgba(168,85,247,0.3) 0%, transparent 70%)',
-                filter: 'blur(55px)',
-              }}
-            />
-            <div
-              className="absolute right-[10%] top-[-15%] -z-10"
-              style={{
-                width: '30%',
-                height: '60%',
-                background:
-                  'radial-gradient(ellipse at center, rgba(34,211,238,0.25) 0%, transparent 70%)',
-                filter: 'blur(50px)',
-              }}
-            />
-          </>
-        ))}
+        {renderSection(
+          "intuitive",
+          "Intuitive",
+          [
+            "Technology is only powerful when it's usable. Our control interfaces are clear, responsive, and learnable in minutes—even for non-experts.",
+            "With real-time feedback, smart defaults, and smooth UX, VASTRO empowers users to focus on their mission—not the controls.",
+          ],
+          ["rgba(168,85,247,0.3)", "rgba(34,211,238,0.25)"]
+        )}
 
-        {renderSection("customizable", "Customizable", [
-          "No two missions are alike. VASTRO is designed to be customized—sensors, legs, payloads, compute, you name it.",
-          "Our platform adapts to any task, from urban inspection to hazardous material handling to education. It’s your robot—make it yours.",
-        ], (
-          <>
-            <div
-              className="absolute right-[0%] top-[0%] rotate-20 -z-10"
-              style={{
-                width: '35%',
-                height: '70%',
-                background:
-                  'radial-gradient(ellipse at center, rgba(6,182,212,0.25) 0%, transparent 70%)',
-                filter: 'blur(55px)',
-              }}
-            />
-            <div
-              className="absolute right-[10%] top-[50%] -z-10"
-              style={{
-                width: '35%',
-                height: '60%',
-                background:
-                  'radial-gradient(ellipse at center, rgba(192,132,252,0.25) 0%, transparent 70%)',
-                filter: 'blur(50px)',
-              }}
-            />
-          </>
-        ))}
+        {renderSection(
+          "customizable",
+          "Customizable",
+          [
+            "No two missions are alike. VASTRO is designed to be customized—sensors, legs, payloads, compute, you name it.",
+            "Our platform adapts to any task, from urban inspection to hazardous material handling to education. It’s your robot—make it yours.",
+          ],
+          ["rgba(6,182,212,0.25)", "rgba(192,132,252,0.25)"]
+        )}
       </div>
 
       <div className="absolute bottom-0 left-6 right-6 h-1/5 flex items-center z-20 justify-between overflow-hidden whitespace-nowrap">

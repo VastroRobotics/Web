@@ -305,7 +305,7 @@ const Home = forwardRef(
                       <LazyGlow
                         color="white"
                         width="50vw"
-                        height="10vw"
+                        height="10vh"
                         shape="rect"
                         radius={80}
                         blur={35}

@@ -2,7 +2,6 @@
 
 import { forwardRef, useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import Glow from "../ui/Glow";
 import Chart from "../ui/Chart";
 import ComparisonTable from "../ui/ComparisonTable";
 
@@ -17,10 +16,6 @@ const specs = [
 ];
 
 const variants = {
-  glow: {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { duration: 1.2, delay: 1 } },
-  },
   banner: {
     hidden: { x: -200, opacity: 0 },
     visible: { x: 0, opacity: 1, transition: { duration: 0.8, ease: "easeOut" } },
@@ -48,25 +43,13 @@ const HeroScroll = forwardRef((_, ref) => {
           initial="hidden"
           animate={inView ? "visible" : "hidden"}
           variants={variants.banner}
-          className="bg-black w-full lg:w-[70%] flex flex-col items-center justify-center relative rounded-r-3xl px-20 py-24 my-6"
-          style={{ boxShadow: "0 0 20px rgba(255,255,255,0.15)" }}
+          className="luminous bg-black w-full lg:w-[70%] flex flex-col items-center justify-center relative rounded-r-3xl px-20 py-24 my-6"
+          style={{
+            boxShadow: "0 0 20px rgba(255,255,255,0.15)",
+            "--glow-color1": "rgba(255,255,255,0.25)",
+            "--glow-color2": "rgba(96,165,250,0.3)",
+          }}
         >
-          <motion.div
-            variants={variants.glow}
-            initial="hidden"
-            animate={inView ? "visible" : "hidden"}
-            className="absolute inset-0 flex items-center justify-center pointer-events-none"
-          >
-            <Glow
-              color="rgba(255,255,255,0.4)"
-              width={600}
-              height={400}
-              shape="rect"
-              radius={120}
-              blur={40}
-              stop="45%"
-            />
-          </motion.div>
 
           <motion.div
             className="relative z-10 text-center font-bold text-white whitespace-nowrap text-[3vw] leading-[1.1]"
@@ -108,29 +91,17 @@ const HeroScroll = forwardRef((_, ref) => {
         </div>
       </motion.div>
 
-        <motion.div 
+        <motion.div
           initial="hidden"
           animate={inView ? "visible" : "hidden"}
           variants={variants.bannerRight}
-          className="bg-black w-full lg:w-[60%] flex flex-col items-center justify-center relative rounded-l-3xl px-20 py-32"
-          style={{ boxShadow: "0 0 20px rgba(255,255,255,0.15)" }}
+          className="luminous bg-black w-full lg:w-[60%] flex flex-col items-center justify-center relative rounded-l-3xl px-20 py-32"
+          style={{
+            boxShadow: "0 0 20px rgba(255,255,255,0.15)",
+            "--glow-color1": "rgba(255,255,255,0.25)",
+            "--glow-color2": "rgba(192,132,252,0.3)",
+          }}
         >
-          <motion.div
-            variants={variants.glow}
-            initial="hidden"
-            animate={inView ? "visible" : "hidden"}
-            className="absolute inset-0 flex items-center justify-center pointer-events-none"
-          >
-            <Glow
-              color="rgba(255,255,255,0.4)"
-              width={600}
-              height={400}
-              shape="rect"
-              radius={120}
-              blur={40}
-              stop="45%"
-            />
-          </motion.div>
 
           <motion.div
             className="relative z-10 text-center font-bold text-white whitespace-nowrap text-[3vw] leading-[1.1]"
