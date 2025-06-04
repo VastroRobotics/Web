@@ -108,7 +108,7 @@ export default function TeamCarousel() {
 
        useEffect(() => {
                setInfoVisible(false);
-               const timeout = setTimeout(() => setInfoVisible(true), 350);
+               const timeout = setTimeout(() => setInfoVisible(true), 480);
                return () => clearTimeout(timeout);
        }, [activeIndex]);
 
@@ -119,7 +119,7 @@ export default function TeamCarousel() {
                setActiveIndex(0); // Now default to first item on rotation
                setTimeout(() => {
                        setIsRotating(false);
-               }, 1000);
+               }, 500);
        };
 
 	const getVisibleMembers = () => {
@@ -234,11 +234,11 @@ export default function TeamCarousel() {
 
                                        {/* Info Box */}
                                         <motion.div
-                                                className="absolute bottom-0 left-0 w-full aspect-[4/3] pointer-events-none overflow-hidden"
+                                                className="absolute bottom-0 left-0 w-full aspect-[2/4] pointer-events-none overflow-hidden"
                                                 initial="hidden"
                                                 animate={isActive && infoVisible ? "visible" : "hidden"}
-                                                variants={{ hidden: { opacity: 0, y: 60 }, visible: { opacity: 1, y: 0 } }}
-                                                transition={{ duration: 0.35, ease: [0.23, 1, 0.32, 1] }}
+                                                variants={{ hidden: { opacity: 0, y: 50 }, visible: { opacity: 1, y: 0 } }}
+                                                transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
                                         >
                                                 <div className="absolute inset-0 p-6 bg-gradient-to-t from-black/90 via-black/70 to-transparent space-y-2 pointer-events-auto">
                                                         <h3 className="text-3xl font-bold text-white whitespace-nowrap">
