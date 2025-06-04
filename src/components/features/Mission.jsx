@@ -6,26 +6,26 @@ import StageBanner from "./StageBanner";
 const components = [StageBanner, StageBanner, StageBanner];
 
 const baseParams = [
-  { text: "Banner 1", direction: 0, start: 20, end: 100 },
-  { text: "Banner 2", direction: 1, start: 20, end: 100 },
-  { text: "Banner 3", direction: 0, start: 20, end: 100 },
+  { direction: 0 },
+  { direction: 1 },
+  { direction: 0 },
 ];
 
 const stages = [
   [
-    { show: true },
+    { show: true, text: "Banner 1", start: 20, end: 80 },
     { show: false },
     { show: false },
   ],
   [
     { show: false },
-    { show: true },
+    { show: true, text: "Custom Stage", start: 40, end: 90 },
     { show: false },
   ],
   [
     { show: false },
     { show: false },
-    { show: true },
+    { show: true, text: "Final Stage", start: 30, end: 100 },
   ],
 ];
 
