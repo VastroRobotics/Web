@@ -138,15 +138,15 @@ export default function TeamCarousel() {
 	const visibleMembers = getVisibleMembers();
 
 	return (
-		<div
-			className="relative h-[600px] w-full overflow-hidden"
-			onMouseMove={() => setLastInteraction(Date.now())}
-		>
-			<AnimatePresence mode="popLayout">
-				<div
-					ref={carouselRef}
-					className="flex justify-end gap-3 h-[550px] w-full absolute"
-				>
+                <div
+                        className="relative w-full overflow-hidden aspect-[4/3]"
+                        onMouseMove={() => setLastInteraction(Date.now())}
+                >
+                        <AnimatePresence mode="popLayout">
+                                <div
+                                        ref={carouselRef}
+                                        className="absolute inset-0 flex justify-end gap-3"
+                                >
 					{visibleMembers.map((member, index) => {
 						const isRightmost = index === 4;
 						const isActive = index === activeIndex;
@@ -154,9 +154,9 @@ export default function TeamCarousel() {
 						return (
 							<motion.div
 								key={`${member.id}-${member.visibleIndex}`}
-								className={`relative cursor-pointer ${
-									isActive ? "h-[600px]" : "h-[550px]"
-								}`}
+                                                                className={`relative cursor-pointer ${
+                                                                        isActive ? "h-full" : "h-[92%]"
+                                                                }`}
 								style={{
 									zIndex: isActive ? 10 : 1,
 								}}
@@ -164,7 +164,7 @@ export default function TeamCarousel() {
 								animate={{
 									opacity: 1,
 									x: 0,
-									flex: isActive ? "1 0 150px" : "0 0 60px",
+                                                                        flex: isActive ? "1 0 18.75%" : "0 0 7.5%",
 									marginLeft: isActive ? "8px" : "0px",
 									marginRight: isActive ? "8px" : "0px",
 								}}
