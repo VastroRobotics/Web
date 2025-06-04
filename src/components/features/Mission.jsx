@@ -1,133 +1,70 @@
 "use client";
 
-import { forwardRef, useRef } from "react";
-import { motion, useInView } from "framer-motion";
-import Glow from "../ui/Glow";
-import Chart from "../ui/Chart";
-import ComparisonTable from "../ui/ComparisonTable";
+import { forwardRef, useEffect, useRef, useState } from "react";
+import { AnimatePresence } from "framer-motion";
+import StagePlaceholder from "./StagePlaceholder";
 
-const specs = [
-  { label: "WEIGHT", left: "32 kg", right: "4 kg" },
-  { label: "PAYLOAD", left: "14 kg", right: "1 kg" },
-  { label: "CONTROL", left: "Tablet", right: "VR" },
-  { label: "HAPTICS", left: "No", right: "Yes" },
-  { label: "LIDAR", left: "Yes", right: "Yes" },
-  { label: "CAMERA", left: "Standard", right: "360°" },
-  { label: "CHASSIS", left: "Cast", right: "3-D Printed" },
+const stages = [
+  (props) => <StagePlaceholder {...props} number={1} />,
+  (props) => <StagePlaceholder {...props} number={2} />,
+  (props) => <StagePlaceholder {...props} number={3} />,
 ];
 
-const variants = {
-  glow: {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { duration: 1.2, delay: 1 } },
-  },
-  banner: {
-    hidden: { x: -200, opacity: 0 },
-    visible: { x: 0, opacity: 1, transition: { duration: 0.8, ease: "easeOut" } },
-  },
-  chart: {
-    hidden: { opacity: 0, scale: 0.9 },
-    visible: { opacity: 1, scale: 1, transition: { duration: 0.8, ease: "easeOut" } },
-  },
-  bannerRight: {
-    hidden: { x: 200, opacity: 0 },
-    visible: { x: 0, opacity: 1, transition: { duration: 0.8, ease: "easeOut" } },
-  },
-};
+const throttleDuration = 700;
 
-const HeroScroll = forwardRef((_, ref) => {
-  const containerRef = useRef(null);
-  const inView = useInView(containerRef, { once: true, margin: "-100px" });
+const Mission = forwardRef(function Mission(
+  { isActive, scrollDirection, onCanLeaveChange },
+  ref
+) {
+  const [index, setIndex] = useState(0);
+  const animating = useRef(false);
+  const last = stages.length - 1;
+
+  useEffect(() => {
+    if (!isActive) return;
+    const start = scrollDirection === "up" ? last : 0;
+    setIndex(start);
+    onCanLeaveChange(false);
+  }, [isActive, scrollDirection, last]);
+
+  useEffect(() => {
+    if (!isActive) return;
+    const onWheel = (e) => {
+      const dir = e.deltaY > 0 ? 1 : -1;
+      const next = index + dir;
+
+      if (animating.current) {
+        e.preventDefault();
+        return;
+      }
+
+      if (next < 0 || next > last) {
+        onCanLeaveChange(true);
+        return;
+      }
+
+      e.preventDefault();
+      animating.current = true;
+      onCanLeaveChange(false);
+      setIndex(next);
+      setTimeout(() => {
+        animating.current = false;
+      }, throttleDuration);
+    };
+
+    window.addEventListener("wheel", onWheel, { passive: false });
+    return () => window.removeEventListener("wheel", onWheel);
+  }, [isActive, index, last]);
+
+  const Stage = stages[index];
 
   return (
-    <div className="py-6 space-y-10">
-      {/* First Section: Left Banner + Charts */}
-      <div ref={ref} className="w-full flex flex-col lg:flex-row items-center px-0">
-        <motion.div
-          ref={containerRef}
-          initial="hidden"
-          animate={inView ? "visible" : "hidden"}
-          variants={variants.banner}
-          className="bg-black w-full lg:w-[70%] flex flex-col items-center justify-center relative rounded-r-3xl px-20 py-24 my-6"
-          style={{ boxShadow: "0 0 20px rgba(255,255,255,0.15)" }}
-        >
-          <motion.div
-            variants={variants.glow}
-            initial="hidden"
-            animate={inView ? "visible" : "hidden"}
-            className="absolute inset-0 flex items-center justify-center pointer-events-none"
-          >
-            <Glow color="white" />
-          </motion.div>
-
-          <motion.div
-            className="relative z-10 text-center font-bold text-white whitespace-nowrap text-[3vw] leading-[1.1]"
-            initial="hidden"
-            animate={inView ? "visible" : "hidden"} 
-          >   
-            VR‑controlled quadruped robots<br />
-            $75k capability for $2.5k
-          </motion.div>
-        </motion.div>
-
-        <motion.div
-          className="w-full lg:w-[30%] flex flex-col justify-center items-center"
-          initial="hidden"
-          animate={inView ? "visible" : "hidden"}
-          variants={variants.chart}
-        >
-          <div className="flex flex-col lg:flex-col md:flex-row gap-10 justify-center items-center w-full">
-            <Chart title="VASTRO" targetAmount={2500} targetPercent={2.5} barColor="#ffffff" />
-            <Chart title="Competitors" targetAmount={75000} targetPercent={70} barColor="#ffffff" />
-          </div>
-        </motion.div> 
-      </div>
-
-      {/* Second Section: Table Left + Right Banner */}
-      <div className="w-full flex flex-col-reverse lg:flex-row items-center px-0">
-      <motion.div 
-        className="w-full lg:w-[40%] flex justify-center items-center px-6 py-0"
-        initial="hidden"
-        animate={inView ? "visible" : "hidden"}
-        variants={variants.chart}
-      >
-        <div className="w-full mx-15">
-          <ComparisonTable
-            data={specs}
-            labelLeft="SpotMini"
-            labelRight="VASTRO"
-          />
-        </div>
-      </motion.div>
-
-        <motion.div 
-          initial="hidden"
-          animate={inView ? "visible" : "hidden"}
-          variants={variants.bannerRight}
-          className="bg-black w-full lg:w-[60%] flex flex-col items-center justify-center relative rounded-l-3xl px-20 py-32"
-          style={{ boxShadow: "0 0 20px rgba(255,255,255,0.15)" }}
-        >
-          <motion.div
-            variants={variants.glow}
-            initial="hidden"
-            animate={inView ? "visible" : "hidden"}
-            className="absolute inset-0 flex items-center justify-center pointer-events-none"
-          >
-            <Glow color="white" />
-          </motion.div>
-
-          <motion.div
-            className="relative z-10 text-center font-bold text-white whitespace-nowrap text-[3vw] leading-[1.1]"
-            initial="hidden"
-            animate={inView ? "visible" : "hidden"}
-          >
-            Making remote access<br />
-            more accessible
-          </motion.div>
-        </motion.div>
-      </div>
-    </div   >
+    <div ref={ref} className="relative w-full h-full overflow-hidden">
+      <AnimatePresence mode="wait">
+        <Stage key={index} />
+      </AnimatePresence>
+    </div>
   );
 });
 
-export default HeroScroll;
+export default Mission;
