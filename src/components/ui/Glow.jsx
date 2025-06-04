@@ -14,13 +14,15 @@ export default function Glow({
   height = 500,
   shape = "circle",
   radius = 0,
+  blur = 60,
+  stop = "60%",
   className = "",
 }) {
   const style = {
     width: typeof width === "number" ? `${width}px` : width,
     height: typeof height === "number" ? `${height}px` : height,
-    background: `radial-gradient(circle, ${color} 0%, transparent 70%)`,
-    filter: "blur(80px)",
+    background: `radial-gradient(circle, ${color} 0%, transparent ${stop})`,
+    filter: `blur(${blur}px)`,
     borderRadius:
       shape === "circle"
         ? "50%"

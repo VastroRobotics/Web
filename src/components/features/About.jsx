@@ -118,23 +118,29 @@ export default function VastroMultipage() {
         ], (
           <>
             <Glow
-              color="rgba(96, 165, 250, 0.1)"
+              color="rgba(96, 165, 250, 0.15)"
               width={256}
               height={256}
+              blur={40}
+              stop="55%"
               className="absolute right-[30%] top-[-10%] -z-10"
             />
             <Glow
-              color="rgba(192, 132, 252, 0.1)"
+              color="rgba(192, 132, 252, 0.15)"
               width={320}
               height={288}
               shape="oval"
+              blur={40}
+              stop="55%"
               className="absolute right-[5%] top-[20%] -z-10"
             />
             <Glow
-              color="rgba(34, 211, 238, 0.1)"
+              color="rgba(34, 211, 238, 0.15)"
               width={288}
               height={320}
               shape="oval"
+              blur={40}
+              stop="55%"
               className="absolute right-[20%] top-[50%] -z-10"
             />
           </>
@@ -146,17 +152,21 @@ export default function VastroMultipage() {
         ], (
           <>
             <Glow
-              color="rgba(59, 130, 246, 0.15)"
+              color="rgba(59, 130, 246, 0.2)"
               width={288}
               height={320}
               shape="oval"
+              blur={40}
+              stop="55%"
               className="absolute right-[5%] top-[-5%] rotate-45 -z-10"
             />
             <Glow
-              color="rgba(6, 182, 212, 0.15)"
+              color="rgba(6, 182, 212, 0.2)"
               width={256}
               height={256}
               shape="oval"
+              blur={40}
+              stop="55%"
               className="absolute right-[15%] top-[50%] -z-10"
             />
           </>
@@ -168,17 +178,21 @@ export default function VastroMultipage() {
         ], (
           <>
             <Glow
-              color="rgba(168, 85, 247, 0.15)"
+              color="rgba(168, 85, 247, 0.2)"
               width={320}
               height={384}
               shape="oval"
+              blur={40}
+              stop="55%"
               className="absolute right-[0%] top-[40%] -rotate-15 -z-10"
             />
             <Glow
-              color="rgba(34, 211, 238, 0.15)"
+              color="rgba(34, 211, 238, 0.2)"
               width={256}
               height={288}
               shape="oval"
+              blur={40}
+              stop="55%"
               className="absolute right-[10%] top-[-15%] -z-10"
             />
           </>
@@ -190,17 +204,21 @@ export default function VastroMultipage() {
         ], (
           <>
             <Glow
-              color="rgba(6, 182, 212, 0.15)"
+              color="rgba(6, 182, 212, 0.2)"
               width={288}
               height={320}
               shape="oval"
+              blur={40}
+              stop="55%"
               className="absolute right-[0%] top-[0%] rotate-20 -z-10"
             />
             <Glow
-              color="rgba(192, 132, 252, 0.15)"
+              color="rgba(192, 132, 252, 0.2)"
               width={320}
               height={256}
               shape="oval"
+              blur={40}
+              stop="55%"
               className="absolute right-[10%] top-[50%] -z-10"
             />
           </>

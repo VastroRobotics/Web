@@ -304,10 +304,12 @@ const Home = forwardRef(
                     <Suspense fallback={null}>
                       <LazyGlow
                         color="white"
-                        width={1000}
-                        height={250}
+                        width={800}
+                        height={200}
                         shape="rect"
                         radius={120}
+                        blur={50}
+                        stop="55%"
                       />
                     </Suspense>
                   </div>
