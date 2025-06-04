@@ -31,7 +31,7 @@ const ScrollIndicator = () => {
       setTimeout(() => {
         setVisible(true);
         setTimeout(() => {
-          video.playbackRate = 0.5;
+          video.playbackRate = 1.2;
           video.play();
 
           const onEnd = () => {
@@ -65,7 +65,10 @@ const ScrollIndicator = () => {
           playsInline
           className="w-12 h-auto"
         />
-        <span className="text-white text-sm tracking-widest select-none">
+        <span
+          className="text-gray-400 tracking-widest select-none"
+          style={{ fontFamily: "Roboto, sans-serif", fontSize: "14px" }}
+        >
           Scroll
         </span>
       </div>

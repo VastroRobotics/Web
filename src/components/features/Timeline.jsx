@@ -51,6 +51,7 @@ const timelineEvents = [
 
 export default function Timeline({
   isActive,
+  scrollDirection,
   onCanLeaveChange,
   centerFraction = 0.5,
 }) {
@@ -83,7 +84,8 @@ export default function Timeline({
 
   useEffect(() => {
     if (isActive) {
-      setActiveIndex(0);
+      const start = scrollDirection === "up" ? timelineEvents.length - 1 : 0;
+      setActiveIndex(start);
       setCanScroll(false);
       onCanLeaveChange(false);
       isThrottled.current = true;
@@ -98,7 +100,7 @@ export default function Timeline({
       isThrottled.current = false;
       clearTimeout(unlockTimeout.current);
     }
-  }, [isActive]);
+  }, [isActive, scrollDirection]);
 
   useEffect(() => {
     if (!isActive || !canScroll) return;
@@ -107,7 +109,17 @@ export default function Timeline({
       const dir = e.deltaY > 0 ? 1 : -1;
       const maxIndex = timelineEvents.length - 1;
 
-      if ((dir < 0 && activeIndex === 0) || (dir > 0 && activeIndex === maxIndex)) {
+      if (dir > 0 && activeIndex === maxIndex) {
+        if (isThrottled.current) return;
+        isThrottled.current = true;
+        setTimeout(() => {
+          isThrottled.current = false;
+        }, forwardThrottle);
+        onCanLeaveChange(true);
+        return;
+      }
+
+      if (dir < 0 && activeIndex === 0) {
         onCanLeaveChange(true);
         return;
       }
@@ -135,7 +147,8 @@ export default function Timeline({
   }, [isActive, canScroll, activeIndex]);
 
   useEffect(() => {
-    const center = viewport.width * centerFraction;
+    const fraction = viewport.width < 768 ? 0.25 : centerFraction;
+    const center = viewport.width * fraction;
     controls.start({ x: center - nodeOffset - activeIndex * shiftPerEvent });
 
   }, [activeIndex, viewport.width, centerFraction]);
@@ -266,7 +279,7 @@ export default function Timeline({
                       />
 
                       <Motion.div
-                        className="absolute flex flex-col"
+                        className={`absolute flex flex-col${isDown ? " flex-col-reverse" : ""}`}
                         initial={{ opacity: 0, x: -30 }}
                         animate={isFuture ? { opacity: 0, x: -30 } : { opacity: 1, x: 0 }}
                         transition={{
@@ -277,6 +290,7 @@ export default function Timeline({
                         style={{
                           left: "60px",
                           top: isDown ? `${distance}px` : `-${distance + nodeSize}px`,
+                          transform: isDown ? "translateY(-100%)" : "none",
                           width: "350px",
                         }}
                       >
