@@ -73,7 +73,7 @@ const Mission = forwardRef(({ isActive, onCanLeaveChange }, ref) => {
     if (!isDesktop) return;
     if (isActive) {
       setStage(0);
-      onCanLeaveChange(true);
+      onCanLeaveChange(false);
       isThrottled.current = false;
     } else {
       isThrottled.current = false;
@@ -114,7 +114,7 @@ const Mission = forwardRef(({ isActive, onCanLeaveChange }, ref) => {
 
   useEffect(() => {
     if (!isDesktop) return;
-    if (stage === 0 || stage === maxStage) {
+    if (stage === maxStage) {
       onCanLeaveChange(true);
     } else {
       onCanLeaveChange(false);
