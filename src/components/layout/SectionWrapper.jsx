@@ -9,28 +9,31 @@ export default function SectionWrapper({ isActive, scrollDirection, children }) 
           custom={scrollDirection}
           variants={{
             initial: (dir) => ({
-              opacity: 0,
-              y: dir === "down" ? 250 : -250,
-              scale: 0.85,
-              rotateX: dir === "down" ? -25 : 25,
+              opacity: 0.95,
+              y: dir === "down" ? "100%" : "-100%",
+              z: -100,
+              scale: 0.9,
+              rotateX: dir === "down" ? -20 : 20,
             }),
             animate: {
               opacity: 1,
               y: 0,
+              z: 0,
               scale: 1,
               rotateX: 0,
               transition: {
-                duration: 1.5,
+                duration: 1.8,
                 ease: [0.22, 1, 0.36, 1],
               },
             },
             exit: (dir) => ({
-              opacity: 0,
-              y: dir === "down" ? -250 : 250,
-              scale: 0.85,
-              rotateX: dir === "down" ? 25 : -25,
+              opacity: 0.95,
+              y: dir === "down" ? "-100%" : "100%",
+              z: -100,
+              scale: 0.9,
+              rotateX: dir === "down" ? 20 : -20,
               transition: {
-                duration: 1.5,
+                duration: 1.8,
                 ease: [0.22, 1, 0.36, 1],
               },
             }),
@@ -40,7 +43,8 @@ export default function SectionWrapper({ isActive, scrollDirection, children }) 
           exit="exit"
           className="absolute inset-0"
           style={{
-            perspective: 1000,
+            perspective: 1200,
+            transformStyle: "preserve-3d",
             transformOrigin: scrollDirection === "down" ? "top center" : "bottom center",
           }}
         >
