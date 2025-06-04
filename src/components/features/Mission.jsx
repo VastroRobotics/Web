@@ -1,12 +1,36 @@
 "use client";
 
 import { forwardRef, useEffect, useRef, useState } from "react";
-import StagePlaceholder from "./StagePlaceholder";
+import StageBanner from "./StageBanner";
 
 const components = [
-  (props) => <StagePlaceholder {...props} text="Stage 1" />,
-  (props) => <StagePlaceholder {...props} text="Stage 2" />,
-  (props) => <StagePlaceholder {...props} text="Stage 3" />,
+  (props) => (
+    <StageBanner
+      {...props}
+      text="Banner 1"
+      direction={0}
+      start={20}
+      end={100}
+    />
+  ),
+  (props) => (
+    <StageBanner
+      {...props}
+      text="Banner 2"
+      direction={1}
+      start={20}
+      end={100}
+    />
+  ),
+  (props) => (
+    <StageBanner
+      {...props}
+      text="Banner 3"
+      direction={0}
+      start={20}
+      end={100}
+    />
+  ),
 ];
 
 const stages = [
