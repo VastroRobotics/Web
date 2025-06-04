@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, forwardRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useAnimation } from "framer-motion";
 import AnimatedBanner from "../ui/AnimatedBanner";
 import Chart from "../ui/Chart";
 import ComparisonTable from "../ui/ComparisonTable";
@@ -21,9 +21,49 @@ const Mission = forwardRef(({ isActive, onCanLeaveChange }, ref) => {
   const { isDesktop } = useBreakpoint();
   const [stage, setStage] = useState(0);
   const isThrottled = useRef(false);
+  const bannerControlsTop = useAnimation();
+  const bannerControlsBottom = useAnimation();
+  const [showCharts, setShowCharts] = useState(false);
+  const [showTable, setShowTable] = useState(false);
 
   const maxStage = 2;
   const throttleDelay = 600;
+
+  useEffect(() => {
+    if (!isDesktop) return;
+
+    if (stage >= 1) {
+      if (stage === 1) {
+        setShowCharts(false);
+        bannerControlsTop.set({ x: "-100%", width: "90%" });
+        bannerControlsTop
+          .start({ x: 0, width: "90%", transition: { duration: 0.8, ease: "easeOut" } })
+          .then(() => {
+            bannerControlsTop.start({ width: "65%", transition: { duration: 0.6, ease: "easeOut" } });
+            setShowCharts(true);
+          });
+      }
+    } else {
+      bannerControlsTop.set({ x: "-100%", width: "90%" });
+      setShowCharts(false);
+    }
+
+    if (stage >= 2) {
+      if (stage === 2) {
+        setShowTable(false);
+        bannerControlsBottom.set({ x: "100%", width: "90%" });
+        bannerControlsBottom
+          .start({ x: 0, width: "90%", transition: { duration: 0.8, ease: "easeOut" } })
+          .then(() => {
+            bannerControlsBottom.start({ width: "70%", transition: { duration: 0.6, ease: "easeOut" } });
+            setShowTable(true);
+          });
+      }
+    } else {
+      bannerControlsBottom.set({ x: "100%", width: "90%" });
+      setShowTable(false);
+    }
+  }, [stage, isDesktop]);
 
   useEffect(() => {
     if (!isDesktop) return;
@@ -84,7 +124,7 @@ const Mission = forwardRef(({ isActive, onCanLeaveChange }, ref) => {
         <div className="w-full flex flex-col lg:flex-row items-center px-0">
           <AnimatedBanner
             text={"VR‑controlled quadruped robots\n$75k capability for $2.5k"}
-            direction="right"
+            direction="left"
           />
           <div className="w-full lg:w-[30%] flex flex-col justify-center items-center">
             <div className="flex flex-col lg:flex-col md:flex-row gap-10 justify-center items-center w-full">
@@ -101,7 +141,7 @@ const Mission = forwardRef(({ isActive, onCanLeaveChange }, ref) => {
           </div>
           <AnimatedBanner
             text={"Making remote access\nmore accessible"}
-            direction="left"
+            direction="right"
           />
         </div>
       </div>
@@ -117,27 +157,40 @@ const Mission = forwardRef(({ isActive, onCanLeaveChange }, ref) => {
         transition={{ duration: 0.8, ease: "easeInOut" }}
       >
         <div className="flex items-center justify-center gap-8 w-full h-full">
-          <AnimatePresence>{stage >= 1 && (
-            <AnimatedBanner
-              key="top-banner"
-              text={"VR‑controlled quadruped robots\n$75k capability for $2.5k"}
-              direction="right"
-            />)}</AnimatePresence>
-          <AnimatePresence>{stage >= 1 && (
-            <motion.div
-              key="charts"
-              className="w-[30%] flex flex-col justify-center items-center"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
-            >
-              <div className="flex flex-col lg:flex-col md:flex-row gap-10 justify-center items-center w-full">
-                <Chart title="VASTRO" targetAmount={2500} targetPercent={2.5} barColor="#ffffff" />
-                <Chart title="Competitors" targetAmount={75000} targetPercent={70} barColor="#ffffff" />
-              </div>
-            </motion.div>
-          )}</AnimatePresence>
+          <AnimatePresence>
+            {stage >= 1 && (
+              <motion.div
+                key="top-banner-wrapper"
+                className="flex justify-start"
+                style={{ width: "90%" }}
+                initial={false}
+                animate={bannerControlsTop}
+              >
+                <AnimatedBanner
+                  text={"VR‑controlled quadruped robots\n$75k capability for $2.5k"}
+                  direction="left"
+                  className="w-full"
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
+          <AnimatePresence>
+            {showCharts && (
+              <motion.div
+                key="charts"
+                className="w-[30%] flex flex-col justify-center items-center"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+              >
+                <div className="flex flex-col lg:flex-col md:flex-row gap-10 justify-center items-center w-full">
+                  <Chart title="VASTRO" targetAmount={2500} targetPercent={2.5} barColor="#ffffff" />
+                  <Chart title="Competitors" targetAmount={75000} targetPercent={70} barColor="#ffffff" />
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </motion.div>
 
@@ -147,27 +200,39 @@ const Mission = forwardRef(({ isActive, onCanLeaveChange }, ref) => {
         animate={{ height: stage >= 2 ? "50%" : "0%", bottom: 0, opacity: stage >= 2 ? 1 : 0 }}
         transition={{ duration: 0.8, ease: "easeInOut" }}
       >
-        <AnimatePresence>{stage >= 2 && (
-          <motion.div
-            key="table"
-            className="w-full lg:w-[40%] flex justify-center items-center px-6 py-0"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-          >
-            <div className="w-full mx-15">
-              <ComparisonTable data={specs} labelLeft="SpotMini" labelRight="VASTRO" />
-            </div>
-          </motion.div>
-        )}</AnimatePresence>
-        <AnimatePresence>{stage >= 2 && (
-          <AnimatedBanner
-            key="bottom-banner"
-            text={"Making remote access\nmore accessible"}
-            direction="left"
-          />
-        )}</AnimatePresence>
+        <AnimatePresence>
+          {showTable && (
+            <motion.div
+              key="table"
+              className="w-full lg:w-[40%] flex justify-center items-center px-6 py-0"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+            >
+              <div className="w-full mx-15">
+                <ComparisonTable data={specs} labelLeft="SpotMini" labelRight="VASTRO" />
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+        <AnimatePresence>
+          {stage >= 2 && (
+            <motion.div
+              key="bottom-banner-wrapper"
+              className="flex justify-end"
+              style={{ width: "90%" }}
+              initial={false}
+              animate={bannerControlsBottom}
+            >
+              <AnimatedBanner
+                text={"Making remote access\nmore accessible"}
+                direction="right"
+                className="w-full"
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.div>
     </div>
   );

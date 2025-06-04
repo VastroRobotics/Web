@@ -1,7 +1,11 @@
 import { motion } from "framer-motion";
 import Glow from "./Glow";
 
-export default function AnimatedBanner({ text = "", direction = "right" }) {
+export default function AnimatedBanner({
+  text = "",
+  direction = "right",
+  className = "",
+}) {
   const lines = text.split("\n");
   const variants = {
     hidden: {
@@ -14,7 +18,7 @@ export default function AnimatedBanner({ text = "", direction = "right" }) {
 
   return (
     <motion.div
-      className={`bg-black flex flex-col items-center justify-center relative px-20 py-24 ${direction === "left" ? "rounded-l-3xl" : "rounded-r-3xl"}`}
+      className={`bg-black flex flex-col items-center justify-center relative px-20 py-24 ${direction === "left" ? "rounded-l-3xl" : "rounded-r-3xl"} ${className}`}
       style={{ boxShadow: "0 0 20px rgba(255,255,255,0.15)" }}
       variants={variants}
       initial="hidden"
