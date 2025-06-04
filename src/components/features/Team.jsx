@@ -37,8 +37,10 @@ export default function Team({ isActive, scrollDirection, onCanLeaveChange }) {
                 </div>
 
                 {/* Right side - Team carousel */}
-                <div className="lg:col-span-9">
-                  <TeamCarousel />
+                <div className="lg:col-span-9 flex justify-center">
+                  <div className="w-[600px] transform scale-[0.8] lg:scale-[0.5]">
+                    <TeamCarousel />
+                  </div>
                 </div>
               </div>
             </div>
