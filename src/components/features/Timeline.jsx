@@ -100,7 +100,7 @@ export default function Timeline({
 
   useEffect(() => {
     if (isActive) {
-      const start = scrollDirection === "down" ? timelineEvents.length - 1 : 0;
+      const start = scrollDirection === "up" ? timelineEvents.length - 1 : 0;
       setActiveIndex(start);
       setCanScroll(false);
       onCanLeaveChange(false);
