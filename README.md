@@ -50,7 +50,10 @@ VastroRobotics/Web
 
 ## Scrolling Architecture
 
-Section transitions are coordinated through a single `goToSection` helper. Each section uses one of two hooks to convert scroll input into calls to this function:
+Section transitions are coordinated through a single `goToSection` helper that
+takes the **current** and **target** section indices. The function determines the
+animation direction and activates the target section. Each section converts
+scroll input into calls to this helper via one of two hooks:
 
 - `useSectionScroll` &ndash; always moves between sections based on scroll direction.
 - `useEdgeSectionScroll` &ndash; only moves when the content is at its start or end (used by multi-page sections like About and Timeline).

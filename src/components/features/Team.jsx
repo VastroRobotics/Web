@@ -7,7 +7,7 @@ import useSectionScroll from "../../hooks/useSectionScroll";
 
 export default function Team({
   isActive,
-  scrollDirection,
+  movementDirection,
   activeIndex,
   goToSection,
 }) {
@@ -20,9 +20,9 @@ export default function Team({
         <motion.div
           ref={scrollRef}
           key="team"
-          initial={{ opacity: 0, y: scrollDirection === "up" ? 40 : -40 }}
+          initial={{ opacity: 0, y: movementDirection === "up" ? 40 : -40 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: scrollDirection === "up" ? -40 : 40 }}
+          exit={{ opacity: 0, y: movementDirection === "up" ? -40 : 40 }}
           transition={{ duration: 0.6 }}
           className="w-full h-full bg-black text-white overflow-hidden"
         >

@@ -52,7 +52,7 @@ const timelineEvents = [
 
 export default function Timeline({
   isActive,
-  scrollDirection,
+  movementDirection,
   activeIndex: sectionIndex,
   goToSection,
   centerFraction = 0.5,
@@ -87,10 +87,10 @@ export default function Timeline({
 
   useEffect(() => {
     if (isActive) {
-      const start = scrollDirection === "down" ? timelineEvents.length - 1 : 0;
+      const start = movementDirection === "down" ? timelineEvents.length - 1 : 0;
       setTimelineIndex(start);
     }
-  }, [isActive, scrollDirection]);
+  }, [isActive, movementDirection]);
 
   useEffect(() => {
     if (!isActive) return;

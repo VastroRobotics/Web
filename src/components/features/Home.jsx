@@ -25,7 +25,7 @@ const LazyGlow = lazy(() => import('../ui/Glow'));
 
 const Home = forwardRef(
   (
-    { isActive, scrollDirection, goToSection, activeIndex },
+    { isActive, movementDirection, goToSection, activeIndex },
     ref
   ) => {
     const backEntranceRef = useRef(null);

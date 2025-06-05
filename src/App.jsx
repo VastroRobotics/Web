@@ -18,12 +18,18 @@ const sections = [Home, Mission, About, Team, Timeline, Footer];
 
 export default function App() {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [scrollDirection, setScrollDirection] = useState("down");
+  const [movementDirection, setMovementDirection] = useState("down");
 
-  const goToSection = (current, next) => {
-    if (next < 0 || next >= sections.length || current === next) return;
-    setScrollDirection(next > current ? "up" : "down");
-    setActiveIndex(next);
+  const goToSection = (currentIndex, targetIndex) => {
+    if (
+      targetIndex < 0 ||
+      targetIndex >= sections.length ||
+      currentIndex === targetIndex
+    ) {
+      return;
+    }
+    setMovementDirection(targetIndex > currentIndex ? "up" : "down");
+    setActiveIndex(targetIndex);
   };
 
 
@@ -42,13 +48,13 @@ export default function App() {
           <ErrorBoundary>
             <SectionWrapper
               isActive={i === activeIndex}
-              scrollDirection={scrollDirection}
+              movementDirection={movementDirection}
               isFirst={i === 0}
             >
               <Suspense fallback={i === 0 ? null : <Loading />}>
                 <Section
                   isActive={i === activeIndex}
-                  scrollDirection={scrollDirection}
+                  movementDirection={movementDirection}
                   activeIndex={activeIndex}
                   goToSection={goToSection}
                 />
