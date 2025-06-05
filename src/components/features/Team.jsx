@@ -3,18 +3,29 @@
 import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import TeamCarousel from "../ui/TeamCarousel";
+import useSectionScroll from "../../hooks/useSectionScroll";
 
-export default function Team({ isActive, scrollDirection, onCanLeaveChange }) {
+export default function Team({
+  isActive,
+  scrollDirection,
+  onCanLeaveChange,
+  activeIndex,
+  goToSection,
+  canLeave,
+}) {
   useEffect(() => {
     if (isActive) {
       onCanLeaveChange(true); // Always allow leaving
     }
   }, [isActive]);
 
+  const scrollRef = useSectionScroll({ activeIndex, goToSection, canLeave });
+
   return (
     <AnimatePresence mode="wait">
       {isActive && (
         <motion.div
+          ref={scrollRef}
           key="team"
           initial={{ opacity: 0, y: scrollDirection === "up" ? 40 : -40 }}
           animate={{ opacity: 1, y: 0 }}

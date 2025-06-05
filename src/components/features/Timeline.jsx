@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import useSectionScroll from "../../hooks/useSectionScroll";
 import { motion as Motion, useAnimation } from "framer-motion";
 import ScrollIndicator from "../layout/ScrollIndicator";
 
@@ -53,10 +54,13 @@ export default function Timeline({
   isActive,
   scrollDirection,
   onCanLeaveChange,
+  activeIndex: sectionIndex,
+  goToSection,
+  canLeave,
   centerFraction = 0.5,
 }) {
   const controls = useAnimation();
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [timelineIndex, setTimelineIndex] = useState(0);
   const [canScroll, setCanScroll] = useState(false);
   const isThrottled = useRef(false);
   const unlockTimeout = useRef(null);
@@ -70,6 +74,8 @@ export default function Timeline({
   const timelineHeight = 10;
   const nodeSize = timelineHeight * 3;
   const nodeOffset = nodeSize / 2;
+
+  const scrollRef = useSectionScroll({ activeIndex: sectionIndex, goToSection, canLeave });
 
   const shiftPerEvent = timelineWidth / (timelineEvents.length - 1);
 
@@ -85,7 +91,7 @@ export default function Timeline({
   useEffect(() => {
     if (isActive) {
       const start = scrollDirection === "down" ? timelineEvents.length - 1 : 0;
-      setActiveIndex(start);
+      setTimelineIndex(start);
       setCanScroll(false);
       onCanLeaveChange(false);
       isThrottled.current = true;
@@ -109,7 +115,7 @@ export default function Timeline({
       const dir = e.deltaY > 0 ? 1 : -1;
       const maxIndex = timelineEvents.length - 1;
 
-      if (dir > 0 && activeIndex === maxIndex) {
+      if (dir > 0 && timelineIndex === maxIndex) {
         if (isThrottled.current) return;
         isThrottled.current = true;
         setTimeout(() => {
@@ -119,7 +125,7 @@ export default function Timeline({
         return;
       }
 
-      if (dir < 0 && activeIndex === 0) {
+      if (dir < 0 && timelineIndex === 0) {
         onCanLeaveChange(true);
         return;
       }
@@ -128,8 +134,8 @@ export default function Timeline({
       e.stopPropagation();
       if (isThrottled.current) return;
 
-      const nextIndex = Math.min(Math.max(activeIndex + dir, 0), maxIndex);
-      if (nextIndex === activeIndex) return;
+      const nextIndex = Math.min(Math.max(timelineIndex + dir, 0), maxIndex);
+      if (nextIndex === timelineIndex) return;
 
       isThrottled.current = true;
       const delay = dir > 0 ? forwardThrottle : backwardThrottle;
@@ -139,27 +145,27 @@ export default function Timeline({
       }, delay);
 
       onCanLeaveChange(false);
-      setActiveIndex(nextIndex);
+      setTimelineIndex(nextIndex);
     };
 
     window.addEventListener("wheel", handleWheel, { passive: false });
     return () => window.removeEventListener("wheel", handleWheel);
-  }, [isActive, canScroll, activeIndex]);
+  }, [isActive, canScroll, timelineIndex]);
 
   useEffect(() => {
     const fraction = viewport.width < 768 ? 0.20 : centerFraction;
     const center = viewport.width * fraction;
-    controls.start({ x: center - nodeOffset - activeIndex * shiftPerEvent });
+    controls.start({ x: center - nodeOffset - timelineIndex * shiftPerEvent });
 
-  }, [activeIndex, viewport.width, centerFraction]);
+  }, [timelineIndex, viewport.width, centerFraction]);
 
-  const progress = activeIndex / (timelineEvents.length - 1);
+  const progress = timelineIndex / (timelineEvents.length - 1);
 
-  const centerOffset = activeIndex * shiftPerEvent - timelineWidth / 2;
+  const centerOffset = timelineIndex * shiftPerEvent - timelineWidth / 2;
   const scaleFactor = 1 - Math.min(0.25, Math.abs(centerOffset) / (timelineWidth / 2) * 0.25);
 
   return (
-    <div className="relative w-full h-screen">
+    <div className="relative w-full h-screen" ref={scrollRef}>
       <div className="absolute inset-0 p-6">
         <div className="relative w-full h-full overflow-hidden rounded-3xl bg-black shadow-[0_0_10px_2px_rgba(255,255,255,0.15)]">
           {/* Timeline Line */}
@@ -189,9 +195,9 @@ export default function Timeline({
               />
 
               {timelineEvents.map((ev, idx) => {
-                const isFuture = idx > activeIndex;
-                const isCurrent = idx === activeIndex;
-                const isPast = idx < activeIndex;
+                const isFuture = idx > timelineIndex;
+                const isCurrent = idx === timelineIndex;
+                const isPast = idx < timelineIndex;
                 const baseDistance = ev.distance || 300;
                 const distance = Math.min(baseDistance, viewport.height * 0.35);
 

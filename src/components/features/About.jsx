@@ -2,11 +2,14 @@
 
 import { useState } from "react";
 import VastroLogo from "../../assets/branding/vastro_full_logo.svg";
+import useSectionScroll from "../../hooks/useSectionScroll";
 
-export default function VastroMultipage() {
+export default function VastroMultipage({ activeIndex, goToSection, canLeave }) {
   const [activePage, setActivePage] = useState("mission");
   const [transitioning, setTransitioning] = useState(false);
   const [glowVisible, setGlowVisible] = useState(true);
+
+  const scrollRef = useSectionScroll({ activeIndex, goToSection, canLeave });
 
   const pages = ["mission", "affordable", "intuitive", "customizable"];
 
@@ -109,6 +112,7 @@ export default function VastroMultipage() {
     <div
       className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[95%] max-h-screen p-4 sm:p-6 md:p-8 rounded-3xl bg-black shadow-[0_0_10px_2px_rgba(255,255,255,0.15)] overflow-hidden"
       style={{ height: "50vh" }}
+      ref={scrollRef}
     >
       <div className="flex-1 relative h-full">
         {renderSection("mission", "Mission", [

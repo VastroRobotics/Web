@@ -11,6 +11,7 @@ import {
 import InfoPoint from "../ui/InfoPoint";
 import ScrollPrompt from "../layout/ScrollPrompt";
 import LogoSplash from "../common/LogoSplash";
+import useSectionScroll from "../../hooks/useSectionScroll";
 import AssetLoader from '../../utils/assetLoader';
 import { useBreakpoint } from '../../hooks/useBreakpoint';
 
@@ -23,7 +24,10 @@ const LazyBackgroundEmblem = lazy(() => import('../BackgroundEmblem'));
 const LazyGlow = lazy(() => import('../ui/Glow'));
 
 const Home = forwardRef(
-  ({ isActive, scrollDirection, onCanLeaveChange, goToSection, activeIndex }, ref) => {
+  (
+    { isActive, scrollDirection, onCanLeaveChange, goToSection, activeIndex, canLeave },
+    ref
+  ) => {
     const backEntranceRef = useRef(null);
     const backLoopRef = useRef(null);
     const frontEntranceRef = useRef(null);
@@ -205,8 +209,10 @@ const Home = forwardRef(
     const videoClass =
       "absolute inset-0 w-full h-full object-fill pointer-events-none";
 
+    const scrollRef = useSectionScroll({ activeIndex, goToSection, canLeave });
+
     return (
-      <div className="relative w-full h-screen">
+      <div className="relative w-full h-screen" ref={scrollRef}>
         <div className={`absolute inset-0 p-6 transition-opacity duration-500 ${videoReady ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
           <div className="relative w-full h-full overflow-hidden rounded-3xl bg-black shadow-[0_0_10px_2px_rgba(255,255,255,0.15)]">
             <div

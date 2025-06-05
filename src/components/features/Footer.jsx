@@ -4,10 +4,12 @@ import { Instagram, Linkedin, Mail } from "lucide-react";
 import LogoIcon from "../../assets/branding/icon_only_white.svg";
 import LogoText from "../../assets/branding/text_only_white.svg";
 import ScrollPrompt from "../layout/ScrollPrompt";
+import useSectionScroll from "../../hooks/useSectionScroll";
 
-export default function MiniFooter({ goToSection, activeIndex }) {
+export default function MiniFooter({ goToSection, activeIndex, canLeave }) {
+  const scrollRef = useSectionScroll({ activeIndex, goToSection, canLeave });
   return (
-        <div className="relative w-full h-screen">
+        <div className="relative w-full h-screen" ref={scrollRef}>
       <div className="absolute inset-0 p-6">
         <div className="relative w-full h-full overflow-hidden rounded-3xl bg-black shadow-[0_0_10px_2px_rgba(255,255,255,0.15)]">
 

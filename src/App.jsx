@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, lazy, Suspense } from "react";
+import { useState, lazy, Suspense } from "react";
 import Home from "./components/features/Home";
 import SectionWrapper from "./components/layout/SectionWrapper";
 import Loading from "./components/common/Loading";
@@ -20,7 +20,6 @@ export default function App() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [scrollDirection, setScrollDirection] = useState("down");
   const [canLeave, setCanLeave] = useState(true);
-  const isThrottled = useRef(false);
 
   const goToSection = (current, next) => {
     if (next < 0 || next >= sections.length || current === next) return;
@@ -28,25 +27,6 @@ export default function App() {
     setActiveIndex(next);
   };
 
-  const handleScroll = (e) => {
-    if (isThrottled.current || !canLeave) return;
-
-    const delta = e.deltaY;
-    const next = activeIndex + (delta > 0 ? 1 : -1);
-    if (next === activeIndex) return;
-
-    goToSection(activeIndex, next);
-    isThrottled.current = true;
-
-    setTimeout(() => {
-      isThrottled.current = false;
-    }, 800); // debounce duration
-  };
-
-  useEffect(() => {
-    window.addEventListener("wheel", handleScroll, { passive: false });
-    return () => window.removeEventListener("wheel", handleScroll);
-  }, [canLeave, activeIndex]);
 
   return (
     <div className="w-full h-screen overflow-hidden relative">
@@ -71,6 +51,7 @@ export default function App() {
                   isActive={i === activeIndex}
                   scrollDirection={scrollDirection}
                   onCanLeaveChange={setCanLeave}
+                  canLeave={canLeave}
                   activeIndex={activeIndex}
                   goToSection={goToSection}
                 />

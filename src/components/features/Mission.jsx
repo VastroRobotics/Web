@@ -1,6 +1,7 @@
 "use client";
 
 import { forwardRef, useRef } from "react";
+import useSectionScroll from "../../hooks/useSectionScroll";
 import { motion, useInView } from "framer-motion";
 import Glow from "../ui/Glow";
 import Chart from "../ui/Chart";
@@ -35,12 +36,13 @@ const variants = {
   },
 };
 
-const HeroScroll = forwardRef((_, ref) => {
+const HeroScroll = forwardRef(({ activeIndex, goToSection, canLeave }, ref) => {
   const containerRef = useRef(null);
   const inView = useInView(containerRef, { once: true, margin: "-100px" });
+  const scrollRef = useSectionScroll({ activeIndex, goToSection, canLeave });
 
   return (
-    <div className="py-6 space-y-10">
+    <div className="py-6 space-y-10" ref={scrollRef}>
       {/* First Section: Left Banner + Charts */}
       <div ref={ref} className="w-full flex flex-col lg:flex-row items-center px-0">
         <motion.div
