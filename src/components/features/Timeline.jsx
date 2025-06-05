@@ -7,43 +7,59 @@ import ScrollIndicator from "../layout/ScrollIndicator";
 const timelineEvents = [
   {
     id: "1",
-    title: "12 months",
-    date: "03/2023",
-    description: "From a rail-mounted arm to a fully walking quadruped",
+    title: "Project Formation",
+    date: "08/2024",
+    description: "What started as an idea between friends in a dusty old engineering classroom quickly became the foundation for Virtual Astronaut. The research project, guided by Professor Rick Fleeter and backed by the Nelson Center, the Hazeltine Grant, and Research@Brown, quickly began taking shape.",
     color: "#FFFFFF",
     distance: 240,
   },
   {
     id: "2",
-    title: "Prototype",
-    date: "06/2023",
-    description: "Designed and prototyped initial robotic arm, developed VR control, and livestreaming capabilities",
+    title: "Initial Prototype",
+    date: "10/2024",
+    description: "With support in place and momentum building, the team built their first prototype: a rail-mounted robotic arm capable of basic grab-and-drop tasks. It was the first tangible step in transforming their research into a functional system—laying the groundwork for immersive VR control and full mobility.",
     color: "#FFFFFF",
     image: "/assets/images/timeline/prototype.png",
     distance: 360,
   },
   {
     id: "3",
-    title: "$12,000",
-    date: "09/2023",
-    description: "Initial investment from grant resources at Brown and NASA",
+    title: "NASA Partnership",
+    date: "02/2025",
+    description: "Backed by early success, the team formed a partnership with NASA through the Rhode Island Space Grant Consortium. Their generous financial support and strategic guidance marked a turning point—elevating the project from a student-led initiative to a platform with real potential for deployment in space and remote Earth environments.",
     color: "#FFFFFF",
     distance: 200,
   },
   {
     id: "4",
-    title: "LiDAR incorporation",
-    date: "12/2023",
-    description: "Incorporated LiDAR detection & mapping for precise control",
+    title: "Quadruped Development",
+    date: "03/2025",
+    description: "The team began work on their most ambitious model yet: a fully mobile quadruped robot. Working around the clock in the workshop, they pushed to take the project’s capabilities to the next level with advanced mobility, LiDAR sensing, and VR-based precision control.",
     color: "#FFFFFF",
     image: "/placeholder.svg?height=150&width=240",
     distance: 380,
   },
   {
     id: "5",
-    title: "Manufacturing",
-    date: "03/2024",
-    description: "Collaborating with GIZELIS Robotics to automate manufacturing",
+    title: "Pitching & Presentation",
+    date: "04/2025",
+    description: "The team had the opportunity to present Vastro to the Brown University President’s Leadership Council and later at the NASA Rhode Island Space Grant Consortium. These moments marked a turning point as we began sharpening our business aspirations—developing and testing our go-to-market strategy, refining our value offering, and laying the groundwork for future growth.",
+    color: "#FFFFFF",
+    distance: 260,
+  },
+    {
+    id: "6",
+    title: "Demo Ready",
+    date: "12/2025",
+    description: "The team has their sights set on completing a fully operational quadruped model by the end of next semester. The focus: delivering a working demo and proof of concept showcasing immersive VR control, real-time LiDAR mapping, and reliable remote operation.",
+    color: "#FFFFFF",
+    distance: 260,
+  },
+    {
+    id: "7",
+    title: "Manufacturing & Scaling",
+    date: "2026",
+    description: "The team hopes to leverage this success to begin exploring scalable production methods—emphasising cost efficiency and our innovative 3D-printing-first approach as the backbone of a lean, adaptable manufacturing strategy.",
     color: "#FFFFFF",
     distance: 260,
   },
@@ -84,7 +100,7 @@ export default function Timeline({
 
   useEffect(() => {
     if (isActive) {
-      const start = scrollDirection === "up" ? timelineEvents.length - 1 : 0;
+      const start = scrollDirection === "down" ? timelineEvents.length - 1 : 0;
       setActiveIndex(start);
       setCanScroll(false);
       onCanLeaveChange(false);
