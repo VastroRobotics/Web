@@ -27,7 +27,7 @@ const timelineEvents = [
     description: "With support in place and momentum building, the team built their first prototype: a rail-mounted robotic arm capable of basic grab-and-drop tasks. It was the first tangible step in transforming their research into a functional system—laying the groundwork for immersive VR control and full mobility.",
     color: "#FFFFFF",
     image: armImage,
-    distance: 360,
+    distance: 250,
   },
   {
     id: "3",
@@ -36,7 +36,7 @@ const timelineEvents = [
     description: "Backed by early success, the team formed a partnership with NASA through the Rhode Island Space Grant Consortium. Their generous financial support and strategic guidance marked a turning point—elevating the project from a student-led initiative to a platform with real potential for deployment in space and remote Earth environments.",
     image: nasaImage,
     color: "#FFFFFF",
-    distance: 320,
+    distance: 260,
   },
   {
     id: "4",
@@ -45,7 +45,7 @@ const timelineEvents = [
     description: "The team began work on their most ambitious model yet: a fully mobile quadruped robot. Working around the clock in the workshop, they pushed to take the project’s capabilities to the next level with advanced mobility, LiDAR sensing, and VR-based precision control.",
     color: "#FFFFFF",
     image: workshopImage,
-    distance: 300,
+    distance: 240,
   },
   {
     id: "5",
@@ -54,7 +54,7 @@ const timelineEvents = [
     description: "The team had the opportunity to present Vastro to the Brown University President’s Leadership Council and later at the NASA Rhode Island Space Grant Consortium. These moments marked a turning point as we began sharpening our business aspirations—developing and testing our go-to-market strategy, refining our value offering, and laying the groundwork for future growth.",
     image: leadershipImage,
     color: "#FFFFFF",
-    distance: 260,
+    distance: 280,
   },
     {
     id: "6",
@@ -174,7 +174,7 @@ export default function Timeline({
   }, [isActive, canScroll, activeIndex]);
 
   useEffect(() => {
-    const fraction = viewport.width < 768 ? 0.20 : centerFraction;
+    const fraction = viewport.width < 768 ? 0.15 : centerFraction;
     const center = viewport.width * fraction;
     controls.start({ x: center - nodeOffset - activeIndex * shiftPerEvent });
 
@@ -324,7 +324,7 @@ export default function Timeline({
           top: `-${distance + nodeSize}px`,
         }),
     width: "350px",
-    maxWidth: "40vw"
+    maxWidth: "50vw"
   }}
 >
   <div className={`m${isDown ? "t-4" : "b-2"}`}>
@@ -360,8 +360,8 @@ export default function Timeline({
         src={ev.image}
         alt={ev.title}
         width={240}
-        style={{ maxWidth: "30vw", height: "auto" }}
-        className="rounded-md object-cover"
+        style={{height: "auto" }}
+        className="rounded-md max-w-[30vw] sm:max-w-[13vw] max-h-[30vh] sm:max-h-[20vh] object-cover"
       />
     </Motion.div>
   )}
@@ -375,8 +375,8 @@ export default function Timeline({
           </Motion.div>
 
           {/* Side gradient overlays */}
-          <div className="absolute top-0 left-0 h-full w-40 pointer-events-none z-20 bg-gradient-to-r from-black to-transparent" />
-          <div className="absolute top-0 right-0 h-full w-40 pointer-events-none z-20 bg-gradient-to-l from-black to-transparent" />
+          <div className="absolute top-0 left-0 h-full w-40 w-max-[6vw] pointer-events-none z-20 bg-gradient-to-r from-black to-transparent" />
+          <div className="absolute top-0 right-0 h-full w-40 w-max-[6vw] pointer-events-none z-20 bg-gradient-to-l from-black to-transparent" />
 
           {/* Scroll Indicator */}
           <div className="top-0 justify-center z-50">
