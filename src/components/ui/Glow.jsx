@@ -19,8 +19,8 @@ export default function Glow({
   className = "",
 }) {
   const style = {
-    width: typeof width === "number" ? `${width}px` : width,
-    height: typeof height === "number" ? `${height}px` : height,
+    width: typeof width === "number" ? `${width}%` : width,
+    height: typeof height === "number" ? `${height}%` : height,
     background: `radial-gradient(circle, ${color} 0%, transparent ${stop})`,
     filter: `blur(${blur}px)`,
     borderRadius:

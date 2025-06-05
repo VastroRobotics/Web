@@ -165,11 +165,17 @@ const Home = forwardRef(
     useLayoutEffect(() => {
       const update = () => {
         if (!wrapperRef.current) return;
-        const scale = window.innerHeight / nat.h;
+        const baseHeight = window.innerWidth < 400 ? window.innerHeight * 0.75 :
+                          (window.innerWidth < 728 ? window.innerHeight * 0.85 :
+                           window.innerHeight);
+        
+        const scale = baseHeight / nat.h;
+
         wrapperRef.current.style.width = `${nat.w}px`;
         wrapperRef.current.style.height = `${nat.h}px`;
         wrapperRef.current.style.transform = `scale(${scale})`;
       };
+
       update();
       window.addEventListener("resize", update);
       return () => window.removeEventListener("resize", update);
@@ -193,17 +199,20 @@ const Home = forwardRef(
                 <LazyBackgroundEmblem />
               </Suspense>
               <div className="absolute inset-0" style={{ perspective: 800 }}>
-                <div className="absolute inset-0">
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <div ref={wrapperRef} className="relative origin-center flex-none overflow-visible">
-                      <div className="absolute inset-0 z-0">
+                    <div ref={wrapperRef} className="absolute bottom-0 origin-bottom flex-none overflow-visible">
+                      <div className="absolute inset-0 z-10">
                         <video ref={backEntranceRef} className={videoClass} src={BackEntrance} muted autoPlay playsInline preload="auto" style={{ opacity: showBackLoop ? 0 : 1 }} />
                         <video ref={backLoopRef} className={videoClass} src={BackLoop} muted playsInline preload="auto" style={{ opacity: showBackLoop ? 1 : 0 }} />
                       </div>
-                      <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
+                    <div
+                      className={`absolute inset-0 flex items-center justify-center pointer-events-none ${
+                        window.innerWidth < 650 ? "z-40" : "z-20"
+                      }`}
+                    >
                         <div className="flex items-center justify-center">
                           <Suspense fallback={null}>
-                            <LogoSplash className="text-4xl sm:text-5xl md:text-7xl xl:text-8xl font-bold text-white text-center drop-shadow-lg" style={{ fontSize: isMobile ? 'clamp(2rem, 7vw, 3.5rem)' : 'clamp(3rem, 8vw, 6rem)' }} />
+                            <LogoSplash className="font-bold text-white text-center drop-shadow-lg" style={{ fontSize: isMobile ? 'clamp(2rem, 7vw, 3.5rem)' : 'clamp(3rem, 8vw, 6rem)' }} />
                           </Suspense>
                         </div>
                       </div>
@@ -242,14 +251,54 @@ const Home = forwardRef(
                     </div>
                   </div>
 
-                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 opacity-40 z-50 pointer-events-none">
-                    <div className="relative w-[700px] h-[500px]">
+                  <div className="absolute bottom-0 z-0 pointer-events-none w-full h-full">
                       <Suspense fallback={null}>
-                        <LazyGlow color="black" />
-                      </Suspense>
-                    </div>
+                       <div className="pointer-events-none left-0 absolute inset-0 z-0">
+  {/* Bottom-left glow */}
+  <LazyGlow
+    color="rgba(255,255,255, 0.25)"
+    width={30}
+    height={70}
+    blur={60}
+    stop="100%"
+    shape="oval"
+    className="absolute bottom-0 left-0 translate-x-[-80%] translate-y-[20%]"
+  /> 
+    <LazyGlow
+    color="rgba(255,255,255, 0.25)"
+    width={60}
+    height={30}
+    blur={90}
+    stop="100%"
+    shape="oval"
+    className="absolute bottom-0 left-0 translate-x-[-40%] translate-y-[70%]"
+  />   
+</div>
+                       <div className="pointer-events-none right-0 absolute inset-0 z-0">
+
+{/* Bottom-right glow */}
+<LazyGlow
+  color="rgba(255,255,255, 0.25)"
+  width={30}
+  height={60}
+  blur={90}
+  stop="100%"
+  shape="oval"
+  className="absolute bottom-0 right-0 translate-x-[70%] translate-y-[40%]"
+/> 
+<LazyGlow
+  color="rgba(255,255,255, 0.25)"
+  width={60}
+  height={30}
+  blur={90}
+  stop="100%"
+  shape="oval"
+  className="absolute bottom-0 right-0 translate-x-[40%] translate-y-[70%]"
+/> 
                   </div>
-                </div>
+
+                      </Suspense>
+                  </div>
               </div>
 
               <div className="absolute bottom-18 left-1/2 -translate-x-1/2 z-50">
