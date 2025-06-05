@@ -98,18 +98,24 @@ export default function TeamCarousel() {
         const [itemGap, setItemGap] = useState(12);
         const carouselRef = useRef(null);
         const [scaleFactor, setScaleFactor] = useState(1);
-        
+        const [containerHeight, setContainerHeight] = useState(600);
+       
         const computeVisible = () => {
 
                 const screenWidth = window.innerWidth - 48;
-                const scale = screenWidth < 777 ? screenWidth/777 : 1;
+                const scale = screenWidth < 777 ? screenWidth/710 : 1;
                 setScaleFactor(scale);
                 console.log(scale)
 
+
+
                 const open = 465 * scale;
-                const closed = 60 * scale;
-                const minGap = 12;
-                const maxGap = 18;
+                const closed = Math.max(30, 60 * scale);
+                const minGap = 12 * scale;
+                const maxGap = 18 * scale;
+
+                const height = screenWidth < 777 ? Math.max(600, window.innerHeight) * 0.6 : 600;
+                setContainerHeight(height);
 
                 let width = screenWidth;
                 let count = 1;
@@ -144,7 +150,7 @@ export default function TeamCarousel() {
                        const { count, gap } = computeVisible();
                        setVisibleCount(count);
                        setItemGap(gap);
-                       setActiveIndex(count > 1 ? 1 : 0);
+                       setActiveIndex(count > 1 ? Math.floor((count + 1) / 2) : 0);
                };
                update();
                window.addEventListener('resize', update);
@@ -181,18 +187,20 @@ export default function TeamCarousel() {
                 return result;
         };
 
-	const visibleMembers = getVisibleMembers();
+        const visibleMembers = getVisibleMembers();
+        const itemHeightInactive = containerHeight - 50 * scaleFactor;
 
-	return (
-		<div
-			className="flex h-[600px] justify-center w-full overflow-hidden"
-			onMouseMove={() => setLastInteraction(Date.now())}
-		>
+        return (
+                <div
+                        className="flex justify-center w-full overflow-hidden"
+                        style={{ height: `${containerHeight}px` }}
+                        onMouseMove={() => setLastInteraction(Date.now())}
+                >
 			<AnimatePresence mode="popLayout">
                                 <div
                                         ref={carouselRef}
-                                        className="flex w-fit h-[550px]"
-                                        style={{ gap: `${itemGap}px` }}
+                                        className="flex w-fit"
+                                        style={{ gap: `${itemGap}px`, height: `${itemHeightInactive}px` }}
                                 >
                                         {visibleMembers.map((member, index) => {
                                                 const isRightmost = visibleCount < teamMembers.length && index === visibleCount - 1;
@@ -201,20 +209,19 @@ export default function TeamCarousel() {
                                                 return (
                                                         <Motion.div
                                                                 key={`${member.id}-${member.visibleIndex}`}
-								className={`relative cursor-pointer ${
-									isActive ? "h-[600px]" : "h-[550px]"
-								}`}
-								style={{
-									zIndex: isActive ? 10 : 1,
-								}}
+                                                                className="relative cursor-pointer"
+                                                                style={{
+                                                                        zIndex: isActive ? 10 : 1,
+                                                                        height: `${isActive ? containerHeight : itemHeightInactive}px`,
+                                                                }}
 								initial={{ opacity: 1, x: 50 }}
 								animate={{
 									opacity: 1,
 									x: 0,
                                                                         width: `${isActive ? 465 * scaleFactor : 60 * scaleFactor}px`,
                                                                         flex: "0 0 auto",
-                                                                        marginLeft: isActive ? "8px" : "0px",
-									marginRight: isActive ? "8px" : "0px",
+                                                                        marginLeft: isActive ? `${8 * scaleFactor}px` : "0px",
+                                                                        marginRight: isActive ? `${8 * scaleFactor}px` : "0px",
 								}}
 								exit={{ x: -50, opacity: 0 }}
                                                                transition={{
@@ -227,9 +234,12 @@ export default function TeamCarousel() {
 								}
 								layout
 							>
-								<div
-									className={`w-full rounded-b-xl overflow-hidden h-full`}
-								>
+                                                                <div
+                                                                        className="w-full overflow-hidden h-full"
+                                                                        style={{
+                                                                                borderRadius: `${Math.max(6, 12 * scaleFactor)}px`,
+                                                                        }}
+                                                                >
 									<div className="relative w-full h-full">
 <Motion.img
                                                                                src={member.image || "/placeholder.svg"}
@@ -264,7 +274,7 @@ export default function TeamCarousel() {
                                                         repeatDelay: 2.5,
                                                         }}
                                                         >
-                                                        <ChevronRight className="w-10 h-10 text-white" />
+                                                        <ChevronRight className="text-white" style={{ width: `${40 * scaleFactor}px`, height: `${40 * scaleFactor}px` }} />
                                                         </Motion.div>
                                                 </div>
                                         )}
@@ -274,47 +284,60 @@ export default function TeamCarousel() {
 										)}
 
 										{!isActive && (
-											<div className="absolute inset-0 flex items-end justify-center pb-20">
-												<div className="rotate-[-90deg] origin-center whitespace-nowrap text-3xl font-bold text-white tracking-wide">
-													{member.name.split(" ")[0]}
-												</div>
-											</div>
+                                                                               <div className="absolute inset-0 flex items-end justify-center" style={{ paddingBottom: `${80 * scaleFactor}px` }}>
+                                                                               <div className="rotate-[-90deg] origin-center whitespace-nowrap font-bold text-white tracking-wide" style={{ fontSize: `${30 * scaleFactor}px` }}>
+                                                                               {member.name.split(" ")[0]}
+                                                                               </div>
+                                                                               </div>
 										)}
 
                                        {/* Info Box */}
                                         <Motion.div
-                                                className="absolute bottom-0 left-0 w-full aspect-[2/1] pointer-events-none overflow-hidden"
+                                                className={`absolute bottom-0 left-0 w-full h-[clamp(80px,30vh,250px)] pointer-events-none overflow-hidden`}
                                                 initial="hidden"
                                                 animate={isActive && infoVisible ? "visible" : "hidden"}
                                                 variants={{ hidden: { opacity: 0, y: 50 }, visible: { opacity: 1, y: 0 } }}
                                                 transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
                                         >
-                                                <div className="absolute inset-0 p-6 bg-gradient-to-t from-black/60 via-black/50 to-transparent space-y-2 pointer-events-auto">
-                                                        <h3 className="text-xl sm:text-3xl font-bold text-white whitespace-nowrap">
+                                                <div
+                                                        className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/50 to-transparent pointer-events-auto flex flex-col justify-end"
+                                                        style={{ padding: `${24 * scaleFactor}px`, gap: `${8 * scaleFactor}px` }}
+                                                >
+                                                        <h3 className="font-bold text-white whitespace-nowrap text-[clamp(15px,3.4vw,24px)]">
                                                                 {member.name}
                                                         </h3>
-                                                        <div className="flex items-center text-lg sm:text-xl font-semibold text-gray-200 space-x-2">
+                                                        <div
+                                                                className="flex items-center font-semibold text-gray-200 text-[clamp(12.5px,2.6vw,18px)]"
+                                                                style={{gap: `${Math.max(4, 8 * scaleFactor)}px` }}
+                                                        >
                                                                 <span>{member.role}</span>
-                                                                <div className="flex items-center space-x-1 pl-3 text-gray-400">
+                                                                <div
+                                                                        className="flex items-center text-gray-400"
+                                                                        style={{ paddingLeft: `${Math.max(6, 12 * scaleFactor)}px`, gap: `${Math.max(2, 4 * scaleFactor)}px` }}
+                                                                >
                                                                         <a
-                                                                                href={member.email}
-                                                                                aria-label="Email"
-                                                                                className="p-1 text-gray-400 hover:text-white"
+                                                                        href={member.email}
+                                                                        aria-label="Email"
+                                                                        className="text-gray-400 hover:text-white"
+                                                                        style={{ padding: `${4 * scaleFactor}px` }}
                                                                         >
-                                                                                <Mail className="w-5 h-5" />
+                                                                        <Mail className="text-gray-400" style={{ width: `${Math.max(15, 20 * scaleFactor)}px`, height: `${20 * scaleFactor}px` }} />
                                                                         </a>
                                                                         <a
-                                                                                href={member.linkedin}
-                                                                                target="_blank"
-                                                                                rel="noopener noreferrer"
-                                                                                aria-label="LinkedIn"
-                                                                                className="p-1 text-gray-400 hover:text-white"
+                                                                        href={member.linkedin}
+                                                                        target="_blank"
+                                                                        rel="noopener noreferrer"
+                                                                        aria-label="LinkedIn"
+                                                                        className="text-gray-400 hover:text-white"
+                                                                        style={{ padding: `${4 * scaleFactor}px` }}
                                                                         >
-                                                                                <Linkedin className="w-5 h-5" />
+                                                                        <Linkedin className="text-gray-400" style={{ width: `${Math.max(15, 20 * scaleFactor)}px`, height: `${20 * scaleFactor}px` }} />
                                                                         </a>
                                                                 </div>
                                                         </div>
-                                                        <p className="text-sm sm:text-base text-gray-400 whitespace-pre-line">
+                                                        <p
+                                                        className={`text-gray-400 whitespace-pre-line text-[clamp(11px,2.3vw,16px)]`}
+                                                        >
                                                                 {member.bio}
                                                         </p>
                                                 </div>
