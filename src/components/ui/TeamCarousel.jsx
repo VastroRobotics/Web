@@ -138,15 +138,15 @@ export default function TeamCarousel() {
 	const visibleMembers = getVisibleMembers();
 
 	return (
-		<div
-			className="relative h-[600px] w-full overflow-hidden"
-			onMouseMove={() => setLastInteraction(Date.now())}
-		>
+                <div
+                        className="relative w-full aspect-[3/4] overflow-hidden"
+                        onMouseMove={() => setLastInteraction(Date.now())}
+                >
 			<AnimatePresence mode="popLayout">
-				<div
-					ref={carouselRef}
-					className="flex justify-end gap-3 h-[550px] w-full absolute"
-				>
+                                <div
+                                        ref={carouselRef}
+                                        className="flex justify-end gap-3 h-full w-full absolute"
+                                >
 					{visibleMembers.map((member, index) => {
 						const isRightmost = index === 4;
 						const isActive = index === activeIndex;
@@ -154,9 +154,7 @@ export default function TeamCarousel() {
 						return (
 							<motion.div
 								key={`${member.id}-${member.visibleIndex}`}
-								className={`relative cursor-pointer ${
-									isActive ? "h-[600px]" : "h-[550px]"
-								}`}
+                                                                className="relative cursor-pointer h-full"
 								style={{
 									zIndex: isActive ? 10 : 1,
 								}}
@@ -216,7 +214,7 @@ export default function TeamCarousel() {
                                                         repeatDelay: 2.5,
                                                         }}
                                                         >
-                                                        <ChevronRight className="w-10 h-10 text-white" />
+                                                        <ChevronRight className="w-[clamp(1.5rem,2.5vw,2.5rem)] h-[clamp(1.5rem,2.5vw,2.5rem)] text-white" />
                                                         </motion.div>
                                                 </div>
                                         )}
@@ -226,8 +224,8 @@ export default function TeamCarousel() {
 										)}
 
 										{!isActive && (
-											<div className="absolute inset-0 flex items-end justify-center pb-20">
-												<div className="rotate-[-90deg] origin-center whitespace-nowrap text-3xl font-bold text-white tracking-wide">
+                                       <div className="absolute inset-0 flex items-end justify-center pb-[clamp(3rem,5vw,5rem)]">
+                                       <div className="rotate-[-90deg] origin-center whitespace-nowrap text-[clamp(1.5rem,4vw,2.5rem)] font-bold text-white tracking-wide">
 													{member.name.split(" ")[0]}
 												</div>
 											</div>
@@ -241,11 +239,11 @@ export default function TeamCarousel() {
                                                 variants={{ hidden: { opacity: 0, y: 50 }, visible: { opacity: 1, y: 0 } }}
                                                 transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
                                         >
-                                                <div className="absolute inset-0 p-6 bg-gradient-to-t from-black/90 via-black/70 to-transparent space-y-2 pointer-events-auto">
-                                                        <h3 className="text-3xl font-bold text-white whitespace-nowrap">
+                                                <div className="absolute inset-0 p-[clamp(1rem,2vw,1.5rem)] bg-gradient-to-t from-black/90 via-black/70 to-transparent space-y-2 pointer-events-auto">
+                                                        <h3 className="text-[clamp(1.5rem,4vw,2.5rem)] font-bold text-white whitespace-nowrap">
                                                                 {member.name}
                                                         </h3>
-                                                        <div className="flex items-center text-xl font-semibold text-gray-200 space-x-2">
+                                                        <div className="flex items-center text-[clamp(1.25rem,3vw,1.75rem)] font-semibold text-gray-200 space-x-2">
                                                                 <span>{member.role}</span>
                                                                 <div className="flex items-center space-x-1 pl-3 text-gray-400">
                                                                         <a
@@ -253,7 +251,7 @@ export default function TeamCarousel() {
                                                                                 aria-label="Email"
                                                                                 className="p-1 text-gray-400 hover:text-white"
                                                                         >
-                                                                                <Mail className="w-5 h-5" />
+                                                                        <Mail className="w-[clamp(1rem,2vw,1.25rem)] h-[clamp(1rem,2vw,1.25rem)]" />
                                                                         </a>
                                                                         <a
                                                                                 href={member.linkedin}
@@ -262,11 +260,11 @@ export default function TeamCarousel() {
                                                                                 aria-label="LinkedIn"
                                                                                 className="p-1 text-gray-400 hover:text-white"
                                                                         >
-                                                                                <Linkedin className="w-5 h-5" />
+                                                                        <Linkedin className="w-[clamp(1rem,2vw,1.25rem)] h-[clamp(1rem,2vw,1.25rem)]" />
                                                                         </a>
                                                                 </div>
                                                         </div>
-                                                        <p className="text-base text-gray-400 whitespace-pre-line">
+                                                        <p className="text-[clamp(0.875rem,2vw,1rem)] text-gray-400 whitespace-pre-line">
                                                                 {member.bio}
                                                         </p>
                                                 </div>
