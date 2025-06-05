@@ -194,9 +194,9 @@ export default function TeamCarousel() {
 								animate={{
 									opacity: 1,
 									x: 0,
-									flex: isActive ? "1 0 150px" : "0 0 60px",
-									marginLeft: isActive ? "8px" : "0px",
-									marginRight: isActive ? "8px" : "0px",
+                                                                        flex: isActive ? "0 0 150px" : "0 0 60px",
+                                                                        marginLeft: isActive ? "8px" : "0px",
+                                                                        marginRight: isActive ? "8px" : "0px",
 								}}
 								exit={{ x: -50, opacity: 0 }}
                                                                transition={{
