@@ -116,10 +116,14 @@ export default function TeamCarousel() {
        };
 
        const rotateCarousel = useCallback(() => {
-               if (isRotating) return;
+               // Don't rotate if carousel already animating or all members are visible
+               if (isRotating || visibleCount >= teamMembers.length) return;
                setIsRotating(true);
-               setRotationOffset((prev) => (prev + (visibleCount - 1)) % teamMembers.length);
-               setActiveIndex(0); // Now default to first item on rotation
+               // Advance by the number of visible cards so each "page" of members is unique
+               setRotationOffset(
+                       (prev) => (prev + visibleCount) % teamMembers.length
+               );
+               setActiveIndex(0); // Default to first item on rotation
                setTimeout(() => {
                        setIsRotating(false);
                }, 500);
@@ -141,12 +145,16 @@ export default function TeamCarousel() {
 
        useEffect(() => {
                const interval = setInterval(() => {
-                       if (Date.now() - lastInteraction > 18000 && !isRotating) {
+                       if (
+                               Date.now() - lastInteraction > 18000 &&
+                               !isRotating &&
+                               visibleCount < teamMembers.length
+                       ) {
                                rotateCarousel();
                        }
                }, 8000);
                return () => clearInterval(interval);
-       }, [lastInteraction, isRotating, rotateCarousel]);
+       }, [lastInteraction, isRotating, rotateCarousel, visibleCount]);
 
        useEffect(() => {
                setInfoVisible(false);
