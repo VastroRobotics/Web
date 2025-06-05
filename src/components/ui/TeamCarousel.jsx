@@ -110,11 +110,11 @@ export default function TeamCarousel() {
 
 
                 const open = 465 * scale;
-                const closed = 60 * scale;
+                const closed = Math.max(30, 60 * scale);
                 const minGap = 12 * scale;
                 const maxGap = 18 * scale;
 
-                const height = screenWidth < 777 ? window.innerHeight * 0.6 : 600;
+                const height = screenWidth < 777 ? Math.max(600, window.innerHeight) * 0.6 : 600;
                 setContainerHeight(height);
 
                 let width = screenWidth;
@@ -150,7 +150,7 @@ export default function TeamCarousel() {
                        const { count, gap } = computeVisible();
                        setVisibleCount(count);
                        setItemGap(gap);
-                       setActiveIndex(count > 1 ? 1 : 0);
+                       setActiveIndex(count > 1 ? Math.floor((count + 1) / 2) : 0);
                };
                update();
                window.addEventListener('resize', update);
@@ -237,8 +237,7 @@ export default function TeamCarousel() {
                                                                 <div
                                                                         className="w-full overflow-hidden h-full"
                                                                         style={{
-                                                                                borderBottomLeftRadius: `${12 * scaleFactor}px`,
-                                                                                borderBottomRightRadius: `${12 * scaleFactor}px`,
+                                                                                borderRadius: `${Math.max(6, 12 * scaleFactor)}px`,
                                                                         }}
                                                                 >
 									<div className="relative w-full h-full">
@@ -294,27 +293,27 @@ export default function TeamCarousel() {
 
                                        {/* Info Box */}
                                         <Motion.div
-                                                className={`absolute bottom-0 left-0 w-full aspect[2/1] pointer-events-none overflow-hidden`}
+                                                className={`absolute bottom-0 left-0 w-full h-[clamp(80px,30vh,250px)] pointer-events-none overflow-hidden`}
                                                 initial="hidden"
                                                 animate={isActive && infoVisible ? "visible" : "hidden"}
                                                 variants={{ hidden: { opacity: 0, y: 50 }, visible: { opacity: 1, y: 0 } }}
                                                 transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
                                         >
                                                 <div
-                                                        className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/50 to-transparent pointer-events-auto"
+                                                        className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/50 to-transparent pointer-events-auto flex flex-col justify-end"
                                                         style={{ padding: `${24 * scaleFactor}px`, gap: `${8 * scaleFactor}px` }}
                                                 >
-                                                        <h3 className="font-bold text-white whitespace-nowrap" style={{ fontSize: `${24 * scaleFactor}px` }}>
+                                                        <h3 className="font-bold text-white whitespace-nowrap text-[clamp(15px,3.4vw,24px)]">
                                                                 {member.name}
                                                         </h3>
                                                         <div
-                                                                className="flex items-center font-semibold text-gray-200"
-                                                                style={{ fontSize: `${18 * scaleFactor}px`, gap: `${8 * scaleFactor}px` }}
+                                                                className="flex items-center font-semibold text-gray-200 text-[clamp(12.5px,2.6vw,18px)]"
+                                                                style={{gap: `${Math.max(4, 8 * scaleFactor)}px` }}
                                                         >
                                                                 <span>{member.role}</span>
                                                                 <div
                                                                         className="flex items-center text-gray-400"
-                                                                        style={{ paddingLeft: `${12 * scaleFactor}px`, gap: `${4 * scaleFactor}px` }}
+                                                                        style={{ paddingLeft: `${Math.max(6, 12 * scaleFactor)}px`, gap: `${Math.max(2, 4 * scaleFactor)}px` }}
                                                                 >
                                                                         <a
                                                                         href={member.email}
@@ -322,7 +321,7 @@ export default function TeamCarousel() {
                                                                         className="text-gray-400 hover:text-white"
                                                                         style={{ padding: `${4 * scaleFactor}px` }}
                                                                         >
-                                                                        <Mail className="text-gray-400" style={{ width: `${20 * scaleFactor}px`, height: `${20 * scaleFactor}px` }} />
+                                                                        <Mail className="text-gray-400" style={{ width: `${Math.max(15, 20 * scaleFactor)}px`, height: `${20 * scaleFactor}px` }} />
                                                                         </a>
                                                                         <a
                                                                         href={member.linkedin}
@@ -332,12 +331,12 @@ export default function TeamCarousel() {
                                                                         className="text-gray-400 hover:text-white"
                                                                         style={{ padding: `${4 * scaleFactor}px` }}
                                                                         >
-                                                                        <Linkedin className="text-gray-400" style={{ width: `${20 * scaleFactor}px`, height: `${20 * scaleFactor}px` }} />
+                                                                        <Linkedin className="text-gray-400" style={{ width: `${Math.max(15, 20 * scaleFactor)}px`, height: `${20 * scaleFactor}px` }} />
                                                                         </a>
                                                                 </div>
                                                         </div>
                                                         <p
-                                                        className={`text-gray-400 whitespace-pre-line text-[clamp(12px,1.9vw,14px)]`}
+                                                        className={`text-gray-400 whitespace-pre-line text-[clamp(11px,2.3vw,16px)]`}
                                                         >
                                                                 {member.bio}
                                                         </p>
