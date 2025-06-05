@@ -13,19 +13,12 @@ export default function Team({ isActive, scrollDirection, onCanLeaveChange }) {
   }, [isActive]);
 
   return (
-    <AnimatePresence mode="wait">
-      {isActive && (
-        <motion.div
-          key="team"
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: scrollDirection === "down" ? -40 : 40 }}
-          transition={{ duration: 0.6 }}
-          className="w-full h-full bg-black text-white overflow-hidden flex items-center justify-center"
-        >
+    <div className="relative w-full h-screen">
+      <div className="absolute inset-0 p-6">
+        <div className="relative w-full h-full flex items-center justify-center overflow-hidden rounded-3xl bg-black shadow-[0_0_10px_2px_rgba(255,255,255,0.15)]">
           <TeamCarousel />
-        </motion.div>
-      )}
-    </AnimatePresence>
+        </div>
+      </div>
+    </div>
   );
 }

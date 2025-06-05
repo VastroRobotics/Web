@@ -4,7 +4,6 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { motion as Motion, AnimatePresence } from "framer-motion";
 import { ChevronRight, Linkedin, Mail } from "lucide-react";
 
-// Import images
 import AlexImage from "../../assets/media/team/Alex.png";
 import AndrewImage from "../../assets/media/team/Andrew.jpeg";
 import InesImage from "../../assets/media/team/Ines.jpeg";
@@ -99,21 +98,26 @@ export default function TeamCarousel() {
         const [visibleCount, setVisibleCount] = useState(5);
         const [itemGap, setItemGap] = useState(12);
         const carouselRef = useRef(null);
+        
+        const computeVisible = () => {
+        const openWidth = 465;
+        const closedWidth = 60;
+        const minGap = 12;
+        const maxGap = 18;
+        
+        let width = window.innerWidth - 48;
+        let count = 1;
+        let remaining = width - openWidth;
 
-       const computeVisible = (width) => {
-               const openWidth = 465; // active card width incl. margins
-               const closedWidth = 60;
-               const minGap = 12;
-               let count = 1;
-               let remaining = width - openWidth;
-               while (remaining >= closedWidth + minGap && count < teamMembers.length) {
-                       count++;
-                       remaining -= closedWidth + minGap;
-               }
-               let gap = count > 1 ? Math.max(minGap, minGap + remaining / (count - 1)) : 0;
-               console.log(count)
-               return { count, gap };
-       };
+        while (remaining >= closedWidth + minGap && count < teamMembers.length) {
+        count++;
+        remaining -= closedWidth + minGap;
+        }
+
+        let gap = 0;
+        gap = Math.min(Math.max(gap, minGap), maxGap);
+        return { count, gap };
+        };
 
        const rotateCarousel = useCallback(() => {
                // Don't rotate if carousel already animating or all members are visible
@@ -132,8 +136,7 @@ export default function TeamCarousel() {
 
        useEffect(() => {
                const update = () => {
-                       if (!carouselRef.current) return;
-                       const { count, gap } = computeVisible(carouselRef.current.clientWidth);
+                       const { count, gap } = computeVisible();
                        setVisibleCount(count);
                        setItemGap(gap);
                        setActiveIndex(count > 1 ? 1 : 0);
@@ -177,13 +180,13 @@ export default function TeamCarousel() {
 
 	return (
 		<div
-			className="relative h-[600px] w-full overflow-hidden"
+			className="flex h-[600px] justify-center w-full overflow-hidden"
 			onMouseMove={() => setLastInteraction(Date.now())}
 		>
 			<AnimatePresence mode="popLayout">
                                 <div
                                         ref={carouselRef}
-                                        className="flex justify-centre h-[550px] w-full"
+                                        className="flex w-fit h-[550px]"
                                         style={{ gap: `${itemGap}px` }}
                                 >
                                         {visibleMembers.map((member, index) => {
@@ -281,7 +284,7 @@ export default function TeamCarousel() {
                                                 variants={{ hidden: { opacity: 0, y: 50 }, visible: { opacity: 1, y: 0 } }}
                                                 transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
                                         >
-                                                <div className="absolute inset-0 p-6 bg-gradient-to-t from-black/90 via-black/70 to-transparent space-y-2 pointer-events-auto">
+                                                <div className="absolute inset-0 p-6 bg-gradient-to-t from-black/60 via-black/50 to-transparent space-y-2 pointer-events-auto">
                                                         <h3 className="text-xl sm:text-3xl font-bold text-white whitespace-nowrap">
                                                                 {member.name}
                                                         </h3>
