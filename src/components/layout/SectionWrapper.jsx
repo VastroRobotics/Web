@@ -18,7 +18,7 @@ export default function SectionWrapper({ isActive, scrollDirection, isFirst = fa
           variants={{
             initial: (dir) => ({
               opacity: 1,
-              y: dir === "up" ? "100%" : "-100%",
+              y: dir === "up" ? "-100%" : "100%",
               z: -150,
               scale: 0.9,
               rotateX: dir === "up" ? -15 : 15,
@@ -36,7 +36,7 @@ export default function SectionWrapper({ isActive, scrollDirection, isFirst = fa
             },
             exit: (dir) => ({
               opacity: 1,
-              y: dir === "up" ? "-100%" : "100%",
+              y: dir === "up" ? "100%" : "-100%",
               z: -150,
               scale: 0.9,
               rotateX: dir === "up" ? 15 : -15,
