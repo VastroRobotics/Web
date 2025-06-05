@@ -89,9 +89,9 @@ const teamMembers = [
 
 
 export default function TeamCarousel() {
-        const [activeIndex, setActiveIndex] = useState(1); 
+        const [activeIndex, setActiveIndex] = useState(1);
         const [rotationOffset, setRotationOffset] = useState(0);
-        const [isRotating, setIsRotating] = useState(false);
+        const [isRotating, setIsRotating] = useState(true);
         const [lastInteraction, setLastInteraction] = useState(Date.now());
         const [infoVisible, setInfoVisible] = useState(false);
         const [visibleCount, setVisibleCount] = useState(5);
@@ -99,6 +99,16 @@ export default function TeamCarousel() {
         const carouselRef = useRef(null);
         const [scaleFactor, setScaleFactor] = useState(1);
         const [containerHeight, setContainerHeight] = useState(600);
+        const [shouldStagger, setShouldStagger] = useState(true);
+        const hoverDelay = 0.1;
+
+        useEffect(() => {
+                const timer = setTimeout(() => {
+                        setIsRotating(false);
+                        setShouldStagger(false);
+                }, 500);
+                return () => clearTimeout(timer);
+        }, []);
        
         const computeVisible = () => {
 
@@ -134,6 +144,7 @@ export default function TeamCarousel() {
                 // Don't rotate if carousel already animating or all members are visible
                 if (isRotating || visibleCount >= teamMembers.length) return;
                 setIsRotating(true);
+                setShouldStagger(true);
                 // Advance by the number of visible cards so each "page" of members is unique
                 setRotationOffset(
                         (prev) => (prev + visibleCount) % teamMembers.length
@@ -141,6 +152,7 @@ export default function TeamCarousel() {
                 setActiveIndex(0); // Default to first item on rotation
                 setTimeout(() => {
                         setIsRotating(false);
+                        setShouldStagger(false);
                 }, 500);
        }, [isRotating, visibleCount]);
 
@@ -214,7 +226,7 @@ export default function TeamCarousel() {
                                                                         zIndex: isActive ? 10 : 1,
                                                                         height: `${isActive ? containerHeight : itemHeightInactive}px`,
                                                                 }}
-                                                                initial={{ opacity: 0, y: 40, scale: 0.9 }}
+                                                                initial={shouldStagger ? { opacity: 0, y: 40, scale: 0.9 } : false}
                                                                 animate={{
                                                                         opacity: 1,
                                                                         y: 0,
@@ -228,7 +240,7 @@ export default function TeamCarousel() {
                                                                transition={{
                                                                        duration: 0.6,
                                                                        ease: [0.23, 1, 0.32, 1],
-                                                                       delay: index * 0.08,
+                                                                       delay: shouldStagger ? index * 0.08 : hoverDelay,
                                                                        layout: { duration: 0.6, ease: [0.23, 1, 0.32, 1] },
                                                                }}
 								onMouseEnter={() =>
