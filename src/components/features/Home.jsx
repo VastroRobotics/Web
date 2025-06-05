@@ -24,11 +24,13 @@ const LazyGlow = lazy(() => import('../ui/Glow'));
 
 const Home = forwardRef(
   ({ isActive, scrollDirection, onCanLeaveChange, goToNext }, ref) => {
-    const backEntranceRef = useRef(null);
-    const backLoopRef = useRef(null);
-    const frontEntranceRef = useRef(null);
-    const frontLoopRef = useRef(null);
-    const wrapperRef = useRef(null);
+  const backEntranceRef = useRef(null);
+  const backLoopRef = useRef(null);
+  const frontEntranceRef = useRef(null);
+  const frontLoopRef = useRef(null);
+  const wrapperRef = useRef(null);
+  const timeoutRef = useRef(null);
+  const clickedRef = useRef(false);
 
     const [nat, setNat] = useState({ w: 1920, h: 1080 });
     const [showBackLoop, setShowBackLoop] = useState(false);
@@ -58,7 +60,13 @@ const Home = forwardRef(
         description: "Feature 2 description.",
         direction: "right",
       },
-    ];    const preloadVideos = useCallback(async () => {
+    ];
+
+    useEffect(() => {
+      return () => clearTimeout(timeoutRef.current);
+    }, []);
+
+    const preloadVideos = useCallback(async () => {
       const criticalVideos = [
         { src: BackEntrance, type: 'video', priority: 3 },
         { src: FrontEntrance, type: 'video', priority: 3 }
@@ -290,8 +298,22 @@ const Home = forwardRef(
                                 key={p.id}
                                 {...p}
                                 isActive={activePointId === p.id}
-                                onHover={setActivePointId}
-                                onLeave={() => setActivePointId(null)}
+                                onHover={(id) => {
+                                  if (!clickedRef.current) setActivePointId(id);
+                                  clearTimeout(timeoutRef.current);
+                                }}
+                                onLeave={() => {
+                                  if (!clickedRef.current) setActivePointId(null);
+                                }}
+                                onClick={(id) => {
+                                  setActivePointId(id);
+                                  clickedRef.current = true;
+                                  clearTimeout(timeoutRef.current);
+                                  timeoutRef.current = setTimeout(() => {
+                                    clickedRef.current = false;
+                                    setActivePointId(null);
+                                  }, 3000);
+                                }}
                               />
                             ))}
                           </div>
