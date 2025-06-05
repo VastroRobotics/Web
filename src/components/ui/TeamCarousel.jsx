@@ -19,8 +19,8 @@ const teamMembers = [
     name: "Jesalina Phan",
     role: "Co-Founder",
     image: JesalinaImage,
-    linkedin: "#",
-    email: "jesalina.p@vastro.org",
+    linkedin: "https://www.linkedin.com/in/jesalina-phan/",
+    email: "j.phan@vastro.org",
     bio: "Jesalina is a junior studying Computer Engineering and Entrepreneurship. With a knack for interfacing both software development and developing hardware & electrical systems, Jesalina works to ensure our solution has all of its power and electrical needs met.",
   },
   {
@@ -29,7 +29,7 @@ const teamMembers = [
     role: "Founder & CEO",
     image: AndrewImage,
     linkedin: "https://www.linkedin.com/in/andrew-mombay",
-    email: "andrew.m@vastro.org",
+    email: "a.mombay@vastro.org",
     bio: "Andrew is a junior studying Mechanical Engineering and Business Economics. With an interest in start-ups, he assisted significantly in building the project from the ground up and scaling the venture to where it is today.",
   },
   {
@@ -38,7 +38,7 @@ const teamMembers = [
     role: "Design Lead",
     image: JoshImage,
     linkedin: "https://www.linkedin.com/in/josh-krakauer-b51a5523b",
-    email: "josh.k@vastro.org",
+    email: "j.krakauer@vastro.org",
     bio: "Josh is a current junior studying Mechanical Engineering. Josh’s aptitude for designing mechanical systems and utilizing his skills in CAD, Josh contributes significantly to our overall design to meet all users needs.",
   },
   {
@@ -46,8 +46,8 @@ const teamMembers = [
     name: "Lucas Kover Wolf",
     role: "Software",
     image: LucasImage,
-    linkedin: "#",
-    email: "lucas.k@vastro.org",
+    linkedin: "https://www.linkedin.com/in/lucas-kover-wolf/",
+    email: "info@vastro.org",
     bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   },
   {
@@ -56,7 +56,7 @@ const teamMembers = [
     role: "Head of R&D",
     image: InesImage,
     linkedin: "https://www.linkedin.com/in/ines-saltiel",
-    email: "ines.s@vastro.org",
+    email: "i.saltiel@vastro.org",
     bio: "Ines is a current freshman studying Design Engineering. With her skills as a researcher and communications, Ines delivers high-impact research to help the team continue to refine our hardware & software systems to bring our product to the market.",
   },
   {
@@ -64,8 +64,7 @@ const teamMembers = [
     name: "Alexander Thaep",
     role: "Software",
     image: AlexImage,
-    linkedin: "#",
-    email: "alexander.t@vastro.org",
+    email: "info@vastro.org",
     bio: "Alexander is a junior studying Applied Mathematics and Computer Science. Alexander’s work behind the scenes to develop our virtual-reality immersion software and implementation of haptic feedback controls has been key for our continued success in developing an immersive control system for our users.",
   },
   {
@@ -74,7 +73,7 @@ const teamMembers = [
     role: "Software",
     image: RyanImage,
     linkedin: "https://www.linkedin.com/in/ryanduongct",
-    email: "ryan.d@vastro.org",
+    email: "info@vastro.org",
     bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   },
   {
@@ -83,7 +82,7 @@ const teamMembers = [
     role: "Adviser",
     image: RickImage,
     linkedin: "https://it.linkedin.com/in/rick-fleeter-5272432a3",
-    email: "rick.f@vastro.org",
+    email: "info@vastro.org",
     bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   },
 ];
