@@ -89,7 +89,7 @@ const teamMembers = [
 
 
 export default function TeamCarousel() {
-        const [activeIndex, setActiveIndex] = useState(1); // Default to 2nd on load
+        const [activeIndex, setActiveIndex] = useState(1); 
         const [rotationOffset, setRotationOffset] = useState(0);
         const [isRotating, setIsRotating] = useState(false);
         const [lastInteraction, setLastInteraction] = useState(Date.now());
@@ -97,39 +97,45 @@ export default function TeamCarousel() {
         const [visibleCount, setVisibleCount] = useState(5);
         const [itemGap, setItemGap] = useState(12);
         const carouselRef = useRef(null);
+        const [scaleFactor, setScaleFactor] = useState(1);
         
         const computeVisible = () => {
-        const openWidth = 465;
-        const closedWidth = 60;
-        const minGap = 12;
-        const maxGap = 18;
-        
-        let width = window.innerWidth - 48;
-        let count = 1;
-        let remaining = width - openWidth;
 
-        while (remaining >= closedWidth + minGap && count < teamMembers.length) {
-        count++;
-        remaining -= closedWidth + minGap;
-        }
+                const screenWidth = window.innerWidth - 48;
+                const scale = screenWidth < 777 ? screenWidth/777 : 1;
+                setScaleFactor(scale);
+                console.log(scale)
 
-        let gap = 0;
-        gap = Math.min(Math.max(gap, minGap), maxGap);
+                const open = 465 * scale;
+                const closed = 60 * scale;
+                const minGap = 12;
+                const maxGap = 18;
+
+                let width = screenWidth;
+                let count = 1;
+                let remaining = width - open;
+
+                while (remaining >= closed + minGap && count < teamMembers.length) {
+                count++;
+                remaining -= closed + minGap;
+                }
+
+                let gap = Math.min(Math.max(minGap, minGap + remaining / Math.max(1, count - 1)), maxGap);
+
         return { count, gap };
         };
-
-       const rotateCarousel = useCallback(() => {
-               // Don't rotate if carousel already animating or all members are visible
-               if (isRotating || visibleCount >= teamMembers.length) return;
-               setIsRotating(true);
-               // Advance by the number of visible cards so each "page" of members is unique
-               setRotationOffset(
-                       (prev) => (prev + visibleCount) % teamMembers.length
-               );
-               setActiveIndex(0); // Default to first item on rotation
-               setTimeout(() => {
-                       setIsRotating(false);
-               }, 500);
+        const rotateCarousel = useCallback(() => {
+                // Don't rotate if carousel already animating or all members are visible
+                if (isRotating || visibleCount >= teamMembers.length) return;
+                setIsRotating(true);
+                // Advance by the number of visible cards so each "page" of members is unique
+                setRotationOffset(
+                        (prev) => (prev + visibleCount) % teamMembers.length
+                );
+                setActiveIndex(0); // Default to first item on rotation
+                setTimeout(() => {
+                        setIsRotating(false);
+                }, 500);
        }, [isRotating, visibleCount]);
 
 
@@ -205,7 +211,7 @@ export default function TeamCarousel() {
 								animate={{
 									opacity: 1,
 									x: 0,
-                                                                        width: isActive ? "465px" : "60px",
+                                                                        width: `${isActive ? 465 * scaleFactor : 60 * scaleFactor}px`,
                                                                         flex: "0 0 auto",
                                                                         marginLeft: isActive ? "8px" : "0px",
 									marginRight: isActive ? "8px" : "0px",
