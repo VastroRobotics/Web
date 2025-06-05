@@ -36,10 +36,10 @@ const variants = {
   },
 };
 
-const HeroScroll = forwardRef(({ activeIndex, goToSection, canLeave }, ref) => {
+const HeroScroll = forwardRef(({ activeIndex, goToSection }, ref) => {
   const containerRef = useRef(null);
   const inView = useInView(containerRef, { once: true, margin: "-100px" });
-  const scrollRef = useSectionScroll({ activeIndex, goToSection, canLeave });
+  const scrollRef = useSectionScroll({ activeIndex, goToSection });
 
   return (
     <div className="py-6 space-y-10" ref={scrollRef}>

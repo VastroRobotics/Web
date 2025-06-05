@@ -2,14 +2,16 @@
 
 import { useState } from "react";
 import VastroLogo from "../../assets/branding/vastro_full_logo.svg";
-import useSectionScroll from "../../hooks/useSectionScroll";
+import useEdgeSectionScroll from "../../hooks/useEdgeSectionScroll";
 
-export default function VastroMultipage({ activeIndex, goToSection, canLeave }) {
+export default function VastroMultipage({ activeIndex, goToSection }) {
   const [activePage, setActivePage] = useState("mission");
   const [transitioning, setTransitioning] = useState(false);
   const [glowVisible, setGlowVisible] = useState(true);
 
-  const scrollRef = useSectionScroll({ activeIndex, goToSection, canLeave });
+  const atStart = activePage === "mission";
+  const atEnd = activePage === "customizable";
+  const scrollRef = useEdgeSectionScroll({ activeIndex, goToSection, atStart, atEnd });
 
   const pages = ["mission", "affordable", "intuitive", "customizable"];
 

@@ -8,18 +8,11 @@ import useSectionScroll from "../../hooks/useSectionScroll";
 export default function Team({
   isActive,
   scrollDirection,
-  onCanLeaveChange,
   activeIndex,
   goToSection,
-  canLeave,
 }) {
-  useEffect(() => {
-    if (isActive) {
-      onCanLeaveChange(true); // Always allow leaving
-    }
-  }, [isActive]);
 
-  const scrollRef = useSectionScroll({ activeIndex, goToSection, canLeave });
+  const scrollRef = useSectionScroll({ activeIndex, goToSection });
 
   return (
     <AnimatePresence mode="wait">

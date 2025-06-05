@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-export default function useSectionScroll({ activeIndex, goToSection }) {
+export default function useEdgeSectionScroll({ activeIndex, goToSection, atStart, atEnd }) {
   const ref = useRef(null);
   const throttled = useRef(false);
 
@@ -10,8 +10,16 @@ export default function useSectionScroll({ activeIndex, goToSection }) {
 
     const handle = (e) => {
       if (throttled.current) return;
-      const next = activeIndex + (e.deltaY > 0 ? 1 : -1);
-      goToSection(activeIndex, next);
+      const dir = e.deltaY > 0 ? 1 : -1;
+      if (dir > 0 && atEnd) {
+        e.preventDefault();
+        goToSection(activeIndex, activeIndex + 1);
+      } else if (dir < 0 && atStart) {
+        e.preventDefault();
+        goToSection(activeIndex, activeIndex - 1);
+      } else {
+        return;
+      }
       throttled.current = true;
       setTimeout(() => {
         throttled.current = false;
@@ -20,7 +28,7 @@ export default function useSectionScroll({ activeIndex, goToSection }) {
 
     el.addEventListener("wheel", handle, { passive: false });
     return () => el.removeEventListener("wheel", handle);
-  }, [activeIndex, goToSection]);
+  }, [activeIndex, goToSection, atStart, atEnd]);
 
   return ref;
 }

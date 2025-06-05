@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import useSectionScroll from "../../hooks/useSectionScroll";
+import useEdgeSectionScroll from "../../hooks/useEdgeSectionScroll";
 import { motion as Motion, useAnimation } from "framer-motion";
 import ScrollIndicator from "../layout/ScrollIndicator";
 
@@ -53,10 +53,8 @@ const timelineEvents = [
 export default function Timeline({
   isActive,
   scrollDirection,
-  onCanLeaveChange,
   activeIndex: sectionIndex,
   goToSection,
-  canLeave,
   centerFraction = 0.5,
 }) {
   const controls = useAnimation();
@@ -75,7 +73,9 @@ export default function Timeline({
   const nodeSize = timelineHeight * 3;
   const nodeOffset = nodeSize / 2;
 
-  const scrollRef = useSectionScroll({ activeIndex: sectionIndex, goToSection, canLeave });
+  const atStart = timelineIndex === 0;
+  const atEnd = timelineIndex === timelineEvents.length - 1;
+  const scrollRef = useEdgeSectionScroll({ activeIndex: sectionIndex, goToSection, atStart, atEnd });
 
   const shiftPerEvent = timelineWidth / (timelineEvents.length - 1);
 
@@ -93,7 +93,6 @@ export default function Timeline({
       const start = scrollDirection === "down" ? timelineEvents.length - 1 : 0;
       setTimelineIndex(start);
       setCanScroll(false);
-      onCanLeaveChange(false);
       isThrottled.current = true;
 
       clearTimeout(unlockTimeout.current);
@@ -121,12 +120,10 @@ export default function Timeline({
         setTimeout(() => {
           isThrottled.current = false;
         }, forwardThrottle);
-        onCanLeaveChange(true);
         return;
       }
 
       if (dir < 0 && timelineIndex === 0) {
-        onCanLeaveChange(true);
         return;
       }
 
@@ -144,7 +141,6 @@ export default function Timeline({
         isThrottled.current = false;
       }, delay);
 
-      onCanLeaveChange(false);
       setTimelineIndex(nextIndex);
     };
 

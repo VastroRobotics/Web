@@ -6,8 +6,8 @@ import LogoText from "../../assets/branding/text_only_white.svg";
 import ScrollPrompt from "../layout/ScrollPrompt";
 import useSectionScroll from "../../hooks/useSectionScroll";
 
-export default function MiniFooter({ goToSection, activeIndex, canLeave }) {
-  const scrollRef = useSectionScroll({ activeIndex, goToSection, canLeave });
+export default function MiniFooter({ goToSection, activeIndex }) {
+  const scrollRef = useSectionScroll({ activeIndex, goToSection });
   return (
         <div className="relative w-full h-screen" ref={scrollRef}>
       <div className="absolute inset-0 p-6">

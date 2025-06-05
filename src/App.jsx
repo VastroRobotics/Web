@@ -19,7 +19,6 @@ const sections = [Home, Mission, About, Team, Timeline, Footer];
 export default function App() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [scrollDirection, setScrollDirection] = useState("down");
-  const [canLeave, setCanLeave] = useState(true);
 
   const goToSection = (current, next) => {
     if (next < 0 || next >= sections.length || current === next) return;
@@ -50,8 +49,6 @@ export default function App() {
                 <Section
                   isActive={i === activeIndex}
                   scrollDirection={scrollDirection}
-                  onCanLeaveChange={setCanLeave}
-                  canLeave={canLeave}
                   activeIndex={activeIndex}
                   goToSection={goToSection}
                 />

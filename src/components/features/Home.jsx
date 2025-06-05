@@ -25,7 +25,7 @@ const LazyGlow = lazy(() => import('../ui/Glow'));
 
 const Home = forwardRef(
   (
-    { isActive, scrollDirection, onCanLeaveChange, goToSection, activeIndex, canLeave },
+    { isActive, scrollDirection, goToSection, activeIndex },
     ref
   ) => {
     const backEntranceRef = useRef(null);
@@ -200,16 +200,11 @@ const Home = forwardRef(
       return () => window.removeEventListener("resize", update);
     }, [nat]);
 
-    useEffect(() => {
-      if (isActive) {
-        onCanLeaveChange(true);
-      }
-    }, [isActive]);
 
     const videoClass =
       "absolute inset-0 w-full h-full object-fill pointer-events-none";
 
-    const scrollRef = useSectionScroll({ activeIndex, goToSection, canLeave });
+    const scrollRef = useSectionScroll({ activeIndex, goToSection });
 
     return (
       <div className="relative w-full h-screen" ref={scrollRef}>
