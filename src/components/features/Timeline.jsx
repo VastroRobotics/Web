@@ -306,7 +306,7 @@ export default function Timeline({
                       />
 
 <Motion.div
-  className={`absolute flex flex-col${isDown ? "-reverse" : ""}`}
+  className={`absolute flex ${isDown ? "flex-col-reverse" : "flex-col"}`}
   initial={{ opacity: 0, x: -30 }}
   animate={isFuture ? { opacity: 0, x: -30 } : { opacity: 1, x: 0 }}
   transition={{
