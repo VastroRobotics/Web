@@ -108,8 +108,10 @@ export default function TeamCarousel() {
 
                 const open = 465 * scale;
                 const closed = 60 * scale;
-                const minGap = 12;
-                const maxGap = 18;
+                const minGap = 12 * scale;
+                const maxGap = 18 * scale;
+
+                setComponentHeight(window.innerHeight * 0.6);
 
                 let width = screenWidth;
                 let count = 1;
@@ -181,18 +183,22 @@ export default function TeamCarousel() {
                 return result;
         };
 
-	const visibleMembers = getVisibleMembers();
+        const visibleMembers = getVisibleMembers();
 
-	return (
-		<div
-			className="flex h-[600px] justify-center w-full overflow-hidden"
-			onMouseMove={() => setLastInteraction(Date.now())}
-		>
+        const containerHeight = componentHeight * scaleFactor;
+        const itemHeightInactive = containerHeight - 50 * scaleFactor;
+
+        return (
+                <div
+                        className="flex justify-center w-full overflow-hidden"
+                        style={{ height: `${containerHeight}px` }}
+                        onMouseMove={() => setLastInteraction(Date.now())}
+                >
 			<AnimatePresence mode="popLayout">
                                 <div
                                         ref={carouselRef}
-                                        className="flex w-fit h-[550px]"
-                                        style={{ gap: `${itemGap}px` }}
+                                        className="flex w-fit"
+                                        style={{ gap: `${itemGap}px`, height: `${itemHeightInactive}px` }}
                                 >
                                         {visibleMembers.map((member, index) => {
                                                 const isRightmost = visibleCount < teamMembers.length && index === visibleCount - 1;
@@ -201,20 +207,19 @@ export default function TeamCarousel() {
                                                 return (
                                                         <Motion.div
                                                                 key={`${member.id}-${member.visibleIndex}`}
-								className={`relative cursor-pointer ${
-									isActive ? "h-[600px]" : "h-[550px]"
-								}`}
-								style={{
-									zIndex: isActive ? 10 : 1,
-								}}
+                                                                className="relative cursor-pointer"
+                                                                style={{
+                                                                        zIndex: isActive ? 10 : 1,
+                                                                        height: `${isActive ? containerHeight : itemHeightInactive}px`,
+                                                                }}
 								initial={{ opacity: 1, x: 50 }}
 								animate={{
 									opacity: 1,
 									x: 0,
                                                                         width: `${isActive ? 465 * scaleFactor : 60 * scaleFactor}px`,
                                                                         flex: "0 0 auto",
-                                                                        marginLeft: isActive ? "8px" : "0px",
-									marginRight: isActive ? "8px" : "0px",
+                                                                        marginLeft: isActive ? `${8 * scaleFactor}px` : "0px",
+                                                                        marginRight: isActive ? `${8 * scaleFactor}px` : "0px",
 								}}
 								exit={{ x: -50, opacity: 0 }}
                                                                transition={{
@@ -227,9 +232,13 @@ export default function TeamCarousel() {
 								}
 								layout
 							>
-								<div
-									className={`w-full rounded-b-xl overflow-hidden h-full`}
-								>
+                                                                <div
+                                                                        className="w-full overflow-hidden h-full"
+                                                                        style={{
+                                                                                borderBottomLeftRadius: `${12 * scaleFactor}px`,
+                                                                                borderBottomRightRadius: `${12 * scaleFactor}px`,
+                                                                        }}
+                                                                >
 									<div className="relative w-full h-full">
 <Motion.img
                                                                                src={member.image || "/placeholder.svg"}
@@ -264,7 +273,7 @@ export default function TeamCarousel() {
                                                         repeatDelay: 2.5,
                                                         }}
                                                         >
-                                                        <ChevronRight className="w-10 h-10 text-white" />
+                                                        <ChevronRight className="text-white" style={{ width: `${40 * scaleFactor}px`, height: `${40 * scaleFactor}px` }} />
                                                         </Motion.div>
                                                 </div>
                                         )}
@@ -274,11 +283,11 @@ export default function TeamCarousel() {
 										)}
 
 										{!isActive && (
-											<div className="absolute inset-0 flex items-end justify-center pb-20">
-												<div className="rotate-[-90deg] origin-center whitespace-nowrap text-3xl font-bold text-white tracking-wide">
-													{member.name.split(" ")[0]}
-												</div>
-											</div>
+                                                                               <div className="absolute inset-0 flex items-end justify-center" style={{ paddingBottom: `${80 * scaleFactor}px` }}>
+                                                                               <div className="rotate-[-90deg] origin-center whitespace-nowrap font-bold text-white tracking-wide" style={{ fontSize: `${30 * scaleFactor}px` }}>
+                                                                               {member.name.split(" ")[0]}
+                                                                               </div>
+                                                                               </div>
 										)}
 
                                        {/* Info Box */}
@@ -289,32 +298,43 @@ export default function TeamCarousel() {
                                                 variants={{ hidden: { opacity: 0, y: 50 }, visible: { opacity: 1, y: 0 } }}
                                                 transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
                                         >
-                                                <div className="absolute inset-0 p-6 bg-gradient-to-t from-black/60 via-black/50 to-transparent space-y-2 pointer-events-auto">
-                                                        <h3 className="text-xl sm:text-3xl font-bold text-white whitespace-nowrap">
+                                                <div
+                                                        className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/50 to-transparent pointer-events-auto"
+                                                        style={{ padding: `${24 * scaleFactor}px`, gap: `${8 * scaleFactor}px` }}
+                                                >
+                                                        <h3 className="font-bold text-white whitespace-nowrap" style={{ fontSize: `${24 * scaleFactor}px` }}>
                                                                 {member.name}
                                                         </h3>
-                                                        <div className="flex items-center text-lg sm:text-xl font-semibold text-gray-200 space-x-2">
+                                                        <div
+                                                                className="flex items-center font-semibold text-gray-200"
+                                                                style={{ fontSize: `${18 * scaleFactor}px`, gap: `${8 * scaleFactor}px` }}
+                                                        >
                                                                 <span>{member.role}</span>
-                                                                <div className="flex items-center space-x-1 pl-3 text-gray-400">
+                                                                <div
+                                                                        className="flex items-center text-gray-400"
+                                                                        style={{ paddingLeft: `${12 * scaleFactor}px`, gap: `${4 * scaleFactor}px` }}
+                                                                >
                                                                         <a
-                                                                                href={member.email}
-                                                                                aria-label="Email"
-                                                                                className="p-1 text-gray-400 hover:text-white"
+                                                                        href={member.email}
+                                                                        aria-label="Email"
+                                                                        className="text-gray-400 hover:text-white"
+                                                                        style={{ padding: `${4 * scaleFactor}px` }}
                                                                         >
-                                                                                <Mail className="w-5 h-5" />
+                                                                        <Mail className="text-gray-400" style={{ width: `${20 * scaleFactor}px`, height: `${20 * scaleFactor}px` }} />
                                                                         </a>
                                                                         <a
-                                                                                href={member.linkedin}
-                                                                                target="_blank"
-                                                                                rel="noopener noreferrer"
-                                                                                aria-label="LinkedIn"
-                                                                                className="p-1 text-gray-400 hover:text-white"
+                                                                        href={member.linkedin}
+                                                                        target="_blank"
+                                                                        rel="noopener noreferrer"
+                                                                        aria-label="LinkedIn"
+                                                                        className="text-gray-400 hover:text-white"
+                                                                        style={{ padding: `${4 * scaleFactor}px` }}
                                                                         >
-                                                                                <Linkedin className="w-5 h-5" />
+                                                                        <Linkedin className="text-gray-400" style={{ width: `${20 * scaleFactor}px`, height: `${20 * scaleFactor}px` }} />
                                                                         </a>
                                                                 </div>
                                                         </div>
-                                                        <p className="text-sm sm:text-base text-gray-400 whitespace-pre-line">
+                                                        <p className="text-gray-400 whitespace-pre-line" style={{ fontSize: `${14 * scaleFactor}px` }}>
                                                                 {member.bio}
                                                         </p>
                                                 </div>
