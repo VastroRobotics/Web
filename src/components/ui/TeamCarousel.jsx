@@ -114,6 +114,17 @@ export default function TeamCarousel() {
                return { count, gap };
        };
 
+       const rotateCarousel = useCallback(() => {
+               if (isRotating) return;
+               setIsRotating(true);
+               setRotationOffset((prev) => (prev + (visibleCount - 1)) % teamMembers.length);
+               setActiveIndex(0); // Now default to first item on rotation
+               setTimeout(() => {
+                       setIsRotating(false);
+               }, 500);
+       }, [isRotating, visibleCount]);
+
+
        useEffect(() => {
                const update = () => {
                        if (!carouselRef.current) return;
@@ -141,17 +152,6 @@ export default function TeamCarousel() {
                const timeout = setTimeout(() => setInfoVisible(true), 240);
                return () => clearTimeout(timeout);
        }, [activeIndex]);
-
-       const rotateCarousel = useCallback(() => {
-               if (isRotating) return;
-               setIsRotating(true);
-               setRotationOffset((prev) => (prev + (visibleCount - 1)) % teamMembers.length);
-               setActiveIndex(0); // Now default to first item on rotation
-               setTimeout(() => {
-                       setIsRotating(false);
-               }, 500);
-       }, [isRotating, visibleCount]);
-
        const getVisibleMembers = () => {
                 const result = [];
                 for (let i = 0; i < visibleCount; i++) {
