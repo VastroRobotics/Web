@@ -101,7 +101,7 @@ export default function TeamCarousel() {
         const carouselRef = useRef(null);
 
        const computeVisible = (width) => {
-               const openWidth = 166; // active card width incl. margins
+               const openWidth = 465; // active card width incl. margins
                const closedWidth = 60;
                const minGap = 12;
                let count = 1;
@@ -111,6 +111,7 @@ export default function TeamCarousel() {
                        remaining -= closedWidth + minGap;
                }
                let gap = count > 1 ? Math.max(minGap, minGap + remaining / (count - 1)) : 0;
+               console.log(count)
                return { count, gap };
        };
 
@@ -174,7 +175,7 @@ export default function TeamCarousel() {
 			<AnimatePresence mode="popLayout">
                                 <div
                                         ref={carouselRef}
-                                        className="flex justify-end h-[550px] w-full absolute"
+                                        className="flex justify-centre h-[550px] w-full"
                                         style={{ gap: `${itemGap}px` }}
                                 >
                                         {visibleMembers.map((member, index) => {
@@ -194,8 +195,9 @@ export default function TeamCarousel() {
 								animate={{
 									opacity: 1,
 									x: 0,
-									flex: isActive ? "1 0 150px" : "0 0 60px",
-									marginLeft: isActive ? "8px" : "0px",
+                                                                        width: isActive ? "465px" : "60px",
+                                                                        flex: "0 0 auto",
+                                                                        marginLeft: isActive ? "8px" : "0px",
 									marginRight: isActive ? "8px" : "0px",
 								}}
 								exit={{ x: -50, opacity: 0 }}
