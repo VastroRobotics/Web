@@ -315,7 +315,7 @@ const Home = forwardRef(
                 {logoDone && (
                   <ScrollPrompt
                     onClick={goToNext}
-                    className={isMobile ? 'w-10 h-10' : 'w-16 h-16'}
+                    className={isMobile ? 'w-14 h-14' : 'w-16 h-16'}
                     animateIn={true}
                   />
                 )}

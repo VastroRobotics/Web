@@ -36,7 +36,7 @@ export default function Team({ isActive, scrollDirection, onCanLeaveChange }) {
                       creating innovative solutions.
                     </p>
                   </div>
-                  <div className="w-full flex justify-center">
+                  <div className="flex justify-center w-full">
                     <TeamCarousel />
                   </div>
                 </div>

@@ -235,17 +235,17 @@ export default function TeamCarousel() {
 
                                        {/* Info Box */}
                                         <motion.div
-                                                className="absolute bottom-0 left-0 w-full aspect-[4/2] pointer-events-none overflow-hidden"
+                                                className="absolute bottom-0 left-0 w-full aspect-[2/1] pointer-events-none overflow-hidden"
                                                 initial="hidden"
                                                 animate={isActive && infoVisible ? "visible" : "hidden"}
                                                 variants={{ hidden: { opacity: 0, y: 50 }, visible: { opacity: 1, y: 0 } }}
                                                 transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
                                         >
                                                 <div className="absolute inset-0 p-6 bg-gradient-to-t from-black/90 via-black/70 to-transparent space-y-2 pointer-events-auto">
-                                                        <h3 className="text-3xl font-bold text-white whitespace-nowrap">
+                                                        <h3 className="text-xl sm:text-3xl font-bold text-white whitespace-nowrap">
                                                                 {member.name}
                                                         </h3>
-                                                        <div className="flex items-center text-xl font-semibold text-gray-200 space-x-2">
+                                                        <div className="flex items-center text-lg sm:text-xl font-semibold text-gray-200 space-x-2">
                                                                 <span>{member.role}</span>
                                                                 <div className="flex items-center space-x-1 pl-3 text-gray-400">
                                                                         <a
@@ -266,7 +266,7 @@ export default function TeamCarousel() {
                                                                         </a>
                                                                 </div>
                                                         </div>
-                                                        <p className="text-base text-gray-400 whitespace-pre-line">
+                                                        <p className="text-sm sm:text-base text-gray-400 whitespace-pre-line">
                                                                 {member.bio}
                                                         </p>
                                                 </div>
