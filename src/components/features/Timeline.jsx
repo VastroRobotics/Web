@@ -59,14 +59,11 @@ export default function Timeline({
 }) {
   const controls = useAnimation();
   const [timelineIndex, setTimelineIndex] = useState(0);
-  const [canScroll, setCanScroll] = useState(false);
   const isThrottled = useRef(false);
-  const unlockTimeout = useRef(null);
 
   const [viewport, setViewport] = useState({ width: 0, height: 0 });
 
-  const forwardThrottle = 600;
-  const backwardThrottle = 400;
+  const wheelThrottle = 400;
 
   const timelineWidth = timelineEvents.length * 400;
   const timelineHeight = 10;
@@ -92,61 +89,37 @@ export default function Timeline({
     if (isActive) {
       const start = scrollDirection === "down" ? timelineEvents.length - 1 : 0;
       setTimelineIndex(start);
-      setCanScroll(false);
-      isThrottled.current = true;
-
-      clearTimeout(unlockTimeout.current);
-      unlockTimeout.current = setTimeout(() => {
-        setCanScroll(true);
-        isThrottled.current = false;
-      }, forwardThrottle);
-    } else {
-      setCanScroll(false);
-      isThrottled.current = false;
-      clearTimeout(unlockTimeout.current);
     }
   }, [isActive, scrollDirection]);
 
   useEffect(() => {
-    if (!isActive || !canScroll) return;
+    if (!isActive) return;
 
     const handleWheel = (e) => {
+      if (isThrottled.current) return;
       const dir = e.deltaY > 0 ? 1 : -1;
       const maxIndex = timelineEvents.length - 1;
 
-      if (dir > 0 && timelineIndex === maxIndex) {
-        if (isThrottled.current) return;
-        isThrottled.current = true;
-        setTimeout(() => {
-          isThrottled.current = false;
-        }, forwardThrottle);
-        return;
-      }
-
-      if (dir < 0 && timelineIndex === 0) {
+      if ((dir > 0 && timelineIndex === maxIndex) || (dir < 0 && timelineIndex === 0)) {
         return;
       }
 
       e.preventDefault();
       e.stopPropagation();
-      if (isThrottled.current) return;
 
       const nextIndex = Math.min(Math.max(timelineIndex + dir, 0), maxIndex);
       if (nextIndex === timelineIndex) return;
 
       isThrottled.current = true;
-      const delay = dir > 0 ? forwardThrottle : backwardThrottle;
-
+      setTimelineIndex(nextIndex);
       setTimeout(() => {
         isThrottled.current = false;
-      }, delay);
-
-      setTimelineIndex(nextIndex);
+      }, wheelThrottle);
     };
 
     window.addEventListener("wheel", handleWheel, { passive: false });
     return () => window.removeEventListener("wheel", handleWheel);
-  }, [isActive, canScroll, timelineIndex]);
+  }, [isActive, timelineIndex]);
 
   useEffect(() => {
     const fraction = viewport.width < 768 ? 0.20 : centerFraction;

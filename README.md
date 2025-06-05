@@ -48,6 +48,17 @@ VastroRobotics/Web
 
 ---
 
+## Scrolling Architecture
+
+Section transitions are coordinated through a single `goToSection` helper. Each section uses one of two hooks to convert scroll input into calls to this function:
+
+- `useSectionScroll` &ndash; always moves between sections based on scroll direction.
+- `useEdgeSectionScroll` &ndash; only moves when the content is at its start or end (used by multi-page sections like About and Timeline).
+
+These hooks provide built-in throttling so no extra scroll locking logic is needed.
+
+---
+
 ## Deployment
 
 The site is designed to be statically deployed (e.g. Netlify, Vercel, GitHub Pages).
