@@ -18,10 +18,10 @@ export default function SectionWrapper({ isActive, scrollDirection, isFirst = fa
           variants={{
             initial: (dir) => ({
               opacity: 1,
-              y: dir === "down" ? "100%" : "-100%",
+              y: dir === "up" ? "100%" : "-100%",
               z: -150,
               scale: 0.9,
-              rotateX: dir === "down" ? -15 : 15,
+              rotateX: dir === "up" ? -15 : 15,
             }),
             animate: {
               opacity: 1,
@@ -36,10 +36,10 @@ export default function SectionWrapper({ isActive, scrollDirection, isFirst = fa
             },
             exit: (dir) => ({
               opacity: 1,
-              y: dir === "down" ? "-100%" : "100%",
+              y: dir === "up" ? "-100%" : "100%",
               z: -150,
               scale: 0.9,
-              rotateX: dir === "down" ? 15 : -15,
+              rotateX: dir === "up" ? 15 : -15,
               transition: {
                 duration: 1.8,
                 ease: [0.22, 1, 0.36, 1],
@@ -53,7 +53,7 @@ export default function SectionWrapper({ isActive, scrollDirection, isFirst = fa
           style={{
             perspective: 1200,
             transformStyle: "preserve-3d",
-            transformOrigin: scrollDirection === "down" ? "top center" : "bottom center",
+            transformOrigin: scrollDirection === "up" ? "top center" : "bottom center",
           }}
         >
           {children}

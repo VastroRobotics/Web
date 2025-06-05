@@ -25,12 +25,12 @@ export default function App() {
 
   const handleScroll = (e) => {
     if (isThrottled.current || !canLeave) return;
-  
+
     const delta = e.deltaY;
-    const dir = delta > 0 ? "down" : "up";
+    const dir = delta > 0 ? "up" : "down"; // movement direction
     setScrollDirection(dir);
-  
-    let next = activeIndex + (dir === "down" ? 1 : -1);
+
+    let next = activeIndex + (delta > 0 ? 1 : -1);
     const total = sections.length;
   
     if (next < 0 || next >= total) return;
@@ -44,7 +44,7 @@ export default function App() {
   };
 
   const jumpToSection = (index) => {
-    setScrollDirection(index > activeIndex ? "down" : "up");
+    setScrollDirection(index > activeIndex ? "up" : "down");
     setActiveIndex(index);
   };
 
@@ -77,7 +77,7 @@ export default function App() {
                   scrollDirection={scrollDirection}
                   onCanLeaveChange={setCanLeave}
                   goToNext={() => {
-                    setScrollDirection("down");
+                    setScrollDirection("up");
                     setActiveIndex((prev) =>
                       Math.min(prev + 1, sections.length - 1)
                     );
@@ -85,7 +85,7 @@ export default function App() {
                   {...(Section === Footer
                     ? {
                         onScrollTop: () => {
-                          setScrollDirection("up");
+                          setScrollDirection("down");
                           setActiveIndex(0);
                         },
                       }

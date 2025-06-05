@@ -16,9 +16,9 @@ export default function Team({ isActive, scrollDirection, onCanLeaveChange }) {
       {isActive && (
         <motion.div
           key="team"
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: scrollDirection === "up" ? 40 : -40 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: scrollDirection === "down" ? -40 : 40 }}
+          exit={{ opacity: 0, y: scrollDirection === "up" ? -40 : 40 }}
           transition={{ duration: 0.6 }}
           className="w-full h-full bg-black text-white overflow-hidden"
         >
