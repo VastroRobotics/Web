@@ -174,7 +174,9 @@ export default function Timeline({
   }, [isActive, canScroll, activeIndex]);
 
   useEffect(() => {
-    const fraction = viewport.width < 768 ? 0.15 : centerFraction;
+    const fraction = viewport.width < 768 ? 0.15 : 
+                     viewport.width < 1000 ? 0.3 : 
+                     centerFraction;
     const center = viewport.width * fraction;
     controls.start({ x: center - nodeOffset - activeIndex * shiftPerEvent });
 
@@ -315,7 +317,7 @@ export default function Timeline({
     ease: "easeOut",
   }}
   style={{
-    left: "60px",
+    left: "min(12vw, 60px)",
     ...(isDown
       ? {
           bottom: `-${distance + nodeSize + 12}px`,
@@ -323,18 +325,17 @@ export default function Timeline({
       : {
           top: `-${distance + nodeSize}px`,
         }),
-    width: "350px",
-    maxWidth: "50vw"
+    width: "min(60vw, 350px)",
   }}
 >
   <div className={`m${isDown ? "t-4" : "b-2"}`}>
     <span className="text-xs sm:text-sm lg:text-md xl:text-md text-gray-400 mb-0.5">{ev.date}</span>
-    <h3 className="text-xl sm:text-2xl font-bold text-white whitespace-nowrap" style={{ color }}>
+    <h3 className="text-xl sm:text-2xl font-bold text-white" style={{ color }}>
   {ev.title}
 </h3>
   </div>
   <Motion.p
-    className={`text-sm text-gray-400 m${isDown ? "t-4" : "b-4"}`}
+    className={`text-xs sm:text-sm text-gray-400 m${isDown ? "t-4" : "b-4"}`}
     initial={{ opacity: 0, y: -30 }}
     animate={isFuture ? { opacity: 0, y: isDown ? 30 : -30 } : { opacity: 1, y: 0 }}
     transition={{
@@ -361,7 +362,8 @@ export default function Timeline({
         alt={ev.title}
         width={240}
         style={{height: "auto" }}
-        className="rounded-md max-w-[30vw] sm:max-w-[13vw] max-h-[30vh] sm:max-h-[20vh] object-cover"
+        className="rounded-md max-w-[clamp(150px,30vw,175px)] sm:max-w-[clamp(185px,15vw,250px)] max-h-[20vh] object-cover"
+
       />
     </Motion.div>
   )}
@@ -375,8 +377,8 @@ export default function Timeline({
           </Motion.div>
 
           {/* Side gradient overlays */}
-          <div className="absolute top-0 left-0 h-full w-40 w-max-[6vw] pointer-events-none z-20 bg-gradient-to-r from-black to-transparent" />
-          <div className="absolute top-0 right-0 h-full w-40 w-max-[6vw] pointer-events-none z-20 bg-gradient-to-l from-black to-transparent" />
+          <div className="absolute top-0 left-0 h-full w-40 max-w-[5vw] pointer-events-none z-20 bg-gradient-to-r from-black to-transparent" />
+          <div className="absolute top-0 right-0 h-full w-40 max-w-[5vw] pointer-events-none z-20 bg-gradient-to-l from-black to-transparent" />
 
           {/* Scroll Indicator */}
           <div className="top-0 justify-center z-50">

@@ -1,60 +1,19 @@
-import { useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-export default function SectionWrapper({ isActive, scrollDirection, isFirst = false, children }) {
-  const hasMounted = useRef(false);
 
-  const initialVariant = isFirst && !hasMounted.current ? false : "initial";
-
-  if (isActive && !hasMounted.current) {
-    hasMounted.current = true;
-  }
-
+export default function SectionWrapper({ isActive, scrollDirection, children }) {
   return (
-    <AnimatePresence mode="sync">
+    <AnimatePresence mode="wait">
       {isActive && (
         <motion.div
           key="section"
-          custom={scrollDirection}
-          variants={{
-            initial: (dir) => ({
-              opacity: 1,
-              y: dir === "up" ? "-100%" : "100%",
-              z: -150,
-              scale: 0.9,
-              rotateX: dir === "up" ? -15 : 15,
-            }),
-            animate: {
-              opacity: 1,
-              y: 0,
-              z: 0,
-              scale: 1,
-              rotateX: 0,
-              transition: {
-                duration: 1.8,
-                ease: [0.22, 1, 0.36, 1],
-              },
-            },
-            exit: (dir) => ({
-              opacity: 1,
-              y: dir === "up" ? "100%" : "-100%",
-              z: -150,
-              scale: 0.9,
-              rotateX: dir === "up" ? 15 : -15,
-              transition: {
-                duration: 1.8,
-                ease: [0.22, 1, 0.36, 1],
-              },
-            }),
+          initial={{ opacity: 0, y: 60 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: scrollDirection === "down" ? -60 : 60 }}
+          transition={{
+            duration: 1.2,
+            ease: [0.16, 1, 0.3, 1], // slow ease out
           }}
-          initial={initialVariant}
-          animate="animate"
-          exit="exit"
           className="absolute inset-0"
-          style={{
-            perspective: 1200,
-            transformStyle: "preserve-3d",
-            transformOrigin: scrollDirection === "up" ? "top center" : "bottom center",
-          }}
         >
           {children}
         </motion.div>

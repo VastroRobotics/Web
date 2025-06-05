@@ -1,3 +1,4 @@
+// (imports remain unchanged)
 import {
   forwardRef,
   useRef,
@@ -29,6 +30,8 @@ const Home = forwardRef(
     const frontEntranceRef = useRef(null);
     const frontLoopRef = useRef(null);
     const wrapperRef = useRef(null);
+    const timeoutRef = useRef(null);       // ✅ ADDED
+    const clickedRef = useRef(false);      // ✅ ADDED
 
     const [nat, setNat] = useState({ w: 1920, h: 1080 });
     const [showBackLoop, setShowBackLoop] = useState(false);
@@ -58,59 +61,48 @@ const Home = forwardRef(
         description: "Feature 2 description.",
         direction: "right",
       },
-    ];    const preloadVideos = useCallback(async () => {
+    ];
+
+    useEffect(() => {
+      return () => clearTimeout(timeoutRef.current); // ✅ Cleanup on unmount
+    }, []);
+
+    const preloadVideos = useCallback(async () => {
       const criticalVideos = [
         { src: BackEntrance, type: 'video', priority: 3 },
         { src: FrontEntrance, type: 'video', priority: 3 }
       ];
-      
       const secondaryVideos = [
         { src: BackLoop, type: 'video', priority: 2 },
         { src: FrontLoop, type: 'video', priority: 2 }
       ];
-
-      // Set up progress tracking
       AssetLoader.setProgressCallback(setLoadingProgress);
-
-      // Load critical videos first
       await AssetLoader.preloadAssets(criticalVideos);
-      
-      // Then load secondary videos
       AssetLoader.preloadAssets(secondaryVideos);
     }, []);
 
     useEffect(() => {
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('/serviceWorker.js')
-          .then(registration => {
-            console.log('ServiceWorker registered with scope:', registration.scope);
-          })
-          .catch(error => {
-            console.error('ServiceWorker registration failed:', error);
-          });
+          .then(reg => console.log('ServiceWorker registered:', reg.scope))
+          .catch(err => console.error('ServiceWorker failed:', err));
       }
       preloadVideos();
-
-      // Cleanup
-      return () => {
-        AssetLoader.setProgressCallback(null);
-      };
+      return () => AssetLoader.setProgressCallback(null);
     }, [preloadVideos]);
 
     const setupVideo = useCallback((videoRef, src) => {
       if (!videoRef.current) return;
-
       if (AssetLoader.cache.has(src)) {
-        AssetLoader.cache.get(src)
-          .then(preloadedVideo => {
-            videoRef.current.src = preloadedVideo.src;
-            if (src.includes('entrance')) {
-              setEntranceLoaded(prev => ({
-                ...prev,
-                [src.includes('back') ? 'back' : 'front']: true
-              }));
-            }
-          });
+        AssetLoader.cache.get(src).then(preloaded => {
+          videoRef.current.src = preloaded.src;
+          if (src.includes('entrance')) {
+            setEntranceLoaded(prev => ({
+              ...prev,
+              [src.includes('back') ? 'back' : 'front']: true
+            }));
+          }
+        });
       }
     }, []);
 
@@ -119,8 +111,9 @@ const Home = forwardRef(
       setupVideo(backLoopRef, BackLoop);
       setupVideo(frontEntranceRef, FrontEntrance);
       setupVideo(frontLoopRef, FrontLoop);
-    }, [setupVideo]);    useEffect(() => {
-      // Preload loop videos
+    }, [setupVideo]);
+
+    useEffect(() => {
       if (backLoopRef.current) {
         backLoopRef.current.load();
         backLoopRef.current.pause();
@@ -131,23 +124,13 @@ const Home = forwardRef(
       }
 
       const onBackEnd = () => {
-        if (backLoopRef.current) {
-          backLoopRef.current.currentTime = 0;
-          const playPromise = backLoopRef.current.play();
-          if (playPromise) {
-            playPromise.then(() => setShowBackLoop(true)).catch(console.error);
-          }
-        }
+        backLoopRef.current.currentTime = 0;
+        backLoopRef.current.play().then(() => setShowBackLoop(true)).catch(console.error);
       };
 
       const onFrontEnd = () => {
-        if (frontLoopRef.current) {
-          frontLoopRef.current.currentTime = 0;
-          const playPromise = frontLoopRef.current.play();
-          if (playPromise) {
-            playPromise.then(() => setShowFrontLoop(true)).catch(console.error);
-          }
-        }
+        frontLoopRef.current.currentTime = 0;
+        frontLoopRef.current.play().then(() => setShowFrontLoop(true)).catch(console.error);
       };
 
       backEntranceRef.current?.addEventListener("ended", onBackEnd);
@@ -159,16 +142,13 @@ const Home = forwardRef(
         frontEntranceRef.current?.removeEventListener("ended", onFrontEnd);
         clearTimeout(timer);
       };
-    }, []);    useEffect(() => {
+    }, []);
+
+    useEffect(() => {
       if (entranceLoaded.back && entranceLoaded.front) {
         setVideoReady(true);
-        // Start playing entrance videos when ready
-        if (backEntranceRef.current) {
-          backEntranceRef.current.play().catch(console.error);
-        }
-        if (frontEntranceRef.current) {
-          frontEntranceRef.current.play().catch(console.error);
-        }
+        backEntranceRef.current?.play().catch(console.error);
+        frontEntranceRef.current?.play().catch(console.error);
       }
     }, [entranceLoaded]);
 
@@ -179,8 +159,7 @@ const Home = forwardRef(
           h: frontLoopRef.current.videoHeight,
         });
       frontLoopRef.current?.addEventListener("loadedmetadata", loaded);
-      return () =>
-        frontLoopRef.current?.removeEventListener("loadedmetadata", loaded);
+      return () => frontLoopRef.current?.removeEventListener("loadedmetadata", loaded);
     }, []);
 
     useLayoutEffect(() => {
@@ -209,79 +188,28 @@ const Home = forwardRef(
       <div className="relative w-full h-screen">
         <div className={`absolute inset-0 p-6 transition-opacity duration-500 ${videoReady ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
           <div className="relative w-full h-full overflow-hidden rounded-3xl bg-black shadow-[0_0_10px_2px_rgba(255,255,255,0.15)]">
-            <div
-              ref={ref}
-              className="absolute inset-0 w-full h-full overflow-hidden rounded-3xl"
-            >
+            <div ref={ref} className="absolute inset-0 w-full h-full overflow-hidden rounded-3xl">
               <Suspense fallback={null}>
                 <LazyBackgroundEmblem />
               </Suspense>
               <div className="absolute inset-0" style={{ perspective: 800 }}>
                 <div className="absolute inset-0">
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <div
-                      ref={wrapperRef}
-                      className="relative origin-center flex-none overflow-visible"
-                    >
+                    <div ref={wrapperRef} className="relative origin-center flex-none overflow-visible">
                       <div className="absolute inset-0 z-0">
-                        <video
-                          ref={backEntranceRef}
-                          src={BackEntrance}
-                          muted
-                          autoPlay
-                          playsInline
-                          preload="auto"
-                          onLoadedData={() =>
-                            setEntranceLoaded(prev => ({ ...prev, back: true }))
-                          }
-                          className={videoClass}
-                          style={{ opacity: showBackLoop ? 0 : 1 }}
-                        />
-                        <video
-                          ref={backLoopRef}
-                          src={BackLoop}
-                          muted
-                          playsInline
-                          preload="auto"
-                          className={videoClass}
-                          style={{ opacity: showBackLoop ? 1 : 0 }}
-                        />
-                      </div>                      <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">                        <div className="flex items-center justify-center">
+                        <video ref={backEntranceRef} className={videoClass} src={BackEntrance} muted autoPlay playsInline preload="auto" style={{ opacity: showBackLoop ? 0 : 1 }} />
+                        <video ref={backLoopRef} className={videoClass} src={BackLoop} muted playsInline preload="auto" style={{ opacity: showBackLoop ? 1 : 0 }} />
+                      </div>
+                      <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
+                        <div className="flex items-center justify-center">
                           <Suspense fallback={null}>
-                            <LogoSplash 
-                              // Responsive splash text size
-                              className="text-4xl sm:text-5xl md:text-7xl xl:text-8xl font-bold text-white text-center drop-shadow-lg"
-                              style={{
-                                fontSize: isMobile ? 'clamp(2rem, 7vw, 3.5rem)' : 'clamp(3rem, 8vw, 6rem)'
-                              }}
-                            />
+                            <LogoSplash className="text-4xl sm:text-5xl md:text-7xl xl:text-8xl font-bold text-white text-center drop-shadow-lg" style={{ fontSize: isMobile ? 'clamp(2rem, 7vw, 3.5rem)' : 'clamp(3rem, 8vw, 6rem)' }} />
                           </Suspense>
                         </div>
                       </div>
-
                       <div className="absolute inset-0 z-30">
-                        <video
-                          ref={frontEntranceRef}
-                          src={FrontEntrance}
-                          muted
-                          autoPlay
-                          playsInline
-                          preload="auto"
-                          onLoadedData={() =>
-                            setEntranceLoaded(prev => ({ ...prev, front: true }))
-                          }
-                          className={videoClass}
-                          style={{ opacity: showFrontLoop ? 0 : 1 }}
-                        />
-                        <video
-                          ref={frontLoopRef}
-                          src={FrontLoop}
-                          muted
-                          playsInline
-                          preload="auto"
-                          className={videoClass}
-                          style={{ opacity: showFrontLoop ? 1 : 0 }}
-                        />
+                        <video ref={frontEntranceRef} className={videoClass} src={FrontEntrance} muted autoPlay playsInline preload="auto" style={{ opacity: showFrontLoop ? 0 : 1 }} />
+                        <video ref={frontLoopRef} className={videoClass} src={FrontLoop} muted playsInline preload="auto" style={{ opacity: showFrontLoop ? 1 : 0 }} />
 
                         {showFrontLoop && logoDone && (
                           <div className="absolute inset-0 pointer-events-none">
@@ -290,8 +218,22 @@ const Home = forwardRef(
                                 key={p.id}
                                 {...p}
                                 isActive={activePointId === p.id}
-                                onHover={setActivePointId}
-                                onLeave={() => setActivePointId(null)}
+                                onHover={(id) => {
+                                  if (!clickedRef.current) setActivePointId(id);
+                                  clearTimeout(timeoutRef.current);
+                                }}
+                                onLeave={() => {
+                                  if (!clickedRef.current) setActivePointId(null);
+                                }}
+                                onClick={(id) => {
+                                  setActivePointId(id);
+                                  clickedRef.current = true;
+                                  clearTimeout(timeoutRef.current);
+                                  timeoutRef.current = setTimeout(() => {
+                                    clickedRef.current = false;
+                                    setActivePointId(null);
+                                  }, 3000);
+                                }}
                               />
                             ))}
                           </div>
@@ -310,7 +252,6 @@ const Home = forwardRef(
                 </div>
               </div>
 
-              {/* Responsive scroll down button */}
               <div className="absolute bottom-18 left-1/2 -translate-x-1/2 z-50">
                 {logoDone && (
                   <ScrollPrompt
