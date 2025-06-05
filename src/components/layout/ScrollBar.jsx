@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 
-export default function ScrollBar({ activeIndex, setActiveIndex, sectionRefs = { current: [] } }) {
+export default function ScrollBar({ activeIndex, goToSection, sectionRefs = { current: [] } }) {
   const [visible, setVisible] = useState(false);
   const [activated, setActivated] = useState(false);
   const timeoutRef = useRef(null);
@@ -73,7 +73,7 @@ export default function ScrollBar({ activeIndex, setActiveIndex, sectionRefs = {
             return (
               <button
                 key={i}
-                onClick={() => setActiveIndex(i)} // 🔁 no scrollIntoView
+                onClick={() => goToSection(activeIndex, i)} // 🔁 no scrollIntoView
                 className={`absolute left-1/2 -translate-x-1/2 rounded-full border-2 transition-all duration-300 ease-out z-10
                   ${
                     isSelected

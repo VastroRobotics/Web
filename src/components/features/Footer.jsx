@@ -5,7 +5,7 @@ import LogoIcon from "../../assets/branding/icon_only_white.svg";
 import LogoText from "../../assets/branding/text_only_white.svg";
 import ScrollPrompt from "../layout/ScrollPrompt";
 
-export default function MiniFooter({ onScrollTop }) {
+export default function MiniFooter({ goToSection, activeIndex }) {
   return (
         <div className="relative w-full h-screen">
       <div className="absolute inset-0 p-6">
@@ -54,7 +54,7 @@ export default function MiniFooter({ onScrollTop }) {
 
         {/* Scroll to top */}
         <div className="flex justify-center items-center my-25">
-          <ScrollPrompt direction="up" onClick={onScrollTop} className="w-14 h-14" />
+          <ScrollPrompt direction="up" onClick={() => goToSection(activeIndex, 0)} className="w-14 h-14" />
         </div>
 
         {/* Footer Credits */}

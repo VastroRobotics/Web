@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState, lazy, Suspense } from "react";
-import ScrollBar from "./components/layout/ScrollBar";
 import Home from "./components/features/Home";
 import SectionWrapper from "./components/layout/SectionWrapper";
 import Loading from "./components/common/Loading";
@@ -23,29 +22,25 @@ export default function App() {
   const [canLeave, setCanLeave] = useState(true);
   const isThrottled = useRef(false);
 
+  const goToSection = (current, next) => {
+    if (next < 0 || next >= sections.length || current === next) return;
+    setScrollDirection(next > current ? "up" : "down");
+    setActiveIndex(next);
+  };
+
   const handleScroll = (e) => {
     if (isThrottled.current || !canLeave) return;
 
     const delta = e.deltaY;
-    const dir = delta > 0 ? "up" : "down"; // movement direction
-    setScrollDirection(dir);
+    const next = activeIndex + (delta > 0 ? 1 : -1);
+    if (next === activeIndex) return;
 
-    let next = activeIndex + (delta > 0 ? 1 : -1);
-    const total = sections.length;
-  
-    if (next < 0 || next >= total) return;
-  
-    setActiveIndex(next);
+    goToSection(activeIndex, next);
     isThrottled.current = true;
-  
+
     setTimeout(() => {
       isThrottled.current = false;
     }, 800); // debounce duration
-  };
-
-  const jumpToSection = (index) => {
-    setScrollDirection(index > activeIndex ? "up" : "down");
-    setActiveIndex(index);
   };
 
   useEffect(() => {
@@ -76,20 +71,8 @@ export default function App() {
                   isActive={i === activeIndex}
                   scrollDirection={scrollDirection}
                   onCanLeaveChange={setCanLeave}
-                  goToNext={() => {
-                    setScrollDirection("up");
-                    setActiveIndex((prev) =>
-                      Math.min(prev + 1, sections.length - 1)
-                    );
-                  }}
-                  {...(Section === Footer
-                    ? {
-                        onScrollTop: () => {
-                          setScrollDirection("down");
-                          setActiveIndex(0);
-                        },
-                      }
-                    : {})}
+                  activeIndex={activeIndex}
+                  goToSection={goToSection}
                 />
               </Suspense>
             </SectionWrapper>

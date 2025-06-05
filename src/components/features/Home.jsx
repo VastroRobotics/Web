@@ -23,7 +23,7 @@ const LazyBackgroundEmblem = lazy(() => import('../BackgroundEmblem'));
 const LazyGlow = lazy(() => import('../ui/Glow'));
 
 const Home = forwardRef(
-  ({ isActive, scrollDirection, onCanLeaveChange, goToNext }, ref) => {
+  ({ isActive, scrollDirection, onCanLeaveChange, goToSection, activeIndex }, ref) => {
     const backEntranceRef = useRef(null);
     const backLoopRef = useRef(null);
     const frontEntranceRef = useRef(null);
@@ -314,7 +314,7 @@ const Home = forwardRef(
               <div className="absolute bottom-18 left-1/2 -translate-x-1/2 z-50">
                 {logoDone && (
                   <ScrollPrompt
-                    onClick={goToNext}
+                    onClick={() => goToSection(activeIndex, activeIndex + 1)}
                     className={isMobile ? 'w-10 h-10' : 'w-16 h-16'}
                     animateIn={true}
                   />
