@@ -1,4 +1,10 @@
-"use client";
+import nasaImage from "../../assets/media/timeline/NASA.png";
+import leadershipImage from "../../assets/media/timeline/Leadership.png";
+import armImage from "../../assets/media/timeline/Arm.jpeg";
+import classroomImage from "../../assets/media/timeline/Classroom.png";
+import workshopImage from "../../assets/media/timeline/Workshop.jpeg";
+import planImage from "../../assets/media/timeline/Plan.png";
+import robotImage from "../../assets/media/timeline/Robot.png";
 
 import { useEffect, useRef, useState } from "react";
 import { motion as Motion, useAnimation } from "framer-motion";
@@ -11,6 +17,7 @@ const timelineEvents = [
     date: "08/2024",
     description: "What started as an idea between friends in a dusty old engineering classroom quickly became the foundation for Virtual Astronaut. The research project, guided by Professor Rick Fleeter and backed by the Nelson Center, the Hazeltine Grant, and Research@Brown, quickly began taking shape.",
     color: "#FFFFFF",
+    image: classroomImage,
     distance: 240,
   },
   {
@@ -19,7 +26,7 @@ const timelineEvents = [
     date: "10/2024",
     description: "With support in place and momentum building, the team built their first prototype: a rail-mounted robotic arm capable of basic grab-and-drop tasks. It was the first tangible step in transforming their research into a functional system—laying the groundwork for immersive VR control and full mobility.",
     color: "#FFFFFF",
-    image: "/assets/images/timeline/prototype.png",
+    image: armImage,
     distance: 360,
   },
   {
@@ -27,8 +34,9 @@ const timelineEvents = [
     title: "NASA Partnership",
     date: "02/2025",
     description: "Backed by early success, the team formed a partnership with NASA through the Rhode Island Space Grant Consortium. Their generous financial support and strategic guidance marked a turning point—elevating the project from a student-led initiative to a platform with real potential for deployment in space and remote Earth environments.",
+    image: nasaImage,
     color: "#FFFFFF",
-    distance: 200,
+    distance: 320,
   },
   {
     id: "4",
@@ -36,14 +44,15 @@ const timelineEvents = [
     date: "03/2025",
     description: "The team began work on their most ambitious model yet: a fully mobile quadruped robot. Working around the clock in the workshop, they pushed to take the project’s capabilities to the next level with advanced mobility, LiDAR sensing, and VR-based precision control.",
     color: "#FFFFFF",
-    image: "/placeholder.svg?height=150&width=240",
-    distance: 380,
+    image: workshopImage,
+    distance: 300,
   },
   {
     id: "5",
     title: "Pitching & Presentation",
     date: "04/2025",
     description: "The team had the opportunity to present Vastro to the Brown University President’s Leadership Council and later at the NASA Rhode Island Space Grant Consortium. These moments marked a turning point as we began sharpening our business aspirations—developing and testing our go-to-market strategy, refining our value offering, and laying the groundwork for future growth.",
+    image: leadershipImage,
     color: "#FFFFFF",
     distance: 260,
   },
@@ -52,6 +61,7 @@ const timelineEvents = [
     title: "Demo Ready",
     date: "12/2025",
     description: "The team has their sights set on completing a fully operational quadruped model by the end of next semester. The focus: delivering a working demo and proof of concept showcasing immersive VR control, real-time LiDAR mapping, and reliable remote operation.",
+    image: planImage,
     color: "#FFFFFF",
     distance: 260,
   },
@@ -61,6 +71,7 @@ const timelineEvents = [
     date: "2026",
     description: "The team hopes to leverage this success to begin exploring scalable production methods—emphasising cost efficiency and our innovative 3D-printing-first approach as the backbone of a lean, adaptable manufacturing strategy.",
     color: "#FFFFFF",
+    image: robotImage,
     distance: 260,
   },
 ];
