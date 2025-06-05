@@ -214,19 +214,21 @@ export default function TeamCarousel() {
                                                                         zIndex: isActive ? 10 : 1,
                                                                         height: `${isActive ? containerHeight : itemHeightInactive}px`,
                                                                 }}
-								initial={{ opacity: 1, x: 50 }}
-								animate={{
-									opacity: 1,
-									x: 0,
+                                                                initial={{ opacity: 0, y: 40, scale: 0.9 }}
+                                                                animate={{
+                                                                        opacity: 1,
+                                                                        y: 0,
+                                                                        scale: 1,
                                                                         width: `${isActive ? 465 * scaleFactor : 60 * scaleFactor}px`,
                                                                         flex: "0 0 auto",
                                                                         marginLeft: isActive ? `${8 * scaleFactor}px` : "0px",
                                                                         marginRight: isActive ? `${8 * scaleFactor}px` : "0px",
-								}}
-								exit={{ x: -50, opacity: 0 }}
+                                                                }}
+                                                                exit={{ opacity: 0, y: -40 }}
                                                                transition={{
                                                                        duration: 0.6,
                                                                        ease: [0.23, 1, 0.32, 1],
+                                                                       delay: index * 0.08,
                                                                        layout: { duration: 0.6, ease: [0.23, 1, 0.32, 1] },
                                                                }}
 								onMouseEnter={() =>
