@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useRef, useEffect, useCallback } from "react";
+import { motion as Motion, AnimatePresence } from "framer-motion";
 import { ChevronRight, Linkedin, Mail } from "lucide-react";
 
 // Import images
@@ -96,7 +96,36 @@ export default function TeamCarousel() {
         const [isRotating, setIsRotating] = useState(false);
         const [lastInteraction, setLastInteraction] = useState(Date.now());
         const [infoVisible, setInfoVisible] = useState(false);
+        const [visibleCount, setVisibleCount] = useState(5);
+        const [itemGap, setItemGap] = useState(12);
         const carouselRef = useRef(null);
+
+       const computeVisible = (width) => {
+               const openWidth = 166; // active card width incl. margins
+               const closedWidth = 60;
+               const minGap = 12;
+               let count = 1;
+               let remaining = width - openWidth;
+               while (remaining >= closedWidth + minGap && count < teamMembers.length) {
+                       count++;
+                       remaining -= closedWidth + minGap;
+               }
+               let gap = count > 1 ? Math.max(minGap, minGap + remaining / (count - 1)) : 0;
+               return { count, gap };
+       };
+
+       useEffect(() => {
+               const update = () => {
+                       if (!carouselRef.current) return;
+                       const { count, gap } = computeVisible(carouselRef.current.clientWidth);
+                       setVisibleCount(count);
+                       setItemGap(gap);
+                       setActiveIndex(count > 1 ? 1 : 0);
+               };
+               update();
+               window.addEventListener('resize', update);
+               return () => window.removeEventListener('resize', update);
+       }, []);
 
        useEffect(() => {
                const interval = setInterval(() => {
@@ -105,7 +134,7 @@ export default function TeamCarousel() {
                        }
                }, 8000);
                return () => clearInterval(interval);
-       }, [lastInteraction, isRotating]);
+       }, [lastInteraction, isRotating, rotateCarousel]);
 
        useEffect(() => {
                setInfoVisible(false);
@@ -113,27 +142,27 @@ export default function TeamCarousel() {
                return () => clearTimeout(timeout);
        }, [activeIndex]);
 
-       const rotateCarousel = () => {
+       const rotateCarousel = useCallback(() => {
                if (isRotating) return;
                setIsRotating(true);
-               setRotationOffset((prev) => (prev + 4) % teamMembers.length);
+               setRotationOffset((prev) => (prev + (visibleCount - 1)) % teamMembers.length);
                setActiveIndex(0); // Now default to first item on rotation
                setTimeout(() => {
                        setIsRotating(false);
                }, 500);
-       };
+       }, [isRotating, visibleCount]);
 
-	const getVisibleMembers = () => {
-		const result = [];
-		for (let i = 0; i < 5; i++) {
-			const index = (rotationOffset + i) % teamMembers.length;
-			result.push({
-				...teamMembers[index],
-				visibleIndex: i,
-			});
-		}
-		return result;
-	};
+       const getVisibleMembers = () => {
+                const result = [];
+                for (let i = 0; i < visibleCount; i++) {
+                        const index = (rotationOffset + i) % teamMembers.length;
+                        result.push({
+                                ...teamMembers[index],
+                                visibleIndex: i,
+                        });
+                }
+                return result;
+        };
 
 	const visibleMembers = getVisibleMembers();
 
@@ -143,17 +172,18 @@ export default function TeamCarousel() {
 			onMouseMove={() => setLastInteraction(Date.now())}
 		>
 			<AnimatePresence mode="popLayout">
-				<div
-					ref={carouselRef}
-					className="flex justify-end gap-3 h-[550px] w-full absolute"
-				>
-					{visibleMembers.map((member, index) => {
-						const isRightmost = index === 4;
-						const isActive = index === activeIndex;
+                                <div
+                                        ref={carouselRef}
+                                        className="flex justify-end h-[550px] w-full absolute"
+                                        style={{ gap: `${itemGap}px` }}
+                                >
+                                        {visibleMembers.map((member, index) => {
+                                                const isRightmost = visibleCount < teamMembers.length && index === visibleCount - 1;
+                                                const isActive = index === activeIndex;
 
-						return (
-							<motion.div
-								key={`${member.id}-${member.visibleIndex}`}
+                                                return (
+                                                        <Motion.div
+                                                                key={`${member.id}-${member.visibleIndex}`}
 								className={`relative cursor-pointer ${
 									isActive ? "h-[600px]" : "h-[550px]"
 								}`}
@@ -183,7 +213,7 @@ export default function TeamCarousel() {
 									className={`w-full rounded-b-xl overflow-hidden h-full`}
 								>
 									<div className="relative w-full h-full">
-                                                                                <motion.img
+<Motion.img
                                                                                src={member.image || "/placeholder.svg"}
                                                                                alt={member.name}
                                                                                className={`w-full h-full object-cover ${
@@ -204,7 +234,7 @@ export default function TeamCarousel() {
                                                         setLastInteraction(Date.now());
                                                         }}
                                                 >
-                                                        <motion.div
+                                                        <Motion.div
                                                         initial={{ x: 0 }}
                                                         animate={{ x: [0, 8, 0, 8, 0] }}
                                                         transition={{
@@ -217,7 +247,7 @@ export default function TeamCarousel() {
                                                         }}
                                                         >
                                                         <ChevronRight className="w-10 h-10 text-white" />
-                                                        </motion.div>
+                                                        </Motion.div>
                                                 </div>
                                         )}
 
@@ -234,7 +264,7 @@ export default function TeamCarousel() {
 										)}
 
                                        {/* Info Box */}
-                                        <motion.div
+                                        <Motion.div
                                                 className="absolute bottom-0 left-0 w-full aspect-[2/1] pointer-events-none overflow-hidden"
                                                 initial="hidden"
                                                 animate={isActive && infoVisible ? "visible" : "hidden"}
@@ -270,10 +300,10 @@ export default function TeamCarousel() {
                                                                 {member.bio}
                                                         </p>
                                                 </div>
-                                        </motion.div>
+</Motion.div>
 									</div>
 								</div>
-							</motion.div>
+                                        </Motion.div>
 						);
 					})}
 				</div>
