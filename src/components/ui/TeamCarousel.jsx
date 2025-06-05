@@ -98,20 +98,24 @@ export default function TeamCarousel() {
         const [itemGap, setItemGap] = useState(12);
         const carouselRef = useRef(null);
         const [scaleFactor, setScaleFactor] = useState(1);
-        
+        const [containerHeight, setContainerHeight] = useState(600);
+       
         const computeVisible = () => {
 
                 const screenWidth = window.innerWidth - 48;
-                const scale = screenWidth < 777 ? screenWidth/777 : 1;
+                const scale = screenWidth < 777 ? screenWidth/710 : 1;
                 setScaleFactor(scale);
                 console.log(scale)
+
+
 
                 const open = 465 * scale;
                 const closed = 60 * scale;
                 const minGap = 12 * scale;
                 const maxGap = 18 * scale;
 
-                setComponentHeight(window.innerHeight * 0.6);
+                const height = screenWidth < 777 ? window.innerHeight * 0.6 : 600;
+                setContainerHeight(height);
 
                 let width = screenWidth;
                 let count = 1;
@@ -184,8 +188,6 @@ export default function TeamCarousel() {
         };
 
         const visibleMembers = getVisibleMembers();
-
-        const containerHeight = componentHeight * scaleFactor;
         const itemHeightInactive = containerHeight - 50 * scaleFactor;
 
         return (
@@ -292,7 +294,7 @@ export default function TeamCarousel() {
 
                                        {/* Info Box */}
                                         <Motion.div
-                                                className="absolute bottom-0 left-0 w-full aspect-[2/1] pointer-events-none overflow-hidden"
+                                                className={`absolute bottom-0 left-0 w-full aspect[2/1] pointer-events-none overflow-hidden`}
                                                 initial="hidden"
                                                 animate={isActive && infoVisible ? "visible" : "hidden"}
                                                 variants={{ hidden: { opacity: 0, y: 50 }, visible: { opacity: 1, y: 0 } }}
@@ -334,7 +336,9 @@ export default function TeamCarousel() {
                                                                         </a>
                                                                 </div>
                                                         </div>
-                                                        <p className="text-gray-400 whitespace-pre-line" style={{ fontSize: `${14 * scaleFactor}px` }}>
+                                                        <p
+                                                        className={`text-gray-400 whitespace-pre-line text-[clamp(12px,1.9vw,14px)]`}
+                                                        >
                                                                 {member.bio}
                                                         </p>
                                                 </div>
