@@ -335,7 +335,7 @@ export default function Timeline({
 </h3>
   </div>
   <Motion.p
-    className={`text-xs sm:text-sm text-gray-400 m${isDown ? "t-4" : "b-4"}`}
+    className={`text-xs sm:text-sm text-gray-400 m${isDown ? "t-5" : "b-5"}`}
     initial={{ opacity: 0, y: -30 }}
     animate={isFuture ? { opacity: 0, y: isDown ? 30 : -30 } : { opacity: 1, y: 0 }}
     transition={{
@@ -362,7 +362,7 @@ export default function Timeline({
         alt={ev.title}
         width={240}
         style={{height: "auto" }}
-        className="rounded-md max-w-[clamp(150px,30vw,175px)] sm:max-w-[clamp(185px,15vw,250px)] max-h-[20vh] object-cover"
+        className="my-3 rounded-md max-w-[clamp(150px,30vw,175px)] sm:max-w-[clamp(185px,15vw,250px)] max-h-[20vh] object-cover"
 
       />
     </Motion.div>
