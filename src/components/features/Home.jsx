@@ -256,7 +256,7 @@ const Home = forwardRef(
                         <div className="absolute inset-0">
                           <div className="absolute inset-0 left-0">
                             <LazyGlow
-                              color="rgba(255,255,255, 0.25)"
+                              color="rgba(255,255,255, 0.2)"
                               width={30}
                               height={70}
                               blur={50}
@@ -265,7 +265,7 @@ const Home = forwardRef(
                               className="absolute bottom-0 left-0 translate-x-[-80%] translate-y-[20%]"
                             />
                             <LazyGlow
-                              color="rgba(255,255,255, 0.25)"
+                              color="rgba(255,255,255, 0.2)"
                               width={60}
                               height={30}
                               blur={80}
@@ -277,7 +277,7 @@ const Home = forwardRef(
 
                           <div className="absolute inset-0 right-0">
                             <LazyGlow
-                              color="rgba(255,255,255, 0.25)"
+                              color="rgba(255,255,255, 0.2)"
                               width={30}
                               height={70}
                               blur={50}
@@ -286,7 +286,7 @@ const Home = forwardRef(
                               className="absolute bottom-0 right-0 translate-x-[80%] translate-y-[20%]"
                             />
                             <LazyGlow
-                              color="rgba(255,255,255, 0.25)"
+                              color="rgba(255,255,255, 0.2)"
                               width={60}
                               height={30}
                               blur={80}
