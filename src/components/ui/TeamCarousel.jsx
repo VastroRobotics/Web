@@ -105,9 +105,6 @@ export default function TeamCarousel() {
                 const screenWidth = window.innerWidth - 48;
                 const scale = screenWidth < 777 ? screenWidth/710 : 1;
                 setScaleFactor(scale);
-                console.log(scale)
-
-
 
                 const open = 465 * scale;
                 const closed = Math.max(30, 60 * scale);

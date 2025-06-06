@@ -10,12 +10,11 @@ import ErrorBoundary from "./components/common/ErrorBoundary";
 
 // Lazy load all sections except Home
 const Mission = lazy(() => import("./components/features/Mission"));
-const About = lazy(() => import("./components/features/About"));
 const Team = lazy(() => import("./components/features/Team"));
 const Timeline = lazy(() => import("./components/features/Timeline"));
 const Footer = lazy(() => import("./components/features/Footer"));
 
-const sections = [Home, Mission, About, Team, Timeline, Footer];
+const sections = [Home, Mission, Team, Timeline, Footer];
 
 export default function App() {
   const [activeIndex, setActiveIndex] = useState(0);

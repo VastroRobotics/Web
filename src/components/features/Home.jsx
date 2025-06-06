@@ -84,7 +84,6 @@ const Home = forwardRef(
     useEffect(() => {
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('/serviceWorker.js')
-          .then(reg => console.log('ServiceWorker registered:', reg.scope))
           .catch(err => console.error('ServiceWorker failed:', err));
       }
       preloadVideos();
@@ -174,8 +173,6 @@ const Home = forwardRef(
         wrapperRef.current.style.width = `${nat.w}px`;
         wrapperRef.current.style.height = `${nat.h}px`;
         wrapperRef.current.style.transform = `scale(${scale})`;
-        console.log("isMobile:", isMobile);
-
       };
 
       update();
