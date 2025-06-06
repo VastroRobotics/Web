@@ -133,7 +133,7 @@ export default function TeamCarousel() {
                 setIsRotating(true);
                 // Advance by the number of visible cards so each "page" of members is unique
                 setRotationOffset(
-                        (prev) => (prev + visibleCount) % teamMembers.length
+                        (prev) => (prev + visibleCount -1)
                 );
                 setActiveIndex(0); // Default to first item on rotation
                 setTimeout(() => {
