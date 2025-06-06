@@ -2,31 +2,73 @@
 
 import { forwardRef, useEffect, useRef, useState } from "react";
 import StageBanner from "../layout/StageBanner.jsx";
+import Chart from "../ui/Chart.jsx";
+import ComparisonTable from "../ui/ComparisonTable.jsx";
 
-const components = [StageBanner, StageBanner, StageBanner];
+const components = [StageBanner, StageBanner];
 
 const baseParams = [
   { direction: 0, thickness: 50 },
   { direction: 1, thickness: 50 },
-  { direction: 0, thickness: 50 },
+];
+
+const bannerOne = (
+  <>
+    VR-controlled quadruped robots
+    <br />$75k capability for $2.5k
+  </>
+);
+
+const bannerTwo = (
+  <>
+    Making remote access
+    <br />more accessible
+  </>
+);
+
+const specs = [
+  { label: "WEIGHT", left: "32 kg", right: "4 kg" },
+  { label: "PAYLOAD", left: "14 kg", right: "1 kg" },
+  { label: "CONTROL", left: "Tablet", right: "VR" },
+  { label: "HAPTICS", left: "No", right: "Yes" },
+  { label: "LIDAR", left: "Yes", right: "Yes" },
+  { label: "CAMERA", left: "Standard", right: "360°" },
+  { label: "CHASSIS", left: "Cast", right: "3-D Printed" },
 ];
 
 const stages = [
-  [
-    { show: true, text: "Banner 1", start: 20, end: 80 },
-    { show: false },
-    { show: false },
-  ],
-  [
-    { show: false },
-    { show: true, text: "Custom Stage", start: 40, end: 90 },
-    { show: false },
-  ],
-  [
-    { show: false },
-    { show: false },
-    { show: true, text: "Final Stage", start: 30, end: 100 },
-  ],
+  {
+    banners: [
+      { show: true, text: bannerOne, start: 0, end: 90 },
+      { show: false },
+    ],
+    showCharts: false,
+    showTable: false,
+  },
+  {
+    banners: [
+      { show: true, text: bannerOne, start: 90, end: 70 },
+      { show: false },
+    ],
+    showCharts: true,
+    showTable: false,
+  },
+  {
+    banners: [
+      { show: true, text: bannerOne, start: 70, end: 0 },
+      { show: true, text: bannerTwo, start: 0, end: 90 },
+    ],
+    showCharts: false,
+    showTable: false,
+  },
+  {
+    banners: [
+      { show: false },
+      { show: true, text: bannerTwo, start: 90, end: 60 },
+    ],
+    showCharts: false,
+    showTable: true,
+  },
 ];
 
 const throttleDuration = 700;
@@ -79,10 +121,27 @@ const Mission = forwardRef(function Mission(
 
   return (
     <div ref={ref} className="relative w-full h-full overflow-hidden">
-      {stage.map((params, i) => {
+      {stage.banners.map((params, i) => {
         const Component = components[i];
-        return <Component key={i} {...baseParams[i]} {...params} />;
+        return (
+          <Component key={`${i}-${index}`} {...baseParams[i]} {...params} />
+        );
       })}
+
+      {stage.showCharts && (
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="flex flex-col lg:flex-col md:flex-row gap-10 justify-center items-center w-full">
+            <Chart title="VASTRO" targetAmount={2500} targetPercent={2.5} barColor="#ffffff" />
+            <Chart title="Competitors" targetAmount={75000} targetPercent={70} barColor="#ffffff" />
+          </div>
+        </div>
+      )}
+
+      {stage.showTable && (
+        <div className="absolute inset-0 flex items-center justify-center">
+          <ComparisonTable data={specs} labelLeft="Spot" labelRight="Vastro" />
+        </div>
+      )}
     </div>
   );
 });
