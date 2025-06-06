@@ -54,14 +54,14 @@ export default function StageBanner({
         [crossKey]: `${thickness}%`,
         top: direction === 0 ? 0 : "auto",
         bottom: direction === 1 ? 0 : "auto",
-        left: "50%",
+        left: "25%",
         transform: "translateX(-50%)",
       }
     : {
         [crossKey]: `${thickness}%`,
         left: direction === 0 ? 0 : "auto",
         right: direction === 1 ? 0 : "auto",
-        top: "50%",
+        top: "25%",
         transform: "translateY(-50%)",
       };
 
@@ -75,10 +75,15 @@ export default function StageBanner({
 
   return (
     <motion.div
-      className={`absolute flex items-center justify-center bg-black text-white font-bold overflow-hidden ${
+      className={`absolute flex items-center w-full h-full justify-center bg-black text-white font-bold overflow-hidden ${
         isVertical ? "mx-6 px-6" : "my-6 py-6"
       } ${radiusClass}`}
-      style={{ ...style, boxShadow: "0 0 20px rgba(255,255,255,0.15)" }}
+      style={{ ...style, 
+        boxShadow: "0 0 20px rgba(255,255,255,0.15)",
+        paddingTop: isVertical ? "10px" : "0px",
+        paddingBottom: isVertical ? "10px" : "0px",
+        paddingLeft: isVertical ? "0px" : "10px",
+        paddingRight: isVertical ? "0px" : "10px",}}
       variants={variants}
       initial="hidden"
       animate={show ? "visible" : "hidden"}
