@@ -89,7 +89,7 @@ const teamMembers = [
 
 
 export default function TeamCarousel() {
-        const [activeIndex, setActiveIndex] = useState(1); 
+        const [activeIndex, setActiveIndex] = useState(1);
         const [rotationOffset, setRotationOffset] = useState(0);
         const [isRotating, setIsRotating] = useState(false);
         const [lastInteraction, setLastInteraction] = useState(Date.now());
@@ -99,6 +99,9 @@ export default function TeamCarousel() {
         const carouselRef = useRef(null);
         const [scaleFactor, setScaleFactor] = useState(1);
         const [containerHeight, setContainerHeight] = useState(600);
+        const [pendingActive, setPendingActive] = useState(null);
+        const [rippleId, setRippleId] = useState(0);
+        const [rippleDelayBase, setRippleDelayBase] = useState(0);
        
         const computeVisible = () => {
 
@@ -125,21 +128,37 @@ export default function TeamCarousel() {
 
                 let gap = Math.min(Math.max(minGap, minGap + remaining / Math.max(1, count - 1)), maxGap);
 
-        return { count, gap };
-        };
-        const rotateCarousel = useCallback(() => {
-                // Don't rotate if carousel already animating or all members are visible
-                if (isRotating || visibleCount >= teamMembers.length) return;
-                setIsRotating(true);
-                // Advance by the number of visible cards so each "page" of members is unique
-                setRotationOffset(
-                        (prev) => (prev + visibleCount) % teamMembers.length
-                );
-                setActiveIndex(0); // Default to first item on rotation
-                setTimeout(() => {
-                        setIsRotating(false);
-                }, 500);
+       return { count, gap };
+       };
+
+       const triggerRipple = useCallback((initial = false) => {
+               setRippleDelayBase(initial ? 0.3 : 0);
+               setRippleId((id) => id + 1);
+       }, []);
+
+       const rotateCarousel = useCallback(() => {
+               // Don't rotate if carousel already animating or all members are visible
+               if (isRotating || visibleCount >= teamMembers.length) return;
+               setIsRotating(true);
+               // Advance by the number of visible cards so each "page" of members is unique
+               setRotationOffset(
+                       (prev) => (prev + visibleCount) % teamMembers.length
+               );
+               setActiveIndex(0); // Default to first item on rotation
+               setTimeout(() => {
+                       setIsRotating(false);
+                       triggerRipple(false);
+               }, 500);
        }, [isRotating, visibleCount]);
+
+       useEffect(() => {
+               setIsRotating(true);
+               const t = setTimeout(() => {
+                       setIsRotating(false);
+                       triggerRipple(true);
+               }, 500);
+               return () => clearTimeout(t);
+       }, []);
 
 
        useEffect(() => {
@@ -147,7 +166,8 @@ export default function TeamCarousel() {
                        const { count, gap } = computeVisible();
                        setVisibleCount(count);
                        setItemGap(gap);
-                       setActiveIndex(count > 1 ? Math.floor((count + 1) / 2) : 0);
+                       const defaultIndex = count > 1 ? Math.floor((count - 1) / 2) : 0;
+                       setActiveIndex(defaultIndex);
                };
                update();
                window.addEventListener('resize', update);
@@ -172,6 +192,15 @@ export default function TeamCarousel() {
                const timeout = setTimeout(() => setInfoVisible(true), 240);
                return () => clearTimeout(timeout);
        }, [activeIndex]);
+
+       useEffect(() => {
+               if (pendingActive === null) return;
+               const t = setTimeout(() => {
+                       setActiveIndex(pendingActive);
+                       setPendingActive(null);
+               }, 120);
+               return () => clearTimeout(t);
+       }, [pendingActive]);
        const getVisibleMembers = () => {
                 const result = [];
                 for (let i = 0; i < visibleCount; i++) {
@@ -205,16 +234,18 @@ export default function TeamCarousel() {
 
                                                 return (
                                                         <Motion.div
-                                                                key={`${member.id}-${member.visibleIndex}`}
+                                                                key={`${member.id}-${member.visibleIndex}-${rippleId}`}
                                                                 className="relative cursor-pointer"
                                                                 style={{
                                                                         zIndex: isActive ? 10 : 1,
                                                                         height: `${isActive ? containerHeight : itemHeightInactive}px`,
                                                                 }}
-								initial={{ opacity: 1, x: 50 }}
-								animate={{
-									opacity: 1,
-									x: 0,
+                                                                initial={{ opacity: 0, y: 40, scale: 0.85 }}
+                                                               animate={{
+                                                                       opacity: 1,
+                                                                        x: 0,
+                                                                        y: 0,
+                                                                        scale: 1,
                                                                         width: `${isActive ? 465 * scaleFactor : 60 * scaleFactor}px`,
                                                                         flex: "0 0 auto",
                                                                         marginLeft: isActive ? `${8 * scaleFactor}px` : "0px",
@@ -224,11 +255,12 @@ export default function TeamCarousel() {
                                                                transition={{
                                                                        duration: 0.6,
                                                                        ease: [0.23, 1, 0.32, 1],
+                                                                       delay: rippleDelayBase + index * 0.07,
                                                                        layout: { duration: 0.6, ease: [0.23, 1, 0.32, 1] },
                                                                }}
-								onMouseEnter={() =>
-									!isRightmost && !isRotating && setActiveIndex(index)
-								}
+                                                                onMouseEnter={() =>
+                                                                        !isRightmost && !isRotating && setPendingActive(index)
+                                                                }
 								layout
 							>
                                                                 <div
