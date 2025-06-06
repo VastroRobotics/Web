@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { breakpoints } from "../constants/breakpoints";
 
-// Get sorted breakpoints for easier comparison
+// Sort breakpoints once
 const breakpointEntries = Object.entries(breakpoints).sort((a, b) => a[1] - b[1]);
 
-function getBreakpoint(width) {
+function getCurrentBreakpoint(width) {
   let current = "sm";
   for (const [name, minWidth] of breakpointEntries) {
     if (width >= minWidth) current = name;
@@ -13,25 +13,18 @@ function getBreakpoint(width) {
 }
 
 export function useBreakpoint() {
-  const [breakpoint, setBreakpoint] = useState(() => getBreakpoint(window.innerWidth));
+  const [windowWidth, setWindowWidth] = useState(() => window.innerWidth);
 
   useEffect(() => {
-    const onResize = () => {
-      setBreakpoint(getBreakpoint(window.innerWidth));
-    };
+    const onResize = () => setWindowWidth(window.innerWidth);
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
   }, []);
 
-  // Generate booleans for each breakpoint
-  const isMobile = window.innerWidth < breakpoints.md;
-  const isTablet = window.innerWidth >= breakpoints.md && window.innerWidth < breakpoints.lg;
-  const isDesktop = window.innerWidth >= breakpoints.lg;
+  const breakpoint = getCurrentBreakpoint(windowWidth);
+  const isMobile = windowWidth < breakpoints.md;
+  const isTablet = windowWidth >= breakpoints.md && windowWidth < breakpoints.lg;
+  const isDesktop = windowWidth >= breakpoints.lg;
 
-  return {
-    breakpoint, // e.g., 'sm', 'md', 'lg', etc.
-    isMobile,
-    isTablet,
-    isDesktop,
-  };
+  return { breakpoint, isMobile, isTablet, isDesktop };
 }

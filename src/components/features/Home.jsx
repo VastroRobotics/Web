@@ -174,6 +174,8 @@ const Home = forwardRef(
         wrapperRef.current.style.width = `${nat.w}px`;
         wrapperRef.current.style.height = `${nat.h}px`;
         wrapperRef.current.style.transform = `scale(${scale})`;
+        console.log("isMobile:", isMobile);
+
       };
 
       update();
@@ -191,7 +193,6 @@ const Home = forwardRef(
       "absolute inset-0 w-full h-full object-fill pointer-events-none";
 
     return (
-      <div className="relative w-full h-screen">
         <div className={`absolute inset-0 p-6 transition-opacity duration-500 ${videoReady ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
           <div className="relative w-full h-full overflow-hidden rounded-3xl bg-black shadow-[0_0_10px_2px_rgba(255,255,255,0.15)]">
             <div ref={ref} className="absolute inset-0 w-full h-full overflow-hidden rounded-3xl">
@@ -206,9 +207,8 @@ const Home = forwardRef(
                         <video ref={backLoopRef} className={videoClass} src={BackLoop} muted playsInline preload="auto" style={{ opacity: showBackLoop ? 1 : 0 }} />
                       </div>
                     <div
-                      className={`absolute inset-0 flex items-center justify-center pointer-events-none ${
-                        window.innerWidth < 650 ? "z-40" : "z-20"
-                      }`}
+                      className={`absolute inset-0 flex items-center justify-center pointer-events-none z-40 
+                      }`} 
                     >
                         <div className="flex items-center justify-center">
                           <Suspense fallback={null}>
@@ -251,57 +251,73 @@ const Home = forwardRef(
                     </div>
                   </div>
 
-                  <div className="absolute bottom-0 z-0 pointer-events-none w-full h-full">
-                      <Suspense fallback={null}>
-                       <div className="pointer-events-none left-0 absolute inset-0 z-0">
-  {/* Bottom-left glow */}
-  <LazyGlow
-    color="rgba(255,255,255, 0.25)"
-    width={30}
-    height={70}
-    blur={60}
-    stop="100%"
-    shape="oval"
-    className="absolute bottom-0 left-0 translate-x-[-80%] translate-y-[20%]"
-  /> 
-    <LazyGlow
-    color="rgba(255,255,255, 0.25)"
-    width={60}
-    height={30}
-    blur={90}
-    stop="100%"
-    shape="oval"
-    className="absolute bottom-0 left-0 translate-x-[-40%] translate-y-[70%]"
-  />   
-</div>
-                       <div className="pointer-events-none right-0 absolute inset-0 z-0">
+                  <div className="absolute bottom-0 w-full h-full pointer-events-none z-50">
+                  <Suspense fallback={null}>
+                    {/* Glow wrapper: two conditional sections */}
+                    <div className="absolute inset-0">
+                      {!isMobile ? (
+                        <div className="absolute inset-0">
+                          <div className="absolute inset-0 left-0">
+                            <LazyGlow
+                              color="rgba(255,255,255, 0.25)"
+                              width={30}
+                              height={70}
+                              blur={50}
+                              stop="100%"
+                              shape="oval"
+                              className="absolute bottom-0 left-0 translate-x-[-80%] translate-y-[20%]"
+                            />
+                            <LazyGlow
+                              color="rgba(255,255,255, 0.25)"
+                              width={60}
+                              height={30}
+                              blur={80}
+                              stop="100%"
+                              shape="oval"
+                              className="absolute bottom-0 left-0 translate-x-[-40%] translate-y-[70%]"
+                            />
+                          </div>
 
-{/* Bottom-right glow */}
-<LazyGlow
-  color="rgba(255,255,255, 0.25)"
-  width={30}
-  height={60}
-  blur={90}
-  stop="100%"
-  shape="oval"
-  className="absolute bottom-0 right-0 translate-x-[70%] translate-y-[40%]"
-/> 
-<LazyGlow
-  color="rgba(255,255,255, 0.25)"
-  width={60}
-  height={30}
-  blur={90}
-  stop="100%"
-  shape="oval"
-  className="absolute bottom-0 right-0 translate-x-[40%] translate-y-[70%]"
-/> 
-                  </div>
+                          <div className="absolute inset-0 right-0">
+                            <LazyGlow
+                              color="rgba(255,255,255, 0.25)"
+                              width={30}
+                              height={70}
+                              blur={50}
+                              stop="100%"
+                              shape="oval"
+                              className="absolute bottom-0 right-0 translate-x-[80%] translate-y-[20%]"
+                            />
+                            <LazyGlow
+                              color="rgba(255,255,255, 0.25)"
+                              width={60}
+                              height={30}
+                              blur={80}
+                              stop="100%"
+                              shape="oval"
+                              className="absolute bottom-0 right-0 translate-x-[40%] translate-y-[70%]"
+                            />
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="absolute z-50">
+                          <LazyGlow
+                            color="rgba(255, 255, 255)"
+                            width={85}
+                            height={50}
+                            blur={35}
+                            stop="80%"
+                            shape="oval"
+                            className="absolute bottom-0 right-0"
+                          />
+                        </div>
+                      )}
+                    </div>
+                  </Suspense>
+                </div>
 
-                      </Suspense>
-                  </div>
-              </div>
 
-              <div className="absolute bottom-18 left-1/2 -translate-x-1/2 z-50">
+              <div className="absolute bottom-24 left-1/2 -translate-x-1/2 z-50">
                 {logoDone && (
                   <ScrollPrompt
                     onClick={goToNext}
