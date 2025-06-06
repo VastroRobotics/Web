@@ -21,11 +21,19 @@ export default function StageBanner({
     return () => window.removeEventListener("resize", update);
   }, []);
 
-  const lenKey = isMobile ? "height" : "width";
-  const crossKey = isMobile ? "width" : "height";
+  const isVertical = isMobile;
+  const lenKey = isVertical ? "height" : "width";
+  const crossKey = isVertical ? "width" : "height";
+  const crossSize = thickness;
+  const textSize = isVertical
+    ? `${(crossSize * 0.16).toFixed(2)}vw`
+    : `${(crossSize * 0.06).toFixed(2)}vh`;
+  const glowSize = crossSize * 14;
+
   const variants = {
     hidden: {
-      x: direction === 0 ? -200 : 200,
+      x: isVertical ? 0 : direction === 0 ? -200 : 200,
+      y: isVertical ? (direction === 0 ? -200 : 200) : 0,
       opacity: 0,
       [lenKey]: `${start}%`,
       [crossKey]: `${thickness}%`,
@@ -33,6 +41,7 @@ export default function StageBanner({
     },
     visible: {
       x: 0,
+      y: 0,
       opacity: 1,
       [lenKey]: `${end}%`,
       [crossKey]: `${thickness}%`,
@@ -40,35 +49,47 @@ export default function StageBanner({
     },
   };
 
-  const style = isMobile
+  const style = isVertical
     ? {
         [crossKey]: `${thickness}%`,
-        left: direction === 0 ? 0 : "auto",
-        right: direction === 1 ? 0 : "auto",
-        top: 0,
+        top: direction === 0 ? 0 : "auto",
+        bottom: direction === 1 ? 0 : "auto",
+        left: "50%",
+        transform: "translateX(-50%)",
       }
     : {
         [crossKey]: `${thickness}%`,
-        top: "50%",
-        transform: "translateY(-50%)",
         left: direction === 0 ? 0 : "auto",
         right: direction === 1 ? 0 : "auto",
+        top: "50%",
+        transform: "translateY(-50%)",
       };
+
+  const radiusClass = isVertical
+    ? direction === 0
+      ? "rounded-b-3xl"
+      : "rounded-t-3xl"
+    : direction === 0
+    ? "rounded-r-3xl"
+    : "rounded-l-3xl";
 
   return (
     <motion.div
-      className={`absolute flex items-center justify-center bg-black text-white font-bold px-6 overflow-hidden my-6 ${
-        direction === 0 ? "rounded-r-3xl" : "rounded-l-3xl"
-      }`}
+      className={`absolute flex items-center justify-center bg-black text-white font-bold overflow-hidden ${
+        isVertical ? "mx-6 px-6" : "my-6 py-6"
+      } ${radiusClass}`}
       style={{ ...style, boxShadow: "0 0 20px rgba(255,255,255,0.15)" }}
       variants={variants}
       initial="hidden"
       animate={show ? "visible" : "hidden"}
     >
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-        <Glow color="white" />
+        <Glow color="white" width={glowSize} height={glowSize} />
       </div>
-      <span className="relative z-10 text-center whitespace-nowrap leading-tight text-[8vw] md:text-[3vw]">
+      <span
+        className="relative z-10 text-center whitespace-nowrap leading-tight"
+        style={{ fontSize: textSize }}
+      >
         {text}
       </span>
     </motion.div>
