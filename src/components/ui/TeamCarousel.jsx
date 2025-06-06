@@ -99,13 +99,18 @@ export default function TeamCarousel() {
         const carouselRef = useRef(null);
         const [scaleFactor, setScaleFactor] = useState(1);
         const [containerHeight, setContainerHeight] = useState(600);
-        const [shouldStagger, setShouldStagger] = useState(true);
+        const [shouldStagger, setShouldStagger] = useState(false);
+        const [showCarousel, setShowCarousel] = useState(false);
         const hoverDelay = 0.1;
+        const hoverTimer = useRef(null);
+        const closeTimer = useRef(null);
 
         useEffect(() => {
                 const timer = setTimeout(() => {
+                        setShowCarousel(true);
                         setIsRotating(false);
-                        setShouldStagger(false);
+                        setShouldStagger(true);
+                        setTimeout(() => setShouldStagger(false), 600);
                 }, 500);
                 return () => clearTimeout(timer);
         }, []);
@@ -187,7 +192,7 @@ export default function TeamCarousel() {
                const timeout = setTimeout(() => setInfoVisible(true), 240);
                return () => clearTimeout(timeout);
        }, [activeIndex]);
-       const getVisibleMembers = () => {
+const getVisibleMembers = () => {
                 const result = [];
                 for (let i = 0; i < visibleCount; i++) {
                         const index = (rotationOffset + i) % teamMembers.length;
@@ -196,19 +201,56 @@ export default function TeamCarousel() {
                                 visibleIndex: i,
                         });
                 }
-                return result;
+        return result;
+        };
+
+        const handleMouseEnter = (idx, isArrow) => {
+                if (isArrow || isRotating) return;
+                if (closeTimer.current) {
+                        clearTimeout(closeTimer.current);
+                        closeTimer.current = null;
+                }
+                hoverTimer.current = setTimeout(() => {
+                        setActiveIndex(idx);
+                }, 200);
+        };
+
+        const handleMouseLeave = (idx, isArrow) => {
+                if (hoverTimer.current) {
+                        clearTimeout(hoverTimer.current);
+                        hoverTimer.current = null;
+                }
+                if (isArrow) return;
+                closeTimer.current = setTimeout(() => {
+                        if (activeIndex === idx) setActiveIndex(null);
+                }, 150);
+        };
+
+        const handleClick = (idx, isArrow) => {
+                if (isArrow || isRotating) return;
+                if (hoverTimer.current) {
+                        clearTimeout(hoverTimer.current);
+                        hoverTimer.current = null;
+                }
+                if (closeTimer.current) {
+                        clearTimeout(closeTimer.current);
+                        closeTimer.current = null;
+                }
+                setActiveIndex(idx);
         };
 
         const visibleMembers = getVisibleMembers();
         const itemHeightInactive = containerHeight - 50 * scaleFactor;
 
         return (
-                <div
+                <Motion.div
                         className="flex justify-center w-full overflow-hidden"
                         style={{ height: `${containerHeight}px` }}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: showCarousel ? 1 : 0 }}
                         onMouseMove={() => setLastInteraction(Date.now())}
                 >
-			<AnimatePresence mode="popLayout">
+                        <AnimatePresence mode="popLayout">
                                 <div
                                         ref={carouselRef}
                                         className="flex w-fit"
@@ -243,11 +285,11 @@ export default function TeamCarousel() {
                                                                        delay: shouldStagger ? index * 0.08 : hoverDelay,
                                                                        layout: { duration: 0.6, ease: [0.23, 1, 0.32, 1] },
                                                                }}
-								onMouseEnter={() =>
-									!isRightmost && !isRotating && setActiveIndex(index)
-								}
-								layout
-							>
+                                                               onMouseEnter={() => handleMouseEnter(index, isRightmost)}
+                                                               onMouseLeave={() => handleMouseLeave(index, isRightmost)}
+                                                               onClick={() => handleClick(index, isRightmost)}
+                                                               layout
+                                                       >
                                                                 <div
                                                                         className="w-full overflow-hidden h-full"
                                                                         style={{
@@ -362,7 +404,7 @@ export default function TeamCarousel() {
 						);
 					})}
 				</div>
-			</AnimatePresence>
-		</div>
-	);
+                        </AnimatePresence>
+                </Motion.div>
+        );
 }
