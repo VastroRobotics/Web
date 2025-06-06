@@ -4,6 +4,7 @@ import { forwardRef, useEffect, useRef, useState } from "react";
 import StageBanner from "../layout/StageBanner.jsx";
 import Chart from "../ui/Chart.jsx";
 import ComparisonTable from "../ui/ComparisonTable.jsx";
+import useIsMobile from "../../hooks/useIsMobile.jsx";
 
 const components = [StageBanner, StageBanner];
 
@@ -78,6 +79,7 @@ const Mission = forwardRef(function Mission(
   ref
 ) {
   const [index, setIndex] = useState(0);
+  const isMobile = useIsMobile(768);
   const animating = useRef(false);
   const last = stages.length - 1;
 
@@ -121,27 +123,24 @@ const Mission = forwardRef(function Mission(
 
   return (
     <div ref={ref} className="relative w-full h-full overflow-hidden">
-      {stage.banners.map((params, i) => {
-        const Component = components[i];
-        return (
-          <Component key={`${i}-${index}`} {...baseParams[i]} {...params} />
-        );
-      })}
+      <div className={`flex w-full h-full ${isMobile ? "flex-col" : "flex-row"}`}>
+        <StageBanner key={`left-${index}`} {...baseParams[0]} {...stage.banners[0]} />
 
-      {stage.showCharts && (
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="flex flex-col lg:flex-col md:flex-row gap-10 justify-center items-center w-full">
-            <Chart title="VASTRO" targetAmount={2500} targetPercent={2.5} barColor="#ffffff" />
-            <Chart title="Competitors" targetAmount={75000} targetPercent={70} barColor="#ffffff" />
-          </div>
-        </div>
-      )}
+        <div className="flex-1 relative flex items-center justify-center">
+          {stage.showCharts && (
+            <div className="flex flex-col lg:flex-col md:flex-row gap-10 justify-center items-center w-full">
+              <Chart title="VASTRO" targetAmount={2500} targetPercent={2.5} barColor="#ffffff" />
+              <Chart title="Competitors" targetAmount={75000} targetPercent={70} barColor="#ffffff" />
+            </div>
+          )}
 
-      {stage.showTable && (
-        <div className="absolute inset-0 flex items-center justify-center">
-          <ComparisonTable data={specs} labelLeft="Spot" labelRight="Vastro" />
+          {stage.showTable && (
+            <ComparisonTable data={specs} labelLeft="Spot" labelRight="Vastro" />
+          )}
         </div>
-      )}
+
+        <StageBanner key={`right-${index}`} {...baseParams[1]} {...stage.banners[1]} />
+      </div>
     </div>
   );
 });

@@ -1,8 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
 import Glow from "../ui/Glow";
+import useIsMobile from "../../hooks/useIsMobile.jsx";
 
 export default function StageBanner({
   direction = 0,
@@ -12,14 +12,7 @@ export default function StageBanner({
   thickness = 50,
   show,
 }) {
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const update = () => setIsMobile(window.innerWidth < 768);
-    update();
-    window.addEventListener("resize", update);
-    return () => window.removeEventListener("resize", update);
-  }, []);
+  const isMobile = useIsMobile(768);
 
   const isVertical = isMobile;
   const lenKey = isVertical ? "height" : "width";
@@ -30,40 +23,11 @@ export default function StageBanner({
     : `${(crossSize * 0.06).toFixed(2)}vh`;
   const glowSize = crossSize * 14;
 
-  const variants = {
-    hidden: {
-      x: isVertical ? 0 : direction === 0 ? -200 : 200,
-      y: isVertical ? (direction === 0 ? -200 : 200) : 0,
-      opacity: 0,
-      [lenKey]: `${start}%`,
-      [crossKey]: `${thickness}%`,
-      transition: { duration: 0.8, ease: "easeOut" },
-    },
-    visible: {
-      x: 0,
-      y: 0,
-      opacity: 1,
-      [lenKey]: `${end}%`,
-      [crossKey]: `${thickness}%`,
-      transition: { duration: 0.8, ease: "easeOut" },
-    },
-  };
+  const transition = { duration: 0.8, ease: "easeOut" };
 
-  const style = isVertical
-    ? {
-        [crossKey]: `${thickness}%`,
-        top: direction === 0 ? 0 : "auto",
-        bottom: direction === 1 ? 0 : "auto",
-        left: "25%",
-        transform: "translateX(-50%)",
-      }
-    : {
-        [crossKey]: `${thickness}%`,
-        left: direction === 0 ? 0 : "auto",
-        right: direction === 1 ? 0 : "auto",
-        top: "25%",
-        transform: "translateY(-50%)",
-      };
+  const style = {
+    [crossKey]: `${thickness}%`,
+  };
 
   const radiusClass = isVertical
     ? direction === 0
@@ -75,12 +39,12 @@ export default function StageBanner({
 
   return (
     <motion.div
-      className={`absolute flex items-center w-full h-full justify-center bg-black text-white font-bold overflow-hidden ${
+      className={`flex items-center justify-center bg-black text-white font-bold overflow-hidden flex-shrink-0 ${
         isVertical ? "mx-6 px-6" : "my-6 py-6"
       } ${radiusClass}`}
-      style={{ ...style, 
-        boxShadow: "0 0 20px rgba(255,255,255,0.15)",
-        paddingTop: isVertical ? "10px" : "0px",
+      initial={{ [lenKey]: `${start}%`, opacity: 1 }}
+      animate={{ [lenKey]: show ? `${end}%` : `${start}%`, opacity: 1 }}
+      transition={transition}
         paddingBottom: isVertical ? "10px" : "0px",
         paddingLeft: isVertical ? "0px" : "10px",
         paddingRight: isVertical ? "0px" : "10px",}}
