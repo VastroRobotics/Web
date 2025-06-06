@@ -48,7 +48,7 @@ const teamMembers = [
     image: LucasImage,
     linkedin: "https://www.linkedin.com/in/lucas-kover-wolf/",
     email: "info@vastro.org",
-    bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    bio: "Lucas plays a central role in coordinating software systems and building out internal infrastructure. His work links core technologies across the stack, from networking to robotic actuation, helping ensure everything functions smoothly and stays aligned.",
   },
   {
     id: 5,
@@ -65,7 +65,7 @@ const teamMembers = [
     role: "Software",
     image: AlexImage,
     email: "info@vastro.org",
-    bio: "Alexander is a junior studying Applied Mathematics and Computer Science. Alexander’s work behind the scenes to develop our virtual-reality immersion software and implementation of haptic feedback controls has been key for our continued success in developing an immersive control system for our users.",
+    bio: "Alexander is a junior studying Applied Math and Computer Science. He was instrumental in designing the initial systems that laid the foundation for our platform, setting the technical direction and core architecture that continues to support our growth.",
   },
   {
     id: 7,
@@ -74,7 +74,7 @@ const teamMembers = [
     image: RyanImage,
     linkedin: "https://www.linkedin.com/in/ryanduongct",
     email: "info@vastro.org",
-    bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    bio: "Ryan Duong will leverage his extensive experience in VR and UX to spearhead the development of our virtual reality integration, including camera systems and user interfaces, ensuring a seamless and intuitive experience for users.",
   },
   {
     id: 8,
@@ -83,7 +83,7 @@ const teamMembers = [
     image: RickImage,
     linkedin: "https://it.linkedin.com/in/rick-fleeter-5272432a3",
     email: "info@vastro.org",
-    bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    bio: "Dr. Rick Fleeter is a pioneer in aerospace engineering and small satellite innovation. With over 20 successful missions and a groundbreaking aerospace company behind him, he brings invaluable guidance, mentorship, and industry expertise to shape our technical and strategic direction.",
   },
 ];
 
@@ -211,21 +211,25 @@ export default function TeamCarousel() {
                                                                         zIndex: isActive ? 10 : 1,
                                                                         height: `${isActive ? containerHeight : itemHeightInactive}px`,
                                                                 }}
-								initial={{ opacity: 1, x: 50 }}
-								animate={{
-									opacity: 1,
-									x: 0,
+							        initial={{ opacity: 0, y: 60, scale: 0.9 }}
+                                                                animate={{
+                                                                        opacity: 1,
+                                                                        y: 0,
+                                                                        scale: 1,
                                                                         width: `${isActive ? 465 * scaleFactor : 60 * scaleFactor}px`,
                                                                         flex: "0 0 auto",
                                                                         marginLeft: isActive ? `${8 * scaleFactor}px` : "0px",
                                                                         marginRight: isActive ? `${8 * scaleFactor}px` : "0px",
-								}}
-								exit={{ x: -50, opacity: 0 }}
-                                                               transition={{
-                                                                       duration: 0.6,
-                                                                       ease: [0.23, 1, 0.32, 1],
-                                                                       layout: { duration: 0.6, ease: [0.23, 1, 0.32, 1] },
-                                                               }}
+                                                                }}
+                                                                exit={{ opacity: 0, y: -40 }}
+                                                                transition={{
+                                                                opacity: { duration: 0.6, delay: index * 0.08, ease: [0.23, 1, 0.32, 1] },
+                                                                y: { duration: 0.6, delay: index * 0.1, ease: [0.23, 1, 0.32, 1] },
+                                                                scale: { duration: 0.6, delay: index * 0.08, ease: [0.23, 1, 0.32, 1] },
+                                                                width: { duration: 0.5, ease: [0.23, 1, 0.32, 1] }, // no delay
+                                                                layout: { duration: 0.5, ease: [0.23, 1, 0.32, 1] }, // no delay
+                                                                }}
+
 								onMouseEnter={() =>
 									!isRightmost && !isRotating && setActiveIndex(index)
 								}
