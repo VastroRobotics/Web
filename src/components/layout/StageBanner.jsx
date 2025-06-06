@@ -21,12 +21,15 @@ export default function StageBanner({
   const textSize = isVertical
     ? `${(crossSize * 0.16).toFixed(2)}vw`
     : `${(crossSize * 0.06).toFixed(2)}vh`;
-  const glowSize = crossSize * 14;
+  const glowSize = 15;
 
-  const transition = { duration: 0.8, ease: "easeOut" };
+  const transition = { duration: (start-end) * 0.015, ease: "easeOut" };
 
   const style = {
     [crossKey]: `${thickness}%`,
+    paddingBottom: isVertical ? "10px" : "0px",
+    paddingLeft: isVertical ? "0px" : "10px",
+    paddingRight: isVertical ? "0px" : "10px",
   };
 
   const radiusClass = isVertical
@@ -42,15 +45,10 @@ export default function StageBanner({
       className={`flex items-center justify-center bg-black text-white font-bold overflow-hidden flex-shrink-0 ${
         isVertical ? "mx-6 px-6" : "my-6 py-6"
       } ${radiusClass}`}
+      style={style}
       initial={{ [lenKey]: `${start}%`, opacity: 1 }}
       animate={{ [lenKey]: show ? `${end}%` : `${start}%`, opacity: 1 }}
       transition={transition}
-        paddingBottom: isVertical ? "10px" : "0px",
-        paddingLeft: isVertical ? "0px" : "10px",
-        paddingRight: isVertical ? "0px" : "10px",}}
-      variants={variants}
-      initial="hidden"
-      animate={show ? "visible" : "hidden"}
     >
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
         <Glow color="white" width={glowSize} height={glowSize} />
