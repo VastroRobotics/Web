@@ -6,9 +6,9 @@ import StageBanner from "../layout/StageBanner.jsx";
 const components = [StageBanner, StageBanner, StageBanner];
 
 const baseParams = [
-  { direction: 0, thickness: 50 },
-  { direction: 1, thickness: 50 },
-  { direction: 0, thickness: 50 },
+  { direction: "left/top", thickness: 50 },
+  { direction: "right/bottom", thickness: 50 },
+  { direction: "left/top", thickness: 50 },
 ];
 
 const stages = [
