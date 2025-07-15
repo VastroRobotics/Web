@@ -1,14 +1,20 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" href="/favicon.svg"/>
+    <link rel="icon" href="favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>VASTRO</title>
-    
+
     <!-- Preload custom font -->
-    <link rel="preload" href="/fonts/grifterbold.otf" as="font" type="font/otf" crossorigin>
-    
+    <link
+      rel="preload"
+      href="fonts/grifterbold.otf"
+      as="font"
+      type="font/otf"
+      crossorigin
+    />
+
     <!-- Initial styles to prevent flash -->
     <style>
       /* Only set background and font for loader, not for html/body */
@@ -28,9 +34,9 @@
         align-items: center;
         justify-content: center;
         z-index: 99999;
-        font-family: 'GrifterBold', sans-serif;
+        font-family: "GrifterBold", sans-serif;
       }
-      
+
       #loader-spinner {
         width: 32px;
         height: 32px;
@@ -40,14 +46,18 @@
         border-radius: 50%;
         animation: spin 1s linear infinite;
       }
-      
+
       @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
       }
-      
+
       #loader-text {
-        font-family: 'Roboto', sans-serif;
+        font-family: "Roboto", sans-serif;
         color: rgba(255, 255, 255, 0.8);
         font-size: 14px;
         opacity: 0;
@@ -55,58 +65,74 @@
       }
 
       @font-face {
-        font-family: 'GrifterBold';
-        src: url('/fonts/grifterbold.otf') format('opentype');
+        font-family: "GrifterBold";
+        src: url("fonts/grifterbold.otf") format("opentype");
         font-display: swap;
       }
     </style>
-    
+
     <!-- Preload critical assets -->
-    <link rel="preload" as="image" href="/src/assets/images/logo/vastro_full_logo.svg" />
-    <link rel="prefetch" href="/src/assets/videos/hero/back_entrance.webm" />
-    <link rel="prefetch" href="/src/assets/videos/hero/front_entrance.webm" />
-    
+    <link
+      rel="preload"
+      as="image"
+      href="../assets/images/logo/vastro_full_logo.svg"
+    />
+    <link rel="prefetch" href="../assets/videos/hero/back_entrance.webm" />
+    <link rel="prefetch" href="../assets/videos/hero/front_entrance.webm" />
+
     <!-- Add meta description for SEO -->
     <meta name="description" content="VASTRO - Advanced Robotics Solutions" />
   </head>
   <body>
     <!-- Initial loader that shows before React mounts -->
     <div id="initial-loader">
-      <img id="loader-logo" src="/src/assets/branding/vastro_full_logo.svg" style="height: 32px; width: auto; opacity: 0; display: none; filter: drop-shadow(0 0 8px rgba(255,255,255,0.2)); transition: opacity 0.4s ease-out;" onload="this.style.display='block'; setTimeout(()=>{this.style.opacity='1'}, 10);" />
+      <img
+        id="loader-logo"
+        src="../assets/branding/vastro_full_logo.svg"
+        style="
+          height: 32px;
+          width: auto;
+          opacity: 0;
+          display: none;
+          filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.2));
+          transition: opacity 0.4s ease-out;
+        "
+        onload="this.style.display='block'; setTimeout(()=>{this.style.opacity='1'}, 10);"
+      />
       <div id="loader-spinner"></div>
       <div id="loader-text">Loading...</div>
     </div>
-    
+
     <div id="root"></div>
-    
+
     <!-- Sequential loading script -->
     <script>
       // Show text first
       requestAnimationFrame(() => {
-        const loaderText = document.getElementById('loader-text');
+        const loaderText = document.getElementById("loader-text");
         if (loaderText) {
-          loaderText.style.opacity = '1';
-          
+          loaderText.style.opacity = "1";
+
           // Then show logo
           setTimeout(() => {
-            const loaderLogo = document.getElementById('loader-logo');
+            const loaderLogo = document.getElementById("loader-logo");
             if (loaderLogo && loaderLogo.complete) {
-              loaderLogo.style.opacity = '1';
+              loaderLogo.style.opacity = "1";
             }
           }, 200);
         }
       });
     </script>
-    
-    <script type="module" src="/src/main.jsx"></script>
-    
+
+    <!---- <script type="module" src="/src/main.jsx"></script>  -->
+
     <!-- Handle React load completion -->
     <script>
-      window.addEventListener('load', () => {
-        const initialLoader = document.getElementById('initial-loader');
+      window.addEventListener("load", () => {
+        const initialLoader = document.getElementById("initial-loader");
         if (initialLoader) {
-          initialLoader.style.opacity = '0';
-          initialLoader.style.transition = 'opacity 0.4s ease-out';
+          initialLoader.style.opacity = "0";
+          initialLoader.style.transition = "opacity 0.4s ease-out";
           setTimeout(() => initialLoader.remove(), 400);
         }
       });
