@@ -78,7 +78,6 @@ See [LICENSE](./LICENSE) for details.
 
 ## Bugs
 
-- It's possible for the user to get stuck on the team page or home page, and have to reload to get back.
 - Stages are very close together, making it easy to scroll past multiple stages on accident
   - It's good that they're close, but make it better at catching the user on each scroll.
 
