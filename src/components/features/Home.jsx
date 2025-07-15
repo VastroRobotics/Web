@@ -72,7 +72,7 @@ const Home = forwardRef(
 
     const preloadVideos = useCallback(async () => {
       const criticalVideos = [
-        { src: { BackEntrance }, type: "video", priority: 3 },
+        { src: BackEntrance, type: "video", priority: 3 },
         { src: FrontEntrance, type: "video", priority: 3 },
       ];
       const secondaryVideos = [
