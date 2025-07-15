@@ -1,0 +1,1 @@
+import{j as s}from"./index-BHAkJW64.js";const e="/assets/icon_only_gray-CCqa7svM.svg",n=()=>s.jsx("div",{className:"absolute inset-0 flex items-center justify-center z-0 pointer-events-none",children:s.jsx("img",{src:e,alt:"Background Emblem",className:"h-[110vh] max-w-[1500px]"})});export{n as default};
