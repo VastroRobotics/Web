@@ -24,21 +24,25 @@ export default function App() {
 
   const handleScroll = (e) => {
     if (isThrottled.current || !canLeave) return;
-  
+    
     const delta = e.deltaY;
     const dir = delta > 0 ? "down" : "up";
     setScrollDirection(dir);
-  
+
     let next = activeIndex + (dir === "down" ? 1 : -1);
     const total = sections.length;
-  
+
     if (next < 0 || next >= total) return;
-  
+
     setActiveIndex(next);
     isThrottled.current = true;
-  
+
     setTimeout(() => {
       isThrottled.current = false;
+      // Prevent user getting stuck on Home and Team pages by ensuring canLeave is set to true
+      if (next == 0 || next == 2) {
+        setCanLeave(true);
+      }
     }, 800); // debounce duration
   };
 
@@ -60,7 +64,6 @@ export default function App() {
           style={{
             pointerEvents: i === activeIndex ? "auto" : "none",
             zIndex: i === activeIndex ? 10 : 0,
-            display: Math.abs(i - activeIndex) > 1 ? 'none' : 'block'
           }}
         >
           <ErrorBoundary>
@@ -78,7 +81,6 @@ export default function App() {
                       Math.min(prev + 1, sections.length - 1)
                     )
                   }
-                  {...(Section === Footer ? { onScrollTop: () => setActiveIndex(0) } : {})}
                 />
               </Suspense>
             </SectionWrapper>

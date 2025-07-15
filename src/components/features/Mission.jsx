@@ -13,19 +13,37 @@ const baseParams = [
 
 const stages = [
   [
-    { show: true, text: "Banner 1", start: 20, end: 80 },
+    {
+      show: true,
+      header: "VR-Controlled Quadruped Robots",
+      text: "$75k Capabilities with a $2.5k Price Tag",
+      start: 0,
+      end: 80,
+    },
     { show: false },
     { show: false },
   ],
   [
     { show: false },
-    { show: true, text: "Custom Stage", start: 40, end: 90 },
+    {
+      show: true,
+      header: "Mission",
+      text: "Here at Vastro, our goal is to develop the next generation of robots, exploiting new and emerging technologies to deliver high performance, effective, and affordable solutions. Our quadruped robot utilizes virtual-reality immersion and haptic feedback controls to drive precision and LiDAR sensing to detect environmental conditions and relay 3D mapping information.",
+      start: 0,
+      end: 80, // 90
+    },
     { show: false },
   ],
   [
     { show: false },
     { show: false },
-    { show: true, text: "Final Stage", start: 30, end: 100 },
+    {
+      show: true,
+      header: "Application",
+      text: "Our NASA-backed innovative design and software platform enables various use cases and applications in geological services, construction, power & energy, remote services, and in space exploration.",
+      start: 0, // 30
+      end: 80, // 100
+    },
   ],
 ];
 
