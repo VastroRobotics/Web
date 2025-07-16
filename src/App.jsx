@@ -1,12 +1,18 @@
 "use client";
 
 import { useEffect, useRef, useState, lazy, Suspense } from "react";
+
+// Load preloaded assets
+import AssetPreloader from "./components/common/AssetPreloader";
+import backEntrance from "./assets/animations/back_entrance.webm";
+import frontEntrance from "./assets/animations/front_entrance.webm";
+import logo from "./assets/branding/vastro_full_logo.svg";
+
 import ScrollBar from "./components/layout/ScrollBar";
 import Home from "./components/features/Home";
 import SectionWrapper from "./components/layout/SectionWrapper";
 import Loading from "./components/common/Loading";
 import ErrorBoundary from "./components/common/ErrorBoundary";
-
 
 // Lazy load all sections except Home
 const Mission = lazy(() => import("./components/features/Mission"));
@@ -24,7 +30,7 @@ export default function App() {
 
   const handleScroll = (e) => {
     if (isThrottled.current || !canLeave) return;
-    
+
     const delta = e.deltaY;
     const dir = delta > 0 ? "down" : "up";
     setScrollDirection(dir);
@@ -39,8 +45,8 @@ export default function App() {
 
     setTimeout(() => {
       isThrottled.current = false;
-      // Prevent user getting stuck on Home and Team pages by ensuring canLeave is set to true
-      if (next == 0 || next == 2) {
+      // Prevent user getting stuck on pages by ensuring canLeave is set to true in all cases but Mission and Timeline
+      if (next != 1 && next != 3) {
         setCanLeave(true);
       }
     }, 800); // debounce duration
@@ -56,37 +62,43 @@ export default function App() {
   }, [canLeave, activeIndex]);
 
   return (
-    <div className="w-full h-screen overflow-hidden relative">
-      {sections.map((Section, i) => (
-        <div
-          key={i}
-          className="absolute top-0 left-0 w-full h-full"
-          style={{
-            pointerEvents: i === activeIndex ? "auto" : "none",
-            zIndex: i === activeIndex ? 10 : 0,
-          }}
-        >
-          <ErrorBoundary>
-            <SectionWrapper
-              isActive={i === activeIndex}
-              scrollDirection={scrollDirection}
-            >
-              <Suspense fallback={i === 0 ? null : <Loading />}>
-                <Section
-                  isActive={i === activeIndex}
-                  scrollDirection={scrollDirection}
-                  onCanLeaveChange={setCanLeave}
-                  goToNext={() =>
-                    setActiveIndex((prev) =>
-                      Math.min(prev + 1, sections.length - 1)
-                    )
-                  }
-                />
-              </Suspense>
-            </SectionWrapper>
-          </ErrorBoundary>
-        </div>
-      ))}
-    </div>
+    <>
+      <AssetPreloader
+        assets={[backEntrance, frontEntrance, logo]}
+        priority={3}
+      />
+      <div className="w-full h-screen overflow-hidden relative">
+        {sections.map((Section, i) => (
+          <div
+            key={i}
+            className="absolute top-0 left-0 w-full h-full"
+            style={{
+              pointerEvents: i === activeIndex ? "auto" : "none",
+              zIndex: i === activeIndex ? 10 : 0,
+            }}
+          >
+            <ErrorBoundary>
+              <SectionWrapper
+                isActive={i === activeIndex}
+                scrollDirection={scrollDirection}
+              >
+                <Suspense fallback={i === 0 ? null : <Loading />}>
+                  <Section
+                    isActive={i === activeIndex}
+                    scrollDirection={scrollDirection}
+                    onCanLeaveChange={setCanLeave}
+                    goToNext={() =>
+                      setActiveIndex((prev) =>
+                        Math.min(prev + 1, sections.length - 1)
+                      )
+                    }
+                  />
+                </Suspense>
+              </SectionWrapper>
+            </ErrorBoundary>
+          </div>
+        ))}
+      </div>
+    </>
   );
 }

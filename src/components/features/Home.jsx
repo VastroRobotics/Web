@@ -1,14 +1,5 @@
 // (imports remain unchanged)
-import {
-  forwardRef,
-  useRef,
-  useState,
-  useEffect,
-  useLayoutEffect,
-  lazy,
-  Suspense,
-  useCallback,
-} from "react";
+import { forwardRef, useRef, useState, useEffect, useLayoutEffect, lazy, Suspense, useCallback,} from "react";
 import InfoPoint from "../ui/InfoPoint";
 import ScrollPrompt from "../layout/ScrollPrompt";
 import LogoSplash from "../common/LogoSplash";
@@ -87,7 +78,7 @@ const Home = forwardRef(
     useEffect(() => {
       if ("serviceWorker" in navigator) {
         navigator.serviceWorker
-          .register("/serviceWorker.js")
+          .register(`${import.meta.env.BASE_URL}serviceWorker.js`)
           .catch((err) => console.error("ServiceWorker failed:", err));
       }
       preloadVideos();
