@@ -5,6 +5,8 @@ const CACHE_NAMES = {
   videos: `vastro-videos-v${CACHE_VERSION}`
 };
 
+const BASE_URL = '/Web'; /* Update this */
+
 const STATIC_ASSETS = [
   `${BASE_URL}/`,
   `${BASE_URL}/index.html`,
