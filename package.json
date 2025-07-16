@@ -7,6 +7,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "deploy": "npm run build && rm -rf docs && mkdir docs && cp -r dist/* docs/",
     "lint": "eslint .",
     "preview": "vite preview"
   },
