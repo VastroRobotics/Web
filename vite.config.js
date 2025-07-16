@@ -14,6 +14,6 @@ import tailwindcss from "@tailwindcss/vite";
 
 // vite.config.js
 export default defineConfig({
-  base: "/Web/",
   plugins: [react(), svgr(), tailwindcss()],
+  base: "/Web",
 });
