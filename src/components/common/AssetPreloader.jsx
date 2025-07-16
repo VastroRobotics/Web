@@ -18,7 +18,7 @@ const AssetPreloader = ({ assets, priority = 1, onProgress, onComplete }) => {
           link.rel = "preload";
           link.href = src;
           link.as = type;
-          link.crossOrigin = "";
+          link.crossOrigin = "anonymous";
           document.head.appendChild(link);
         }
 
