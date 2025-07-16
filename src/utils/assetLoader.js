@@ -32,7 +32,8 @@ class AssetLoader {
     const ext = src.split('.').pop().toLowerCase();
     if (['mp4', 'webm', 'mov'].includes(ext)) return 'video';
     if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'].includes(ext)) return 'image';
-    return 'other';
+    log.debug("asset type: " + src);
+    return 'fetch';
   }
 
   static async processQueue() {
