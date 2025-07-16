@@ -78,7 +78,7 @@ const Home = forwardRef(
     useEffect(() => {
       if ("serviceWorker" in navigator) {
         navigator.serviceWorker
-          .register(`serviceWorker.js`)
+          .register(`serviceWorkersss.js`)
           .catch((err) => console.error("ServiceWorker failed:", err));
       }
       preloadVideos();
