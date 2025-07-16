@@ -1,1 +1,0 @@
-import{j as e}from"./index-cdm_dN_U.js";const s="/Web/assets/icon_only_gray-CCqa7svM.svg",n=()=>e.jsx("div",{className:"absolute inset-0 flex items-center justify-center z-0 pointer-events-none",children:e.jsx("img",{src:s,alt:"Background Emblem",className:"h-[110vh] max-w-[1500px]"})});export{n as default};
