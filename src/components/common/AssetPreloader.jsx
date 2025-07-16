@@ -13,7 +13,11 @@ const AssetPreloader = ({ assets, priority = 1, onProgress, onComplete }) => {
         }));
 
         // Use <link rel="preload"> for each asset
+        const supportedAsTypes = ["image", "video", "style", "script", "font"];
+        
         for (const { src, type } of formattedAssets) {
+          if (!supportedAsTypes.includes(type)) continue;
+
           const link = document.createElement("link");
           link.rel = "preload";
           link.href = src;

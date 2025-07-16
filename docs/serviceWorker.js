@@ -6,10 +6,10 @@ const CACHE_NAMES = {
 };
 
 const STATIC_ASSETS = [
-  '/',
-  '/index.html',
-  '/favicon.svg',
-  '/fonts/grifterbold.otf'
+  `${BASE_URL}/`,
+  `${BASE_URL}/index.html`,
+  `${BASE_URL}/favicon.svg`,
+  `${BASE_URL}/fonts/grifterbold.otf`,
 ];
 
 const VIDEO_EXTENSIONS = ['.webm', '.mp4', '.mov'];
