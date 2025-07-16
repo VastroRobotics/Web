@@ -65,6 +65,11 @@ To build:
 npm run build
 ```
 
+To deploy from /docs
+```bash
+npm run deploy
+```
+
 ---
 
 ## License
