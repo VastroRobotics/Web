@@ -6,7 +6,6 @@ import { useEffect, useRef, useState, lazy, Suspense } from "react";
 import AssetPreloader from "./components/common/AssetPreloader";
 import backEntrance from "./assets/animations/back_entrance.webm";
 import frontEntrance from "./assets/animations/front_entrance.webm";
-//import logo from "./assets/branding/vastro_full_logo.svg";
 
 import ScrollBar from "./components/layout/ScrollBar";
 import Home from "./components/features/Home";
