@@ -12,16 +12,18 @@ const AssetPreloader = ({ assets, priority = 1, onProgress, onComplete }) => {
           priority,
         }));
 
-        // Use <link rel="preload"> for each asset
-        const supportedAsTypes = ["image", "video", "style", "script", "font"];
-        
-        for (const { src, type } of formattedAssets) {
-          if (!supportedAsTypes.includes(type)) continue;
+        //const supportedAsTypes = ["image", "video", "style", "script", "font"];
 
+        // Use <link rel="preload"> for each asset
+        for (const { src, type } of formattedAssets) {
+          // if (!supportedAsTypes.includes(type)) {
+          //   continue;
+          // }
+          console.log("src: " + src + "| Type: " + type);
           const link = document.createElement("link");
           link.rel = "preload";
           link.href = src;
-          link.as = type;
+          link.as = "fetch";
           link.crossOrigin = "anonymous";
           document.head.appendChild(link);
         }
