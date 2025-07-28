@@ -19,7 +19,6 @@ const AssetPreloader = ({ assets, priority = 1, onProgress, onComplete }) => {
           // if (!supportedAsTypes.includes(type)) {
           //   continue;
           // }
-          console.log("src: " + src + "| Type: " + type);
           const link = document.createElement("link");
           link.rel = "preload";
           link.href = src;
