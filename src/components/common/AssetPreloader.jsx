@@ -12,6 +12,7 @@ const AssetPreloader = ({ assets, priority = 1, onProgress, onComplete }) => {
           priority,
         }));
 
+
         //const supportedAsTypes = ["image", "video", "style", "script", "font"];
 
         // Use <link rel="preload"> for each asset
@@ -22,9 +23,11 @@ const AssetPreloader = ({ assets, priority = 1, onProgress, onComplete }) => {
           const link = document.createElement("link");
           link.rel = "preload";
           link.href = src;
-          link.as = "fetch";
+          link.as = "fetch"; // I believe fetch is the wrong format for video files
           link.crossOrigin = "anonymous";
-          document.head.appendChild(link);
+
+          // This code wasnt working correctly, so i removed preloading functionality
+          //document.head.appendChild(link);
         }
 
         // Set up progress callback

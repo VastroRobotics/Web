@@ -86,6 +86,8 @@ See [LICENSE](./LICENSE) for details.
 - Stages are very close together, making it easy to scroll past multiple stages on accident
   - It's good that they're close, but make it better at catching the user on each scroll.
 
+- AssetPreloader.jsx was working incorrectly and wasn't removing previous preloads. Its functionality is removed. It still runs and needs to be resolved.
+
 ---
 
 ## Credits
