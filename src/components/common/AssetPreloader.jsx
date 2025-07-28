@@ -23,7 +23,7 @@ const AssetPreloader = ({ assets, priority = 1, onProgress, onComplete }) => {
           const link = document.createElement("link");
           link.rel = "preload";
           link.href = src;
-          link.as = "fetch"; // I believe fetch is the wrong format for video files
+          link.as = "fetch"; // I believe fetch is the wrong format for video files, but 'video' is no longer supported 'as' type
           link.crossOrigin = "anonymous";
 
           // This code wasnt working correctly, so i removed preloading functionality

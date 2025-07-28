@@ -1,5 +1,14 @@
 // (imports remain unchanged)
-import { forwardRef, useRef, useState, useEffect, useLayoutEffect, lazy, Suspense, useCallback,} from "react";
+import {
+  forwardRef,
+  useRef,
+  useState,
+  useEffect,
+  useLayoutEffect,
+  lazy,
+  Suspense,
+  useCallback,
+} from "react";
 import InfoPoint from "../ui/InfoPoint";
 import ScrollPrompt from "../layout/ScrollPrompt";
 import LogoSplash from "../common/LogoSplash";
@@ -78,8 +87,9 @@ const Home = forwardRef(
     useEffect(() => {
       if ("serviceWorker" in navigator) {
         navigator.serviceWorker
-          .register(`serviceWorker.js`)
+          .register(`Web/serviceWorker.js`)
           .catch((err) => console.error("ServiceWorker failed:", err));
+          // TODO: Must alter 'Web/serviceWork.js' when updating site url
       }
       preloadVideos();
       return () => AssetLoader.setProgressCallback(null);
