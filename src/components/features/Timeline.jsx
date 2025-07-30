@@ -6,7 +6,7 @@ import workshopImage from "../../assets/media/timeline/Workshop.jpeg";
 import planImage from "../../assets/media/timeline/Plan.png";
 import robotImage from "../../assets/media/timeline/Robot.png";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { motion as Motion, useAnimation } from "framer-motion";
 import ScrollIndicator from "../layout/ScrollIndicator";
 
@@ -15,7 +15,8 @@ const timelineEvents = [
     id: "1",
     title: "Project Formation",
     date: "08/2024",
-    description: "What started as an idea between friends in a dusty old engineering classroom quickly became the foundation for Virtual Astronaut. The research project, guided by Professor Rick Fleeter and backed by the Nelson Center, the Hazeltine Grant, and Research@Brown, quickly began taking shape.",
+    description:
+      "What started as an idea between friends in a dusty old engineering classroom quickly became the foundation for Virtual Astronaut. The research project, guided by Professor Rick Fleeter and backed by the Nelson Center, the Hazeltine Grant, and Research@Brown, quickly began taking shape.",
     color: "#FFFFFF",
     image: classroomImage,
     distance: 240,
@@ -24,7 +25,8 @@ const timelineEvents = [
     id: "2",
     title: "Initial Prototype",
     date: "10/2024",
-    description: "With support in place and momentum building, the team built their first prototype: a rail-mounted robotic arm capable of basic grab-and-drop tasks. It was the first tangible step in transforming their research into a functional system—laying the groundwork for immersive VR control and full mobility.",
+    description:
+      "With support in place and momentum building, the team built their first prototype: a rail-mounted robotic arm capable of basic grab-and-drop tasks. It was the first tangible step in transforming their research into a functional system—laying the groundwork for immersive VR control and full mobility.",
     color: "#FFFFFF",
     image: armImage,
     distance: 250,
@@ -33,7 +35,8 @@ const timelineEvents = [
     id: "3",
     title: "NASA Partnership",
     date: "02/2025",
-    description: "Backed by early success, the team formed a partnership with NASA through the Rhode Island Space Grant Consortium. Their generous financial support and strategic guidance marked a turning point—elevating the project from a student-led initiative to a platform with real potential for deployment in space and remote Earth environments.",
+    description:
+      "Backed by early success, the team formed a partnership with NASA through the Rhode Island Space Grant Consortium. Their generous financial support and strategic guidance marked a turning point—elevating the project from a student-led initiative to a platform with real potential for deployment in space and remote Earth environments.",
     image: nasaImage,
     color: "#FFFFFF",
     distance: 260,
@@ -42,7 +45,8 @@ const timelineEvents = [
     id: "4",
     title: "Quadruped Development",
     date: "03/2025",
-    description: "The team began work on their most ambitious model yet: a fully mobile quadruped robot. Working around the clock in the workshop, they pushed to take the project’s capabilities to the next level with advanced mobility, LiDAR sensing, and VR-based precision control.",
+    description:
+      "The team began work on their most ambitious model yet: a fully mobile quadruped robot. Working around the clock in the workshop, they pushed to take the project’s capabilities to the next level with advanced mobility, LiDAR sensing, and VR-based precision control.",
     color: "#FFFFFF",
     image: workshopImage,
     distance: 240,
@@ -51,25 +55,28 @@ const timelineEvents = [
     id: "5",
     title: "Pitching & Presentation",
     date: "04/2025",
-    description: "The team had the opportunity to present Vastro to the Brown University President’s Leadership Council and later at the NASA Rhode Island Space Grant Consortium. These moments marked a turning point as we began sharpening our business aspirations—developing and testing our go-to-market strategy, refining our value offering, and laying the groundwork for future growth.",
+    description:
+      "The team had the opportunity to present Vastro to the Brown University President’s Leadership Council and later at the NASA Rhode Island Space Grant Consortium. These moments marked a turning point as we began sharpening our business aspirations—developing and testing our go-to-market strategy, refining our value offering, and laying the groundwork for future growth.",
     image: leadershipImage,
     color: "#FFFFFF",
     distance: 280,
   },
-    {
+  {
     id: "6",
     title: "Demo Ready",
     date: "12/2025",
-    description: "The team has their sights set on completing a fully operational quadruped model by the end of next semester. The focus: delivering a working demo and proof of concept showcasing immersive VR control, real-time LiDAR mapping, and reliable remote operation.",
+    description:
+      "The team has their sights set on completing a fully operational quadruped model by the end of next semester. The focus: delivering a working demo and proof of concept showcasing immersive VR control, real-time LiDAR mapping, and reliable remote operation.",
     image: planImage,
     color: "#FFFFFF",
     distance: 260,
   },
-    {
+  {
     id: "7",
     title: "Manufacturing & Scaling",
     date: "2026",
-    description: "The team hopes to leverage this success to begin exploring scalable production methods—emphasising cost efficiency and our innovative 3D-printing-first approach as the backbone of a lean, adaptable manufacturing strategy.",
+    description:
+      "The team hopes to leverage this success to begin exploring scalable production methods—emphasising cost efficiency and our innovative 3D-printing-first approach as the backbone of a lean, adaptable manufacturing strategy.",
     color: "#FFFFFF",
     image: robotImage,
     distance: 260,
@@ -80,6 +87,7 @@ export default function Timeline({
   isActive,
   scrollDirection,
   onCanLeaveChange,
+  triggerPageScroll,
   centerFraction = 0.5,
 }) {
   const controls = useAnimation();
@@ -87,6 +95,7 @@ export default function Timeline({
   const [canScroll, setCanScroll] = useState(false);
   const isThrottled = useRef(false);
   const unlockTimeout = useRef(null);
+  const touchStart = useRef({ x: null, y: null }); // Mobile
 
   const [viewport, setViewport] = useState({ width: 0, height: 0 });
 
@@ -114,12 +123,15 @@ export default function Timeline({
       const start = scrollDirection === "up" ? timelineEvents.length - 1 : 0;
       setActiveIndex(start);
       setCanScroll(false);
+      console.log("[Timeline] setCanScroll: false");
       onCanLeaveChange(false);
+      console.log("[Timeline] onCanLeaveChange: false");
       isThrottled.current = true;
 
       clearTimeout(unlockTimeout.current);
       unlockTimeout.current = setTimeout(() => {
         setCanScroll(true);
+        console.log("[Timeline] setCanScroll: true");
         isThrottled.current = false;
       }, forwardThrottle);
     } else {
@@ -129,10 +141,70 @@ export default function Timeline({
     }
   }, [isActive, scrollDirection]);
 
-  useEffect(() => {
-    if (!isActive || !canScroll) return;
+  // Handle Moblie touch
+  const handleTouchStart = useCallback((e) => {
+    const touch = e.touches[0];
+    touchStart.current = { x: touch.clientX, y: touch.clientY };
+  }, []);
 
-    const handleWheel = (e) => {
+  const handleTouchEnd = useCallback(
+    (e) => {
+      if (!isActive || !canScroll) return;
+
+      const touch = e.changedTouches[0];
+      const dx = touchStart.current.x - touch.clientX;
+      const dy = touchStart.current.y - touch.clientY;
+
+      if (Math.abs(dx) < 50 && Math.abs(dy) < 50) return;
+
+      let dir;
+      if (Math.abs(dx) > Math.abs(dy)) {
+        dir = dx > 0 ? 1 : -1;
+      } else {
+        dir = dy > 0 ? 1 : -1;
+      }
+
+      const maxIndex = timelineEvents.length - 1;
+
+      if (dir > 0 && activeIndex === maxIndex) {
+        if (isThrottled.current) return;
+        isThrottled.current = true;
+        setTimeout(() => (isThrottled.current = false), forwardThrottle);
+        triggerPageScroll("down");
+        onCanLeaveChange(true);
+        console.log("[Timeline] onCanLeaveChange: true");
+        return;
+      }
+
+      if (dir < 0 && activeIndex === 0) {
+        triggerPageScroll("up");
+        onCanLeaveChange(true);
+        console.log("[Timeline] onCanLeaveChange: true");
+        return;
+      }
+
+      e.stopPropagation();
+      if (isThrottled.current) return;
+
+      const nextIndex = Math.min(Math.max(activeIndex + dir, 0), maxIndex);
+      if (nextIndex === activeIndex) return;
+
+      isThrottled.current = true;
+      setTimeout(
+        () => (isThrottled.current = false),
+        dir > 0 ? forwardThrottle : backwardThrottle
+      );
+
+      onCanLeaveChange(false);
+      console.log("[Timeline] onCanLeaveChange: false");
+      setActiveIndex(nextIndex);
+    },
+    [isActive, canScroll, activeIndex, onCanLeaveChange, triggerPageScroll]
+  );
+
+  // Handle Wheel
+  const handleWheel = useCallback(
+    (e) => {
       const dir = e.deltaY > 0 ? 1 : -1;
       const maxIndex = timelineEvents.length - 1;
 
@@ -142,12 +214,16 @@ export default function Timeline({
         setTimeout(() => {
           isThrottled.current = false;
         }, forwardThrottle);
+        triggerPageScroll("down");
         onCanLeaveChange(true);
+        console.log("[Timeline] onCanLeaveChange: true");
         return;
       }
 
       if (dir < 0 && activeIndex === 0) {
+        triggerPageScroll("up");
         onCanLeaveChange(true);
+        console.log("[Timeline] onCanLeaveChange: true");
         return;
       }
 
@@ -165,27 +241,44 @@ export default function Timeline({
         isThrottled.current = false;
       }, delay);
 
-      onCanLeaveChange(false);
-      setActiveIndex(nextIndex);
-    };
+      if (isActive) {
+        onCanLeaveChange(false);
+        console.log("[Timeline] onCanLeaveChange: false");
+      }
 
-    window.addEventListener("wheel", handleWheel, { passive: false });
-    return () => window.removeEventListener("wheel", handleWheel);
-  }, [isActive, canScroll, activeIndex]);
+      setActiveIndex(nextIndex);
+    },
+    [isActive, canScroll, activeIndex, onCanLeaveChange, triggerPageScroll]
+  );
 
   useEffect(() => {
-    const fraction = viewport.width < 768 ? 0.15 : 
-                     viewport.width < 1000 ? 0.3 : 
-                     centerFraction;
+    window.addEventListener("wheel", handleWheel, { passive: false });
+    window.addEventListener("touchstart", handleTouchStart, { passive: true });
+    window.addEventListener("touchend", handleTouchEnd, { passive: true });
+
+    return () => {
+      window.removeEventListener("wheel", handleWheel);
+      window.removeEventListener("touchstart", handleTouchStart);
+      window.removeEventListener("touchend", handleTouchEnd);
+    };
+  }, [handleWheel, handleTouchStart, handleTouchEnd]);
+
+  useEffect(() => {
+    const fraction =
+      viewport.width < 768
+        ? 0.15
+        : viewport.width < 1000
+        ? 0.3
+        : centerFraction;
     const center = viewport.width * fraction;
     controls.start({ x: center - nodeOffset - activeIndex * shiftPerEvent });
-
   }, [activeIndex, viewport.width, centerFraction]);
 
   const progress = activeIndex / (timelineEvents.length - 1);
 
   const centerOffset = activeIndex * shiftPerEvent - timelineWidth / 2;
-  const scaleFactor = 1 - Math.min(0.25, Math.abs(centerOffset) / (timelineWidth / 2) * 0.25);
+  const scaleFactor =
+    1 - Math.min(0.25, (Math.abs(centerOffset) / (timelineWidth / 2)) * 0.25);
 
   return (
     <div className="relative w-full h-screen">
@@ -224,7 +317,9 @@ export default function Timeline({
                 const baseDistance = ev.distance || 300;
                 const distance = Math.min(baseDistance, viewport.height * 0.35);
 
-                const pos = `${(idx / (timelineEvents.length - 1)) * timelineWidth}px`;
+                const pos = `${
+                  (idx / (timelineEvents.length - 1)) * timelineWidth
+                }px`;
                 const color = ev.color;
                 const isDown = idx % 2 !== 0;
 
@@ -242,7 +337,15 @@ export default function Timeline({
                 const reverseLineDelay = 0.32;
 
                 return (
-                  <div key={ev.id} className="absolute" style={{ left: pos, top: "50%", transform: "translateY(-50%)" }}>
+                  <div
+                    key={ev.id}
+                    className="absolute"
+                    style={{
+                      left: pos,
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                    }}
+                  >
                     <Motion.div
                       initial={{ scale: 0.55, backgroundColor: "#333333" }}
                       className="relative rounded-full"
@@ -255,9 +358,17 @@ export default function Timeline({
                         zIndex: 5,
                       }}
                       animate={
-                        (isPast || isCurrent)
-                          ? { scale: 1, backgroundColor: "#121212", border: "4px solid " + color }
-                          : { scale: 0.55, backgroundColor: "#333333", border: "none" }
+                        isPast || isCurrent
+                          ? {
+                              scale: 1,
+                              backgroundColor: "#121212",
+                              border: "4px solid " + color,
+                            }
+                          : {
+                              scale: 0.55,
+                              backgroundColor: "#333333",
+                              border: "none",
+                            }
                       }
                       transition={{
                         duration: 0.25,
@@ -265,11 +376,18 @@ export default function Timeline({
                       }}
                     />
 
-                    <div className="absolute" style={{ left: 0, top: 0, width: "400px" }}>
+                    <div
+                      className="absolute"
+                      style={{ left: 0, top: 0, width: "400px" }}
+                    >
                       <Motion.div
                         className="absolute bg-white"
                         initial={{ scaleY: 0, opacity: 0.4 }}
-                        animate={isFuture ? { scaleY: 0, opacity: 0.4 } : { scaleY: 1, opacity: 1 }}
+                        animate={
+                          isFuture
+                            ? { scaleY: 0, opacity: 0.4 }
+                            : { scaleY: 1, opacity: 1 }
+                        }
                         transition={{
                           duration: isFuture ? 0.15 : 0.2,
                           delay: isFuture ? reverseLineDelay : lineDelay,
@@ -288,7 +406,11 @@ export default function Timeline({
                       <Motion.div
                         className="absolute rounded-full"
                         initial={{ scale: 0.3, opacity: 0 }}
-                        animate={isFuture ? { scale: 0.3, opacity: 0 } : { scale: 1.2, opacity: 1 }}
+                        animate={
+                          isFuture
+                            ? { scale: 0.3, opacity: 0 }
+                            : { scale: 1.2, opacity: 1 }
+                        }
                         transition={{
                           duration: isFuture ? 0.15 : 0.2,
                           type: "spring",
@@ -301,74 +423,91 @@ export default function Timeline({
                           width: `${nodeSize}px`,
                           height: `${nodeSize}px`,
                           left: "-13px",
-                          top: isDown ? `${distance}px` : `-${distance + nodeSize}px`,
+                          top: isDown
+                            ? `${distance}px`
+                            : `-${distance + nodeSize}px`,
                           zIndex: 3,
                           boxShadow: "0 0 15px 5px rgba(255,255,255,0.3)",
                         }}
                       />
 
-<Motion.div
-  className={`absolute flex ${isDown ? "flex-col-reverse" : "flex-col"}`}
-  initial={{ opacity: 0, x: -30 }}
-  animate={isFuture ? { opacity: 0, x: -30 } : { opacity: 1, x: 0 }}
-  transition={{
-    duration: isFuture ? 0.15 : 0.2,
-    delay: isFuture ? reverseTitleDelay : titleDelay,
-    ease: "easeOut",
-  }}
-  style={{
-    left: "min(12vw, 60px)",
-    ...(isDown
-      ? {
-          bottom: `-${distance + nodeSize + 12}px`,
-        }
-      : {
-          top: `-${distance + nodeSize}px`,
-        }),
-    width: "min(60vw, 350px)",
-  }}
->
-  <div className={`m${isDown ? "t-4" : "b-2"}`}>
-    <span className="text-xs sm:text-sm lg:text-md xl:text-md text-gray-400 mb-0.5">{ev.date}</span>
-    <h3 className="text-xl sm:text-2xl font-bold text-white" style={{ color }}>
-  {ev.title}
-</h3>
-  </div>
-  <Motion.p
-    className={`text-xs sm:text-sm text-gray-400 m${isDown ? "t-5" : "b-5"}`}
-    initial={{ opacity: 0, y: -30 }}
-    animate={isFuture ? { opacity: 0, y: isDown ? 30 : -30 } : { opacity: 1, y: 0 }}
-    transition={{
-      duration: isFuture ? 0.15 : 0.2,
-      delay: isFuture ? reverseTextDelay : textDelay,
-      ease: "easeOut",
-    }}
-  >
-    {ev.description}
-  </Motion.p>
-  {ev.image && (
-    <Motion.div
-      className="rounded-md overflow-hidden"
-      initial={{ opacity: 0 }}
-      animate={isFuture ? { opacity: 0 } : { opacity: 1 }}
-      transition={{
-        duration: isFuture ? 0.15 : 0.2,
-        delay: isFuture ? reverseImageDelay : imageDelay,
-        ease: "easeOut",
-      }}
-    >
-      <img
-        src={ev.image}
-        alt={ev.title}
-        width={240}
-        style={{height: "auto" }}
-        className="my-3 rounded-md max-w-[clamp(150px,30vw,175px)] sm:max-w-[clamp(185px,15vw,250px)] max-h-[20vh] object-cover"
-
-      />
-    </Motion.div>
-  )}
-</Motion.div>
-
+                      <Motion.div
+                        className={`absolute flex ${
+                          isDown ? "flex-col-reverse" : "flex-col"
+                        }`}
+                        initial={{ opacity: 0, x: -30 }}
+                        animate={
+                          isFuture
+                            ? { opacity: 0, x: -30 }
+                            : { opacity: 1, x: 0 }
+                        }
+                        transition={{
+                          duration: isFuture ? 0.15 : 0.2,
+                          delay: isFuture ? reverseTitleDelay : titleDelay,
+                          ease: "easeOut",
+                        }}
+                        style={{
+                          left: "min(12vw, 60px)",
+                          ...(isDown
+                            ? {
+                                bottom: `-${distance + nodeSize + 12}px`,
+                              }
+                            : {
+                                top: `-${distance + nodeSize}px`,
+                              }),
+                          width: "min(60vw, 350px)",
+                        }}
+                      >
+                        <div className={`m${isDown ? "t-4" : "b-2"}`}>
+                          <span className="text-xs sm:text-sm lg:text-md xl:text-md text-gray-400 mb-0.5">
+                            {ev.date}
+                          </span>
+                          <h3
+                            className="text-xl sm:text-2xl font-bold text-white"
+                            style={{ color }}
+                          >
+                            {ev.title}
+                          </h3>
+                        </div>
+                        <Motion.p
+                          className={`text-xs sm:text-sm text-gray-400 m${
+                            isDown ? "t-5" : "b-5"
+                          }`}
+                          initial={{ opacity: 0, y: -30 }}
+                          animate={
+                            isFuture
+                              ? { opacity: 0, y: isDown ? 30 : -30 }
+                              : { opacity: 1, y: 0 }
+                          }
+                          transition={{
+                            duration: isFuture ? 0.15 : 0.2,
+                            delay: isFuture ? reverseTextDelay : textDelay,
+                            ease: "easeOut",
+                          }}
+                        >
+                          {ev.description}
+                        </Motion.p>
+                        {ev.image && (
+                          <Motion.div
+                            className="rounded-md overflow-hidden"
+                            initial={{ opacity: 0 }}
+                            animate={isFuture ? { opacity: 0 } : { opacity: 1 }}
+                            transition={{
+                              duration: isFuture ? 0.15 : 0.2,
+                              delay: isFuture ? reverseImageDelay : imageDelay,
+                              ease: "easeOut",
+                            }}
+                          >
+                            <img
+                              src={ev.image}
+                              alt={ev.title}
+                              width={240}
+                              style={{ height: "auto" }}
+                              className="my-3 rounded-md max-w-[clamp(150px,30vw,175px)] sm:max-w-[clamp(185px,15vw,250px)] max-h-[20vh] object-cover"
+                            />
+                          </Motion.div>
+                        )}
+                      </Motion.div>
                     </div>
                   </div>
                 );
@@ -386,6 +525,6 @@ export default function Timeline({
           </div>
         </div>
       </div>
-    </div>  
+    </div>
   );
 }

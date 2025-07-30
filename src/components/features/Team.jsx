@@ -13,7 +13,8 @@ export default function Team({ isActive, scrollDirection, onCanLeaveChange }) {
   }, [isActive]);
 
   return (
-    <div className="relative w-full h-screen">
+    //<div className="relative w-full h-screen">
+    <div className="relative w-full min-h-screen overflow-y-auto">
       <div className="absolute inset-0 p-6">
         <div className="relative w-full h-full flex items-center justify-center overflow-hidden rounded-3xl bg-black shadow-[0_0_10px_2px_rgba(255,255,255,0.15)]">
           <TeamCarousel />

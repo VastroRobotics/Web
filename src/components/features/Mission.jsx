@@ -2,6 +2,7 @@
 
 import { forwardRef, useEffect, useRef, useState } from "react";
 import StageBanner from "../layout/StageBanner.jsx";
+import useScrollNavigation from "../../hooks/useScrollNavigation.js";
 
 const components = [StageBanner, StageBanner, StageBanner];
 
@@ -50,7 +51,7 @@ const stages = [
 const throttleDuration = 700;
 
 const Mission = forwardRef(function Mission(
-  { isActive, scrollDirection, onCanLeaveChange },
+  { isActive, scrollDirection, onCanLeaveChange, triggerPageScroll },
   ref
 ) {
   const [index, setIndex] = useState(0);
@@ -62,36 +63,40 @@ const Mission = forwardRef(function Mission(
     const start = scrollDirection === "up" ? last : 0;
     setIndex(start);
     onCanLeaveChange(false);
+    console.log("onCanLeaveChange: false");
   }, [isActive, scrollDirection, last, onCanLeaveChange]);
 
-  useEffect(() => {
-    if (!isActive) return;
-    const onWheel = (e) => {
-      const dir = e.deltaY > 0 ? 1 : -1;
+  useScrollNavigation({
+    isActive,
+    currPage: 1, // TODO: must manually change if index changes
+    canScroll: true,
+    throttleDuration,
+    allowHorizontal: true,
+    onScroll: (direction) => {
+      if (animating.current) return;
+
+      const dir = direction === "down" ? 1 : -1;
       const next = index + dir;
 
-      if (animating.current) {
-        e.preventDefault();
-        return;
-      }
-
       if (next < 0 || next > last) {
-        onCanLeaveChange(true);
+        triggerPageScroll(direction);
+        onCanLeaveChange(true); // allow App.jsx to move forward/backward
+        console.log("onCanLeaveChange: true");
         return;
       }
 
-      e.preventDefault();
       animating.current = true;
-      onCanLeaveChange(false);
+      if (isActive) {
+        onCanLeaveChange(false);
+        console.log("onCanLeaveChange: false | Mission end change index: " + index + " | isActive: " + isActive + " | ");
+      }
       setIndex(next);
+
       setTimeout(() => {
         animating.current = false;
       }, throttleDuration);
-    };
-
-    window.addEventListener("wheel", onWheel, { passive: false });
-    return () => window.removeEventListener("wheel", onWheel);
-  }, [isActive, index, last, onCanLeaveChange]);
+    },
+  });
 
   const stage = stages[index];
 

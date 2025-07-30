@@ -87,7 +87,7 @@ const Home = forwardRef(
     useEffect(() => {
       if ("serviceWorker" in navigator) {
         navigator.serviceWorker
-          .register(`Web/serviceWorker.js`)
+          .register(`/Web/serviceWorker.js`)
           .catch((err) => console.error("ServiceWorker failed:", err));
           // TODO: Must alter 'Web/serviceWork.js' when updating site url
       }

@@ -18,7 +18,7 @@ const AssetPreloader = ({ assets, priority = 1, onProgress, onComplete }) => {
         // Use <link rel="preload"> for each asset
         for (const { src, type } of formattedAssets) {
           if (!supportedAsTypes.includes(type)) {
-            console.log("Do not preload 'video' with AssetPreloader.jsx");
+            //console.log("Do not preload 'video' with AssetPreloader.jsx");
             continue;
           }
           const link = document.createElement("link");

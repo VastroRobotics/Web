@@ -7,6 +7,7 @@ import ScrollPrompt from "../layout/ScrollPrompt";
 
 export default function MiniFooter({ onScrollTop }) {
   return (
+    //<div className="relative w-full min-h-screen overflow-y-auto">
     <div className="relative w-full h-screen">
       <div className="absolute inset-0 p-6">
         <div className="relative w-full h-full overflow-hidden rounded-3xl bg-black shadow-[0_0_10px_2px_rgba(255,255,255,0.15)]">
