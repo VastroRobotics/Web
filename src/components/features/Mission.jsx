@@ -63,13 +63,19 @@ const Mission = forwardRef(function Mission(
     const start = scrollDirection === "up" ? last : 0;
     setIndex(start);
     onCanLeaveChange(false);
+    
+    animating.current = true;
+    const timeout = setTimeout(() => {
+      animating.current = false;
+    }, 600);
+    return () => clearTimeout(timeout);
   }, [isActive, scrollDirection, last, onCanLeaveChange]);
 
   const throttledTriggerPageScroll = (direction) => {
     if (animating.current) return;
     animating.current = true;
     triggerPageScroll(direction);
-    onCanLeaveChange(false); 
+    onCanLeaveChange(false);
 
     setTimeout(() => {
       animating.current = false;
