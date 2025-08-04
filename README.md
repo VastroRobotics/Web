@@ -94,6 +94,8 @@ See [LICENSE](./LICENSE) for details.
 
 - e.preventDefault(); can't be used on mobile pages requiring clickable elements
 
+- Footer button that takes user to top -- not working
+
 ---
 
 ## Credits
