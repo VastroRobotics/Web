@@ -90,6 +90,10 @@ See [LICENSE](./LICENSE) for details.
 
 - Names cutoff on team page
 
+- Mission statement small on mobile and small web page
+
+- e.preventDefault(); can't be used on mobile pages requiring clickable elements
+
 ---
 
 ## Credits

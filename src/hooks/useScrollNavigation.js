@@ -55,12 +55,14 @@ export default function useScrollNavigation({
     };
 
     const handleTouchStart = (e) => {
+      // e.preventDefault(); 
       e.stopPropagation();
       const touch = e.touches[0];
       touchStart.current = { x: touch.clientX, y: touch.clientY };
     };
 
     const handleTouchEnd = (e) => {
+      // e.preventDefault();
       e.stopPropagation();
       if (isThrottled.current) return;
       
@@ -81,8 +83,8 @@ export default function useScrollNavigation({
     };
 
     window.addEventListener("wheel", handleWheel, { passive: false });
-    window.addEventListener("touchstart", handleTouchStart, { passive: true });
-    window.addEventListener("touchend", handleTouchEnd, { passive: true });
+    window.addEventListener("touchstart", handleTouchStart, { passive: false });
+    window.addEventListener("touchend", handleTouchEnd, { passive: false });
 
     return () => {
       window.removeEventListener("wheel", handleWheel);
