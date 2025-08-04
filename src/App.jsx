@@ -37,8 +37,6 @@ export default function App() {
     allowHorizontal: false,
     touchOnly: false,
     onScroll: (dir) => {
-      console.log("Active index: " + activeIndex);
-      //if (alwaysCanLeavePages.includes(activeIndex)) { setCanLeave(true); }
       if (isThrottled.current) return;
       setScrollDirection(dir);
       let next = activeIndex + (dir === "down" ? 1 : -1);
@@ -46,10 +44,8 @@ export default function App() {
 
       isThrottled.current = true;
       setActiveIndex(next);
-      console.log("Switch activeIndex from Reg to " + next);
       setTimeout(() => {
         isThrottled.current = false;
-        console.log("Unthrottled");
       }, 800);
     },
   });
@@ -63,21 +59,11 @@ export default function App() {
       
     isThrottled.current = true;
     setActiveIndex(next);
-    console.log("Switch activeIndex from triggerPageScroll to " + next);
     setTimeout(() => {
       isThrottled.current = false;
-      console.log("Unthrottled");
     }, 800);
   }
   
-  function updateCanLeave(value) {
-    // if (alwaysCanLeavePages.includes(activeIndex)) {
-    //   setCanLeave(true); // Should always be true on specific pages
-    //   console.log("Stopped a false set of CanLeave from App.jsx")
-    // } else {
-    setCanLeave(value);
-    // }
-  }
 
   return (
     <>
@@ -101,7 +87,7 @@ export default function App() {
                   <Section
                     isActive={i === activeIndex}
                     scrollDirection={scrollDirection}
-                    onCanLeaveChange={updateCanLeave}
+                    onCanLeaveChange={setCanLeave}
                     triggerPageScroll={triggerPageScroll}
                     goToNext={() =>
                       setActiveIndex((prev) =>

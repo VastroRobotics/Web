@@ -154,7 +154,6 @@ export default function Timeline({
 
   // Handle Moblie touch
   const handleTouchStart = useCallback((e) => {
-    e.preventDefault();
     e.stopPropagation();
     const touch = e.touches[0];
     touchStart.current = { x: touch.clientX, y: touch.clientY };
@@ -162,7 +161,6 @@ export default function Timeline({
 
   const handleTouchEnd = useCallback(
     (e) => {
-      e.preventDefault();
       e.stopPropagation();
       if (!isActive || !canScroll || isThrottled.current) return;
 
