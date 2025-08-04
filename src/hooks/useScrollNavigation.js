@@ -10,22 +10,31 @@ export default function useScrollNavigation({
 }) {
   const isThrottled = useRef(false);
   const touchStart = useRef({ x: null, y: null });
-  const alwaysCanLeavePages = [0, 2, 4]; // e.g., Home (0), Team (2), Footer (4)
+
+  const canScrollRef = useRef(canScroll);
+  const onScrollRef = useRef(onScroll);
+  
+  const alwaysCanLeavePages = [0, 2, 4];
+  const shouldForceScroll = alwaysCanLeavePages.includes(currPage);
+
+  useEffect(() => {
+    canScrollRef.current = canScroll;
+    onScrollRef.current = onScroll;
+  }, [canScroll, onScroll]);
+
 
   useEffect(() => {
     if (!isActive) return;
-    if (alwaysCanLeavePages.includes(currPage)) {
-        console.log("============ Forced Scroll in scrollNav")
-        canScroll = true;
-    }
-    console.log("If just forced, should be " + canScroll);
 
     const triggerScroll = (direction) => {
-      if (!canScroll || isThrottled.current) return;
+      if ((!shouldForceScroll && !canScrollRef.current) || isThrottled.current)
+        return;
       isThrottled.current = true;
-      onScroll(direction);
+      console.log('Throttling')
+      onScrollRef.current?.(direction);
       setTimeout(() => {
         isThrottled.current = false;
+        console.log("Unthrottled")
       }, throttleDuration);
     };
 
@@ -41,7 +50,6 @@ export default function useScrollNavigation({
     };
 
     const handleTouchEnd = (e) => {
-        console.log("000000000000000000000000000000000000000")
       const touch = e.changedTouches[0];
       const dx = touchStart.current.x - touch.clientX;
       const dy = touchStart.current.y - touch.clientY;
@@ -52,7 +60,7 @@ export default function useScrollNavigation({
       if (Math.abs(dy) > Math.abs(dx)) {
         direction = dy > 0 ? "down" : "up";
       } else if (allowHorizontal) {
-        direction = dx > 0 ? "down" : "up"; // swipe left = down
+        direction = dx > 0 ? "down" : "up";
       }
 
       if (direction) triggerScroll(direction);
@@ -67,5 +75,5 @@ export default function useScrollNavigation({
       window.removeEventListener("touchstart", handleTouchStart);
       window.removeEventListener("touchend", handleTouchEnd);
     };
-  }, [isActive, canScroll, onScroll, throttleDuration, allowHorizontal]);
+  }, [isActive, currPage, allowHorizontal, throttleDuration]);
 }

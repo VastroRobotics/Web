@@ -63,7 +63,6 @@ const Mission = forwardRef(function Mission(
     const start = scrollDirection === "up" ? last : 0;
     setIndex(start);
     onCanLeaveChange(false);
-    console.log("onCanLeaveChange: false");
   }, [isActive, scrollDirection, last, onCanLeaveChange]);
 
   useScrollNavigation({
@@ -81,14 +80,12 @@ const Mission = forwardRef(function Mission(
       if (next < 0 || next > last) {
         triggerPageScroll(direction);
         onCanLeaveChange(true); // allow App.jsx to move forward/backward
-        console.log("onCanLeaveChange: true");
         return;
       }
 
       animating.current = true;
       if (isActive) {
         onCanLeaveChange(false);
-        console.log("onCanLeaveChange: false | Mission end change index: " + index + " | isActive: " + isActive + " | ");
       }
       setIndex(next);
 

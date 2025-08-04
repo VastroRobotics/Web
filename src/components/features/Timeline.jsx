@@ -123,15 +123,12 @@ export default function Timeline({
       const start = scrollDirection === "up" ? timelineEvents.length - 1 : 0;
       setActiveIndex(start);
       setCanScroll(false);
-      console.log("[Timeline] setCanScroll: false");
       onCanLeaveChange(false);
-      console.log("[Timeline] onCanLeaveChange: false");
       isThrottled.current = true;
 
       clearTimeout(unlockTimeout.current);
       unlockTimeout.current = setTimeout(() => {
         setCanScroll(true);
-        console.log("[Timeline] setCanScroll: true");
         isThrottled.current = false;
       }, forwardThrottle);
     } else {
@@ -172,14 +169,14 @@ export default function Timeline({
         setTimeout(() => (isThrottled.current = false), forwardThrottle);
         triggerPageScroll("down");
         onCanLeaveChange(true);
-        console.log("[Timeline] onCanLeaveChange: true");
         return;
       }
 
       if (dir < 0 && activeIndex === 0) {
+        if (isThrottled.current) return;
+        isThrottled.current = true;
         triggerPageScroll("up");
         onCanLeaveChange(true);
-        console.log("[Timeline] onCanLeaveChange: true");
         return;
       }
 
@@ -196,7 +193,6 @@ export default function Timeline({
       );
 
       onCanLeaveChange(false);
-      console.log("[Timeline] onCanLeaveChange: false");
       setActiveIndex(nextIndex);
     },
     [isActive, canScroll, activeIndex, onCanLeaveChange, triggerPageScroll]
@@ -205,6 +201,8 @@ export default function Timeline({
   // Handle Wheel
   const handleWheel = useCallback(
     (e) => {
+      if (!isActive || !canScroll) return;
+
       const dir = e.deltaY > 0 ? 1 : -1;
       const maxIndex = timelineEvents.length - 1;
 
@@ -216,14 +214,12 @@ export default function Timeline({
         }, forwardThrottle);
         triggerPageScroll("down");
         onCanLeaveChange(true);
-        console.log("[Timeline] onCanLeaveChange: true");
         return;
       }
 
       if (dir < 0 && activeIndex === 0) {
         triggerPageScroll("up");
         onCanLeaveChange(true);
-        console.log("[Timeline] onCanLeaveChange: true");
         return;
       }
 
@@ -241,11 +237,7 @@ export default function Timeline({
         isThrottled.current = false;
       }, delay);
 
-      if (isActive) {
-        onCanLeaveChange(false);
-        console.log("[Timeline] onCanLeaveChange: false");
-      }
-
+      onCanLeaveChange(false);
       setActiveIndex(nextIndex);
     },
     [isActive, canScroll, activeIndex, onCanLeaveChange, triggerPageScroll]

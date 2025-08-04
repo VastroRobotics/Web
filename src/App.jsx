@@ -37,87 +37,45 @@ export default function App() {
     allowHorizontal: false,
     touchOnly: false,
     onScroll: (dir) => {
-      if (alwaysCanLeavePages.includes(activeIndex)) {
-        console.log("=========== Forced Second Stiff arm")
-        setCanLeave(true);
-      }
+      if (alwaysCanLeavePages.includes(activeIndex)) { setCanLeave(true); }
+      //if (isThrottled.current) return;
       setScrollDirection(dir);
       let next = activeIndex + (dir === "down" ? 1 : -1);
       if (next < 0 || next >= sections.length) return;
 
+      //isThrottled.current = true;
       setActiveIndex(next);
-
-      // Prevent user getting stuck on Mission (1) and Timeline (3)
-      console.log("Next: " + next)
-      if (next !== 1 && next !== 3) {
-        setCanLeave(true);
-        console.log("setCanLeave(true) preventative — from [App]");
-      }
+      // setTimeout(() => {
+      //   isThrottled.current = false;
+      //   console.log("Unthrottled");
+      // }, throttleDuration);
     },
   });
 
   // Function called in Sections with scrollable elements. It forces the page to scroll immediately
   function triggerPageScroll(direction) {
+    //if (isThrottled.current) return;
+    console.log("Trigger Page Scroll")
+    console.log("triggered")
     setScrollDirection(direction);
     let next = activeIndex + (direction === "down" ? 1 : -1);
     if (next < 0 || next >= sections.length) return;
-
-    console.log("Triggering scroll to page", next);
+      
+    //isThrottled.current = true;
     setActiveIndex(next);
+    // setTimeout(() => {
+    //   isThrottled.current = false;
+    //   console.log("Unthrottled");
+    // }, throttleDuration);
   }
   
   function updateCanLeave(value) {
-    console.log("Updating Can Leave--> " + value + "ActiveIndex: " + activeIndex + " |  ");
-
     if (alwaysCanLeavePages.includes(activeIndex)) {
-      console.log("Bypassed canLeave");
-      setCanLeave(true);
-      return;
+      setCanLeave(true); // Should always be true on specific pages
+    } else {
+      setCanLeave(value);
     }
-    console.log("ActiveIndex: " + activeIndex + " |  ")
-    setCanLeave(value);
   }
-
-
-  // const handleScroll = (e) => {
-  //   if (isThrottled.current || !canLeave) return;
-
-  //   const delta = e.deltaY;
-  //   const dir = delta > 0 ? "down" : "up";
-  //   setScrollDirection(dir);
-
-  //   let next = activeIndex + (dir === "down" ? 1 : -1);
-  //   const total = sections.length;
-
-  //   if (next < 0 || next >= total) return;
-
-  //   setActiveIndex(next);
-  //   isThrottled.current = true;
-
-  //   setTimeout(() => {
-  //     isThrottled.current = false;
-  //     // Prevent user getting stuck on pages by ensuring canLeave is set to true in all cases but Mission and Timeline
-  //     if (next != 1 && next != 3) {
-  //       setCanLeave(true);
-  //     }
-  //   }, 800); // debounce duration
-  // };
-
-  // const jumpToSection = (index) => {
-  //   setActiveIndex(index);
-  // };
-
-
-  // useEffect(() => {
-  //   window.addEventListener("wheel", handleScroll, { passive: false });
-  //   window.addEventListener("touchstart", handleTouchStart, { passive: true });
-  //   window.addEventListener("touchend", handleTouchEnd, { passive: true });
-  //   return () => {
-  //     window.removeEventListener("wheel", handleScroll);
-  //     window.removeEventListener("touchstart", handleTouchStart);
-  //     window.removeEventListener("touchend", handleTouchEnd);
-  //   };
-  // }, [canLeave, activeIndex]);
 
   return (
     <>

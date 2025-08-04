@@ -30,8 +30,8 @@ const Home = forwardRef(
     const frontEntranceRef = useRef(null);
     const frontLoopRef = useRef(null);
     const wrapperRef = useRef(null);
-    const timeoutRef = useRef(null); // ✅ ADDED
-    const clickedRef = useRef(false); // ✅ ADDED
+    const timeoutRef = useRef(null); 
+    const clickedRef = useRef(false);
 
     const [nat, setNat] = useState({ w: 1920, h: 1080 });
     const [showBackLoop, setShowBackLoop] = useState(false);
@@ -67,7 +67,7 @@ const Home = forwardRef(
     ];
 
     useEffect(() => {
-      return () => clearTimeout(timeoutRef.current); // ✅ Cleanup on unmount
+      return () => clearTimeout(timeoutRef.current);
     }, []);
 
     const preloadVideos = useCallback(async () => {
