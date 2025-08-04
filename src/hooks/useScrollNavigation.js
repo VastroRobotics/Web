@@ -9,6 +9,7 @@ export default function useScrollNavigation({
   onScroll,
 }) {
   const isThrottled = useRef(false);
+  const lastDeltaY = useRef(0);
   const touchStart = useRef({ x: null, y: null });
 
   const canScrollRef = useRef(canScroll);
@@ -30,26 +31,41 @@ export default function useScrollNavigation({
       if ((!shouldForceScroll && !canScrollRef.current) || isThrottled.current)
         return;
       isThrottled.current = true;
-      console.log('Throttling')
       onScrollRef.current?.(direction);
       setTimeout(() => {
         isThrottled.current = false;
-        console.log("Unthrottled")
       }, throttleDuration);
     };
 
     const handleWheel = (e) => {
-      const direction = e.deltaY > 0 ? "down" : "up";
       e.preventDefault();
+      e.stopPropagation();
+
+      const deltaY = e.deltaY;
+      // Inertia filtering: skip tiny movements
+      if (Math.abs(deltaY) < 5 && Math.abs(lastDeltaY.current) < 5) {
+        return; // likely inertial scroll
+      }
+
+      lastDeltaY.current = deltaY;
+      if (isThrottled.current) return; // Must update deltas even if throttled for inertia scroll
+
+      const direction = deltaY > 0 ? "down" : "up";
       triggerScroll(direction);
     };
 
     const handleTouchStart = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
       const touch = e.touches[0];
       touchStart.current = { x: touch.clientX, y: touch.clientY };
     };
 
     const handleTouchEnd = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (isThrottled.current) return;
+      
       const touch = e.changedTouches[0];
       const dx = touchStart.current.x - touch.clientX;
       const dy = touchStart.current.y - touch.clientY;

@@ -37,44 +37,46 @@ export default function App() {
     allowHorizontal: false,
     touchOnly: false,
     onScroll: (dir) => {
-      if (alwaysCanLeavePages.includes(activeIndex)) { setCanLeave(true); }
-      //if (isThrottled.current) return;
+      console.log("Active index: " + activeIndex);
+      //if (alwaysCanLeavePages.includes(activeIndex)) { setCanLeave(true); }
+      if (isThrottled.current) return;
       setScrollDirection(dir);
       let next = activeIndex + (dir === "down" ? 1 : -1);
       if (next < 0 || next >= sections.length) return;
 
-      //isThrottled.current = true;
+      isThrottled.current = true;
       setActiveIndex(next);
-      // setTimeout(() => {
-      //   isThrottled.current = false;
-      //   console.log("Unthrottled");
-      // }, throttleDuration);
+      console.log("Switch activeIndex from Reg to " + next);
+      setTimeout(() => {
+        isThrottled.current = false;
+        console.log("Unthrottled");
+      }, 800);
     },
   });
 
   // Function called in Sections with scrollable elements. It forces the page to scroll immediately
   function triggerPageScroll(direction) {
-    //if (isThrottled.current) return;
-    console.log("Trigger Page Scroll")
-    console.log("triggered")
+    if (isThrottled.current) return;
     setScrollDirection(direction);
     let next = activeIndex + (direction === "down" ? 1 : -1);
     if (next < 0 || next >= sections.length) return;
       
-    //isThrottled.current = true;
+    isThrottled.current = true;
     setActiveIndex(next);
-    // setTimeout(() => {
-    //   isThrottled.current = false;
-    //   console.log("Unthrottled");
-    // }, throttleDuration);
+    console.log("Switch activeIndex from triggerPageScroll to " + next);
+    setTimeout(() => {
+      isThrottled.current = false;
+      console.log("Unthrottled");
+    }, 800);
   }
   
   function updateCanLeave(value) {
-    if (alwaysCanLeavePages.includes(activeIndex)) {
-      setCanLeave(true); // Should always be true on specific pages
-    } else {
-      setCanLeave(value);
-    }
+    // if (alwaysCanLeavePages.includes(activeIndex)) {
+    //   setCanLeave(true); // Should always be true on specific pages
+    //   console.log("Stopped a false set of CanLeave from App.jsx")
+    // } else {
+    setCanLeave(value);
+    // }
   }
 
   return (

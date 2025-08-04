@@ -95,12 +95,13 @@ export default function Timeline({
   const [canScroll, setCanScroll] = useState(false);
   const isThrottled = useRef(false);
   const unlockTimeout = useRef(null);
+  const lastDeltaY = useRef(0);
   const touchStart = useRef({ x: null, y: null }); // Mobile
 
   const [viewport, setViewport] = useState({ width: 0, height: 0 });
 
-  const forwardThrottle = 600;
-  const backwardThrottle = 400;
+  const forwardThrottle = 800;
+  const backwardThrottle = 600;
 
   const timelineWidth = timelineEvents.length * 400;
   const timelineHeight = 10;
@@ -137,16 +138,33 @@ export default function Timeline({
       clearTimeout(unlockTimeout.current);
     }
   }, [isActive, scrollDirection]);
+  
+
+  const throttledTriggerPageScroll = (direction) => {
+    isThrottled.current = true;
+    triggerPageScroll(direction);
+    onCanLeaveChange(false);
+
+    const delay = direction === "down" ? forwardThrottle : backwardThrottle;
+    setTimeout(() => {
+      isThrottled.current = false;
+      onCanLeaveChange(true);
+    }, delay);
+  };
 
   // Handle Moblie touch
   const handleTouchStart = useCallback((e) => {
+    e.preventDefault();
+    e.stopPropagation();
     const touch = e.touches[0];
     touchStart.current = { x: touch.clientX, y: touch.clientY };
   }, []);
 
   const handleTouchEnd = useCallback(
     (e) => {
-      if (!isActive || !canScroll) return;
+      e.preventDefault();
+      e.stopPropagation();
+      if (!isActive || !canScroll || isThrottled.current) return;
 
       const touch = e.changedTouches[0];
       const dx = touchStart.current.x - touch.clientX;
@@ -163,25 +181,15 @@ export default function Timeline({
 
       const maxIndex = timelineEvents.length - 1;
 
+      // Leave Section Edge Cases
       if (dir > 0 && activeIndex === maxIndex) {
-        if (isThrottled.current) return;
-        isThrottled.current = true;
-        setTimeout(() => (isThrottled.current = false), forwardThrottle);
-        triggerPageScroll("down");
-        onCanLeaveChange(true);
+        throttledTriggerPageScroll("down");
         return;
       }
-
       if (dir < 0 && activeIndex === 0) {
-        if (isThrottled.current) return;
-        isThrottled.current = true;
-        triggerPageScroll("up");
-        onCanLeaveChange(true);
+        throttledTriggerPageScroll("up");
         return;
       }
-
-      e.stopPropagation();
-      if (isThrottled.current) return;
 
       const nextIndex = Math.min(Math.max(activeIndex + dir, 0), maxIndex);
       if (nextIndex === activeIndex) return;
@@ -201,31 +209,31 @@ export default function Timeline({
   // Handle Wheel
   const handleWheel = useCallback(
     (e) => {
-      if (!isActive || !canScroll) return;
-
-      const dir = e.deltaY > 0 ? 1 : -1;
-      const maxIndex = timelineEvents.length - 1;
-
-      if (dir > 0 && activeIndex === maxIndex) {
-        if (isThrottled.current) return;
-        isThrottled.current = true;
-        setTimeout(() => {
-          isThrottled.current = false;
-        }, forwardThrottle);
-        triggerPageScroll("down");
-        onCanLeaveChange(true);
-        return;
-      }
-
-      if (dir < 0 && activeIndex === 0) {
-        triggerPageScroll("up");
-        onCanLeaveChange(true);
-        return;
-      }
-
       e.preventDefault();
       e.stopPropagation();
-      if (isThrottled.current) return;
+      if (!isActive) return;
+
+      const deltaY = e.deltaY;
+      // Inertia filtering: skip tiny movements
+      if (Math.abs(deltaY) < 5 && Math.abs(lastDeltaY.current) < 5) {
+        return; // likely inertial scroll
+      }
+      lastDeltaY.current = deltaY;
+
+      if (!canScroll || isThrottled.current) return; // Must update deltas before exiting for inertia scroll handling
+
+      const dir = deltaY > 0 ? 1 : -1;
+      const maxIndex = timelineEvents.length - 1;
+
+      // Leave Section Edge Cases
+      if (dir > 0 && activeIndex === maxIndex) {
+        throttledTriggerPageScroll("down");
+        return;
+      }
+      if (dir < 0 && activeIndex === 0) {
+        throttledTriggerPageScroll("up");
+        return;
+      }
 
       const nextIndex = Math.min(Math.max(activeIndex + dir, 0), maxIndex);
       if (nextIndex === activeIndex) return;

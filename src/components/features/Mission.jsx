@@ -65,6 +65,18 @@ const Mission = forwardRef(function Mission(
     onCanLeaveChange(false);
   }, [isActive, scrollDirection, last, onCanLeaveChange]);
 
+  const throttledTriggerPageScroll = (direction) => {
+    if (animating.current) return;
+    animating.current = true;
+    triggerPageScroll(direction);
+    onCanLeaveChange(false); 
+
+    setTimeout(() => {
+      animating.current = false;
+      onCanLeaveChange(true); // allow App.jsx to move forward/backward
+    }, throttleDuration);
+  };
+
   useScrollNavigation({
     isActive,
     currPage: 1, // TODO: must manually change if index changes
@@ -77,12 +89,13 @@ const Mission = forwardRef(function Mission(
       const dir = direction === "down" ? 1 : -1;
       const next = index + dir;
 
+      // Trigger Page Scroll with throttle
       if (next < 0 || next > last) {
-        triggerPageScroll(direction);
-        onCanLeaveChange(true); // allow App.jsx to move forward/backward
+        throttledTriggerPageScroll(direction);
         return;
       }
 
+      // Default Scroll
       animating.current = true;
       if (isActive) {
         onCanLeaveChange(false);

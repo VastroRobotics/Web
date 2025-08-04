@@ -88,7 +88,7 @@ See [LICENSE](./LICENSE) for details.
 
 - AssetPreloader.jsx was working incorrectly and wasn't removing previous preloads. Its functionality is removed. It still runs and needs to be resolved.
 
-- Mobile scrolling is not functioning
+- Names cutoff on team page
 
 ---
 
