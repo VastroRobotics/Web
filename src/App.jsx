@@ -64,7 +64,10 @@ export default function App() {
     }, 800);
   }
   
-
+  function scrollToTop() {
+    setActiveIndex(0);
+  }
+  
   return (
     <>
       <AssetPreloader assets={[backEntrance, frontEntrance]} priority={3} />
@@ -89,6 +92,7 @@ export default function App() {
                     scrollDirection={scrollDirection}
                     onCanLeaveChange={setCanLeave}
                     triggerPageScroll={triggerPageScroll}
+                    onScrollTop={scrollToTop}
                     goToNext={() =>
                       setActiveIndex((prev) =>
                         Math.min(prev + 1, sections.length - 1)
