@@ -55,14 +55,14 @@ export default function useScrollNavigation({
     };
 
     const handleTouchStart = (e) => {
-      // e.preventDefault(); 
+      e.preventDefault(); 
       e.stopPropagation();
       const touch = e.touches[0];
       touchStart.current = { x: touch.clientX, y: touch.clientY };
     };
 
     const handleTouchEnd = (e) => {
-      // e.preventDefault();
+      e.preventDefault();
       e.stopPropagation();
       if (isThrottled.current) return;
       
