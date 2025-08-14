@@ -4,13 +4,13 @@ import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import TeamCarousel from "../ui/TeamCarousel";
 
-export default function Team({ isActive, scrollDirection, onCanLeaveChange }) {
+export default function Team({  }) {
 
-  useEffect(() => {
-    if (isActive) {
-      onCanLeaveChange(true);
-    }
-  }, [isActive]);
+  // useEffect(() => {
+  //   if (isActive) {
+  //     onCanLeaveChange(true);
+  //   }
+  // }, [isActive]);
 
   return (
     //<div className="relative w-full h-screen">

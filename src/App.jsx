@@ -19,6 +19,7 @@ const Mission = lazy(() => import("./components/features/Mission"));
 const Team = lazy(() => import("./components/features/Team"));
 const Timeline = lazy(() => import("./components/features/Timeline"));
 const Footer = lazy(() => import("./components/features/Footer"));
+//const About = lazy(() => import("./components/features/About"));
 
 const sections = [Home, Mission, Team, Timeline, Footer];
 const alwaysCanLeavePages = [0, 2, 4]; // e.g., Home (0), Team (2), Footer (4)
