@@ -75,7 +75,8 @@ h1, h2, h3, h4, h5, h6 {
   content: "";
   position: absolute;
   inset: -20%;
-  pointer-events: none;
+  /* TODO: Mobile Fix
+  pointer-events: none; */
   background:
     radial-gradient(ellipse at var(--glow-pos1, 50% 80%), var(--glow-color1, rgba(255,255,255,0.3)) 0%, transparent 70%),
     radial-gradient(ellipse at var(--glow-pos2, 80% 20%), var(--glow-color2, rgba(200,200,200,0.2)) 0%, transparent 70%);

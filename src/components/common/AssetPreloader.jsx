@@ -34,6 +34,7 @@ const AssetPreloader = ({ assets, priority = 1, onProgress, onComplete }) => {
         AssetLoader.setProgressCallback(onProgress);
 
         // Load assets with specified priority
+        console.log("**CALL** PreloadAssets - await AsssetPreloader");
         await AssetLoader.preloadAssets(formattedAssets, priority);
 
         onComplete?.();

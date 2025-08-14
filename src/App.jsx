@@ -56,21 +56,21 @@ export default function App() {
     setScrollDirection(direction);
     let next = activeIndex + (direction === "down" ? 1 : -1);
     if (next < 0 || next >= sections.length) return;
-      
+
     isThrottled.current = true;
     setActiveIndex(next);
     setTimeout(() => {
       isThrottled.current = false;
     }, 800);
   }
-  
+
   function scrollToTop() {
     setActiveIndex(0);
   }
-  
+  // TODO: Leave this in or remove?
+  //<AssetPreloader assets={[backEntrance, frontEntrance]} priority={3} />
   return (
     <>
-      <AssetPreloader assets={[backEntrance, frontEntrance]} priority={3} />
       <div className="w-full h-screen overflow-hidden relative">
         {sections.map((Section, i) => (
           <div

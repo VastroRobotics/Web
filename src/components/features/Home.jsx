@@ -1,4 +1,3 @@
-// (imports remain unchanged)
 import {
   forwardRef,
   useRef,
@@ -80,7 +79,9 @@ const Home = forwardRef(
         { src: FrontLoop, type: "video", priority: 2 },
       ];
       AssetLoader.setProgressCallback(setLoadingProgress);
+      console.log("**CALL** PreloadAssets - Home (critical)");
       await AssetLoader.preloadAssets(criticalVideos);
+      console.log("**CALL** PreloadAssets - Home (secondary)");
       AssetLoader.preloadAssets(secondaryVideos);
     }, []);
 
@@ -91,6 +92,7 @@ const Home = forwardRef(
           .catch((err) => console.error("ServiceWorker failed:", err));
           // TODO: Must alter 'Web/serviceWork.js' when updating site url
       }
+      console.log("**CALL** PreloadVideos - useEffect ServiceWorker");
       preloadVideos();
       return () => AssetLoader.setProgressCallback(null);
     }, [preloadVideos]);
@@ -195,6 +197,8 @@ const Home = forwardRef(
       return () => window.removeEventListener("resize", update);
     }, [nat]);
 
+
+    // TODO: No longer necessary?
     useEffect(() => {
       if (isActive) {
         onCanLeaveChange(true);
@@ -228,7 +232,7 @@ const Home = forwardRef(
                     <video
                       ref={backEntranceRef}
                       className={videoClass}
-                      src={BackEntrance}
+                      // src={BackEntrance}
                       muted
                       autoPlay
                       playsInline
@@ -238,7 +242,7 @@ const Home = forwardRef(
                     <video
                       ref={backLoopRef}
                       className={videoClass}
-                      src={BackLoop}
+                      // src={BackLoop}
                       muted
                       playsInline
                       preload="auto"
@@ -266,7 +270,7 @@ const Home = forwardRef(
                     <video
                       ref={frontEntranceRef}
                       className={videoClass}
-                      src={FrontEntrance}
+                      // src={FrontEntrance}
                       muted
                       autoPlay
                       playsInline
@@ -276,14 +280,14 @@ const Home = forwardRef(
                     <video
                       ref={frontLoopRef}
                       className={videoClass}
-                      src={FrontLoop}
+                      // src={FrontLoop}
                       muted
                       playsInline
                       preload="auto"
                       style={{ opacity: showFrontLoop ? 1 : 0 }}
                     />
 
-                    {/* Temporarily removed Features using "false"*/}
+                    {/* TODO:: Temporarily removed Features using "false"*/}
                     {showFrontLoop && logoDone && false && (
                       <div className="absolute inset-0 pointer-events-none">
                         {infoPoints.map((p) => (
