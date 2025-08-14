@@ -85,7 +85,7 @@ const Mission = forwardRef(function Mission(
 
   useScrollNavigation({
     isActive,
-    currPage: 1, // TODO: must manually change if index changes
+    currPage: 1, // TODO: must manually change if page index changes
     canScroll: true,
     throttleDuration,
     allowHorizontal: true,

@@ -6,6 +6,7 @@ export default function useScrollNavigation({
   canScroll = true,
   throttleDuration = 800,
   allowHorizontal = true,
+  allowMobileTouch = false,
   onScroll,
 }) {
   const isThrottled = useRef(false);
@@ -17,8 +18,6 @@ export default function useScrollNavigation({
 
   const alwaysCanLeavePages = [0, 2, 4]; // TODO: Must update if pages change
   const shouldForceScroll = alwaysCanLeavePages.includes(currPage);
-  const mobileTouchPages = [2, 4]; // TODO: Must update if pages change
-  const allowMobileTouch = mobileTouchPages.includes(currPage);
 
   useEffect(() => {
     canScrollRef.current = canScroll;
@@ -56,15 +55,21 @@ export default function useScrollNavigation({
     };
 
     const handleTouchStart = (e) => {
-      if (!allowMobileTouch) { e.preventDefault(); };
-      e.stopPropagation();
+      if (!allowMobileTouch) { 
+        e.preventDefault();
+        e.stopPropagation();
+        console.log("Mobile Touch Not Allowed");
+      };
       const touch = e.touches[0];
       touchStart.current = { x: touch.clientX, y: touch.clientY };
     };
 
     const handleTouchEnd = (e) => {
-      if (!allowMobileTouch) { e.preventDefault(); };
-      e.stopPropagation();
+      if (!allowMobileTouch) { 
+        e.preventDefault(); 
+        e.stopPropagation();
+      };
+      
       if (isThrottled.current) return;
 
       const touch = e.changedTouches[0];

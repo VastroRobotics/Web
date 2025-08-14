@@ -6,6 +6,13 @@ import LogoText from "../../assets/branding/text_only_white.svg";
 import ScrollPrompt from "../layout/ScrollPrompt";
 
 export default function MiniFooter({ onScrollTop }) {
+  
+  useScrollNavigation({
+    isActive,
+    currPage: 4, // TODO: must manually change if page index changes
+    allowMobileTouch: true,
+  });
+
   return (
     //<div className="relative w-full min-h-screen overflow-y-auto">
     <div className="relative w-full h-screen">

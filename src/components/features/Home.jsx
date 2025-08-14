@@ -198,15 +198,7 @@ const Home = forwardRef(
     }, [nat]);
 
 
-    // TODO: No longer necessary?
-    useEffect(() => {
-      if (isActive) {
-        onCanLeaveChange(true);
-      }
-    }, [isActive]);
-
-    const videoClass =
-      "absolute inset-0 w-full h-full object-fill pointer-events-none";
+    const videoClass = "absolute inset-0 w-full h-full object-fill pointer-events-none";
 
     return (
       <div
