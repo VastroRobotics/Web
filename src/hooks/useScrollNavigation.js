@@ -14,15 +14,16 @@ export default function useScrollNavigation({
 
   const canScrollRef = useRef(canScroll);
   const onScrollRef = useRef(onScroll);
-  
-  const alwaysCanLeavePages = [0, 2, 4];
+
+  const alwaysCanLeavePages = [0, 2, 4]; // TODO: Must update if pages change
   const shouldForceScroll = alwaysCanLeavePages.includes(currPage);
+  const mobileTouchPages = [2, 4]; // TODO: Must update if pages change
+  const allowMobileTouch = mobileTouchPages.includes(currPage);
 
   useEffect(() => {
     canScrollRef.current = canScroll;
     onScrollRef.current = onScroll;
   }, [canScroll, onScroll]);
-
 
   useEffect(() => {
     if (!isActive) return;
@@ -55,17 +56,17 @@ export default function useScrollNavigation({
     };
 
     const handleTouchStart = (e) => {
-      e.preventDefault(); 
+      if (!allowMobileTouch) { e.preventDefault(); };
       e.stopPropagation();
       const touch = e.touches[0];
       touchStart.current = { x: touch.clientX, y: touch.clientY };
     };
 
     const handleTouchEnd = (e) => {
-      e.preventDefault();
+      if (!allowMobileTouch) { e.preventDefault(); };
       e.stopPropagation();
       if (isThrottled.current) return;
-      
+
       const touch = e.changedTouches[0];
       const dx = touchStart.current.x - touch.clientX;
       const dy = touchStart.current.y - touch.clientY;
@@ -83,8 +84,14 @@ export default function useScrollNavigation({
     };
 
     window.addEventListener("wheel", handleWheel, { passive: false });
-    window.addEventListener("touchstart", handleTouchStart, { passive: false });
-    window.addEventListener("touchend", handleTouchEnd, { passive: false });
+    if (allowMobileTouch) {
+      window.addEventListener("touchstart", handleTouchStart, { passive: true });
+      window.addEventListener("touchend", handleTouchEnd, { passive: true });
+    } else {
+      window.addEventListener("touchstart", handleTouchStart, { passive: false });
+      window.addEventListener("touchend", handleTouchEnd, { passive: false });
+    }
+    
 
     return () => {
       window.removeEventListener("wheel", handleWheel);

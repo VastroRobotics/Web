@@ -68,7 +68,7 @@ export default function MiniFooter({ onScrollTop }) {
               {/* Footer Credits */}
               <div className="text-sm text-gray-400 flex flex-col items-start leading-tight ml-4 whitespace-nowrap">
                 <span>© Vastro Robotics 2025. All rights reserved.</span>
-                <span>Terms &amp; Conditions.</span>
+                <span>Terms &amp; Conditions.</span> {/* TODO: Add terms and condition link */}
               </div>
             </div>
           </div>
