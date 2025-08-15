@@ -26,7 +26,7 @@ class AssetLoader {
     this.priorityQueue.sort((a, b) => b.priority - a.priority);
     console.log("Preload Assets from this map: ");
     for (const a of this.priorityQueue) {
-      console.log(a.src);
+      console.log("---" + a.src);
     }
     return this.processQueue();
   }
@@ -46,7 +46,6 @@ class AssetLoader {
 
     const task = this.priorityQueue.shift();
     this.activeLoads++;
-    console.log("Task - src:" + task.src + "  | ");
     try {
       const asset = task.type === 'video' 
         ? await this.preloadVideo(task.src)
@@ -68,7 +67,6 @@ class AssetLoader {
     }
 
     const promise = new Promise((resolve, reject) => {
-      console.log("[Promise]");
       const video = document.createElement('video');
       video.src = src;
       video.preload = 'auto';
