@@ -224,7 +224,7 @@ const Home = forwardRef(
                     <video
                       ref={backEntranceRef}
                       className={videoClass}
-                      // src={BackEntrance}
+                      src={BackEntrance}
                       muted
                       autoPlay
                       playsInline
@@ -234,7 +234,7 @@ const Home = forwardRef(
                     <video
                       ref={backLoopRef}
                       className={videoClass}
-                      // src={BackLoop}
+                      src={BackLoop}
                       muted
                       playsInline
                       preload="auto"
