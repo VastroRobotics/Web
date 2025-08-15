@@ -17,12 +17,10 @@ const AssetPreloader = ({ assets, priority = 1, onProgress, onComplete }) => {
         const supportedAsTypes = ["image", "style", "script", "font"]; // 'video' not supported
         // Use <link rel="preload"> for each asset
         for (const { src, type } of formattedAssets) {
-          if (!supportedAsTypes.includes(type)) {
-            //console.log("Do not preload 'video' with AssetPreloader.jsx");
-            continue;
+          if (supportedAsTypes.includes(type)) {
+            link.rel = "preload"; // Only rel preload non videos
           }
           const link = document.createElement("link");
-          link.rel = "preload";
           link.href = src;
           link.as = type;
           link.crossOrigin = "anonymous";
@@ -35,6 +33,10 @@ const AssetPreloader = ({ assets, priority = 1, onProgress, onComplete }) => {
 
         // Load assets with specified priority
         console.log("**CALL** PreloadAssets - await AsssetPreloader");
+        console.log("(AssetPreloader) Preload Assets from this map: ");
+        for (const { src, type } of formattedAssets) {
+          console.log("-----" + src);
+        }
         await AssetLoader.preloadAssets(formattedAssets, priority);
 
         onComplete?.();
