@@ -6,7 +6,6 @@ export default function useScrollNavigation({
   canScroll = true,
   throttleDuration = 800,
   allowHorizontal = true,
-  allowMobileTouch = false,
   onScroll,
 }) {
   const isThrottled = useRef(false);
@@ -16,8 +15,10 @@ export default function useScrollNavigation({
   const canScrollRef = useRef(canScroll);
   const onScrollRef = useRef(onScroll);
 
-  const alwaysCanLeavePages = [0, 2, 4]; // TODO: Must update if pages change
+  const alwaysCanLeavePages = [0, 2, 4]; // TODO: Must update if page index changes
   const shouldForceScroll = alwaysCanLeavePages.includes(currPage);
+  const mobileClickRequiredPages = [2, 4]; // TODO: Must update if page index changes
+  const mobileClickEnabled = mobileClickRequiredPages.includes(currPage);
 
   useEffect(() => {
     canScrollRef.current = canScroll;
@@ -55,21 +56,19 @@ export default function useScrollNavigation({
     };
 
     const handleTouchStart = (e) => {
-      if (!allowMobileTouch) { 
+      if (!mobileClickEnabled) {
         e.preventDefault();
         e.stopPropagation();
-        console.log("Mobile Touch Not Allowed");
-      };
+      }
       const touch = e.touches[0];
       touchStart.current = { x: touch.clientX, y: touch.clientY };
     };
 
     const handleTouchEnd = (e) => {
-      if (!allowMobileTouch) { 
-        e.preventDefault(); 
+      if (!mobileClickEnabled) {
+        e.preventDefault();
         e.stopPropagation();
-      };
-      
+      }
       if (isThrottled.current) return;
 
       const touch = e.changedTouches[0];
@@ -89,14 +88,13 @@ export default function useScrollNavigation({
     };
 
     window.addEventListener("wheel", handleWheel, { passive: false });
-    if (allowMobileTouch) {
+    if (mobileClickEnabled) {
       window.addEventListener("touchstart", handleTouchStart, { passive: true });
       window.addEventListener("touchend", handleTouchEnd, { passive: true });
     } else {
       window.addEventListener("touchstart", handleTouchStart, { passive: false });
       window.addEventListener("touchend", handleTouchEnd, { passive: false });
     }
-    
 
     return () => {
       window.removeEventListener("wheel", handleWheel);

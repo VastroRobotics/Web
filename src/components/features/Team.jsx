@@ -5,11 +5,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import TeamCarousel from "../ui/TeamCarousel";
 
 export default function Team({  }) {
-  useScrollNavigation({
-      isActive,
-      currPage: 2, // TODO: must manually change if page index changes
-      allowMobileTouch: true,
-  });
   
   return (
     //<div className="relative w-full h-screen">
