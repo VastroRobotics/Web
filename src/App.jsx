@@ -72,7 +72,7 @@ export default function App() {
   //<AssetPreloader assets={[backEntrance, frontEntrance]} priority={3} />
   return (
     <>
-      <AssetPreloader assets={[backEntrance, frontEntrance]} priority={3} />
+      
       <div className="w-full h-screen overflow-hidden relative">
         {sections.map((Section, i) => (
           <div
