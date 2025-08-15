@@ -117,6 +117,7 @@ const Home = forwardRef(
       setupVideo(backLoopRef, BackLoop);
       setupVideo(frontEntranceRef, FrontEntrance);
       setupVideo(frontLoopRef, FrontLoop);
+      console.log("Videos set up");
     }, [setupVideo]);
 
     useEffect(() => {
@@ -158,6 +159,7 @@ const Home = forwardRef(
 
     useEffect(() => {
       if (entranceLoaded.back && entranceLoaded.front) {
+        console.log("Videos recognized as loaded");
         setVideoReady(true);
         backEntranceRef.current?.play().catch(console.error);
         frontEntranceRef.current?.play().catch(console.error);
@@ -224,7 +226,7 @@ const Home = forwardRef(
                     <video
                       ref={backEntranceRef}
                       className={videoClass}
-                      src={BackEntrance}
+                      // src={BackEntrance}
                       muted
                       autoPlay
                       playsInline
@@ -234,7 +236,7 @@ const Home = forwardRef(
                     <video
                       ref={backLoopRef}
                       className={videoClass}
-                      src={BackLoop}
+                      // src={BackLoop}
                       muted
                       playsInline
                       preload="auto"

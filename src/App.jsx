@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, lazy, Suspense, act } from "react";
+import { useEffect, useRef, useState, lazy, Suspense, act, useMemo } from "react";
 import useScrollNavigation from "./hooks/useScrollNavigation";
 
 // Load preloaded assets
@@ -30,6 +30,7 @@ export default function App() {
   const [scrollDirection, setScrollDirection] = useState("down");
   const [canLeave, setCanLeave] = useState(true);
   const isThrottled = useRef(false);
+  const criticalAssets = useMemo(() => [backEntrance, frontEntrance], []);
 
   useScrollNavigation({
     canScroll: canLeave,
@@ -72,7 +73,7 @@ export default function App() {
   //<AssetPreloader assets={[backEntrance, frontEntrance]} priority={3} />
   return (
     <>
-      
+      <AssetPreloader assets={criticalAssets} priority={3} />
       <div className="w-full h-screen overflow-hidden relative">
         {sections.map((Section, i) => (
           <div
