@@ -117,7 +117,6 @@ const Home = forwardRef(
       setupVideo(backLoopRef, BackLoop);
       setupVideo(frontEntranceRef, FrontEntrance);
       setupVideo(frontLoopRef, FrontLoop);
-      console.log("Videos set up");
     }, [setupVideo]);
 
     useEffect(() => {
@@ -281,7 +280,7 @@ const Home = forwardRef(
                       style={{ opacity: showFrontLoop ? 1 : 0 }}
                     />
 
-                    {/* TODO:: Temporarily removed Features using "false"*/}
+                    {/* TODO: Temporarily removed Features using "false"*/}
                     {showFrontLoop && logoDone && false && (
                       <div className="absolute inset-0 pointer-events-none">
                         {infoPoints.map((p) => (
