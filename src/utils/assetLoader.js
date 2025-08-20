@@ -21,8 +21,9 @@ class AssetLoader {
       type: asset.type || this.getAssetType(asset.src),
       priority
     }));
-
-    this.priorityQueue.push(...tasks);
+    
+    // Add to queue and filter srcs already in the queue
+    this.priorityQueue.push(...tasks.filter(t => !this.priorityQueue.some(q => q.src === t.src)));
     this.priorityQueue.sort((a, b) => b.priority - a.priority);
     console.log("Preload Assets from this map: ");
     for (const a of this.priorityQueue) {
