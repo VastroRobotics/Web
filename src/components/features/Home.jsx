@@ -42,6 +42,8 @@ const Home = forwardRef(
       back: false,
       front: false,
     });
+    const [loopLoaded, setLoopLoaded] = useState({ back: false, front: false });
+
     const [loadingProgress, setLoadingProgress] = useState(0);
 
     const { breakpoint, isMobile } = useBreakpoint();
