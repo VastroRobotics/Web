@@ -97,38 +97,45 @@ const Home = forwardRef(
       return () => AssetLoader.setProgressCallback(null);
     }, [preloadVideos]);
 
-    const setupVideo = useCallback((videoRef, src) => {
-      if (!videoRef.current) return;
-      if (AssetLoader.cache.has(src)) {
-        AssetLoader.cache.get(src).then((preloaded) => {
-          videoRef.current.src = preloaded.src;
-          if (src.includes("entrance")) {
-            setEntranceLoaded((prev) => ({
-              ...prev,
-              [src.includes("back") ? "back" : "front"]: true,
-            }));
-          }
-        });
+    const setupVideo = useCallback((videoRef, src, opts = {}) => {
+      const { entranceKey } = opts; // 'back' | 'front' | undefined
+
+      const assign = (preloaded) => {
+        if (!videoRef.current || !preloaded) return;
+        videoRef.current.src = preloaded.src;
+        if (entranceKey) {
+          setEntranceLoaded((prev) => ({ ...prev, [entranceKey]: true }));
+        }
+        // If this is a loop element, prime it *after* src is set (see #2)
+        if (!entranceKey) {
+          try {
+            videoRef.current.load();
+            videoRef.current.pause();
+          } catch {}
+        }
+      };
+
+      const hit = AssetLoader.cache.get(src);
+      if (hit) {
+        hit.then(assign).catch(() => {});
+        return;
       }
+
+      // one tiny retry if cache wasn't ready yet
+      setTimeout(() => {
+        const again = AssetLoader.cache.get(src);
+        if (again) again.then(assign).catch(() => {});
+      }, 50);
     }, []);
 
     useEffect(() => {
-      setupVideo(backEntranceRef, BackEntrance);
+      setupVideo(backEntranceRef, BackEntrance, { entranceKey: "back" });
+      setupVideo(frontEntranceRef, FrontEntrance, { entranceKey: "front" });
       setupVideo(backLoopRef, BackLoop);
-      setupVideo(frontEntranceRef, FrontEntrance);
       setupVideo(frontLoopRef, FrontLoop);
     }, [setupVideo]);
 
     useEffect(() => {
-      if (backLoopRef.current) {
-        backLoopRef.current.load();
-        backLoopRef.current.pause();
-      }
-      if (frontLoopRef.current) {
-        frontLoopRef.current.load();
-        frontLoopRef.current.pause();
-      }
-
       const onBackEnd = () => {
         backLoopRef.current.currentTime = 0;
         backLoopRef.current
@@ -156,14 +163,22 @@ const Home = forwardRef(
       };
     }, []);
 
+    // Once entrances are loaded, make the videos visible
     useEffect(() => {
       if (entranceLoaded.back && entranceLoaded.front) {
-        console.log("Videos recognized as loaded");
         setVideoReady(true);
-        backEntranceRef.current?.play().catch(console.error);
-        frontEntranceRef.current?.play().catch(console.error);
       }
     }, [entranceLoaded]);
+
+    // Once visibile, start playback on the next frame
+    useEffect(() => {
+      if (!videoReady) return;
+      const id = requestAnimationFrame(() => {
+        backEntranceRef.current?.play().catch(() => {});
+        frontEntranceRef.current?.play().catch(() => {});
+      });
+      return () => cancelAnimationFrame(id);
+    }, [videoReady]);
 
     useEffect(() => {
       const loaded = () =>
